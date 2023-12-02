@@ -1,11 +1,14 @@
 package net.superricky.tpaplusplus.command;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.superricky.tpaplusplus.utils.RequestAction;
+import net.superricky.tpaplusplus.utils.SenderReceiverPair;
 import net.superricky.tpaplusplus.utils.TeleportHandler;
 
 import static net.minecraft.commands.Commands.argument;
@@ -21,18 +24,18 @@ public class TPAAcceptCommand {
                         })
                 .then(argument("receiver", EntityArgument.player())
                         .executes(context -> {
-                            return acceptTPASpecified(EntityArgument.getPlayer(context, "receiver"));
+                            return acceptTPASpecified(context.getSource(), EntityArgument.getPlayer(context, "receiver"));
                         })));
     }
-    private static int acceptMostRecentTPA(CommandSourceStack source) {
+    private static int acceptMostRecentTPA(CommandSourceStack source) throws CommandSyntaxException {
         TeleportHandler teleportHandler = TeleportHandler.getInstance();
-        teleportHandler.acceptMostRecentTPARequest(source.getPlayer());
+        teleportHandler.handleMostRecentTPARequest(source.getPlayerOrException(), RequestAction.ACCEPT);
         return 1;
     }
 
-    private static int acceptTPASpecified(ServerPlayer receiver) {
+    private static int acceptTPASpecified(CommandSourceStack source, ServerPlayer receiver) throws CommandSyntaxException {
         TeleportHandler teleportHandler = TeleportHandler.getInstance();
-        teleportHandler.acceptSpecifiedTPARequest(receiver);
+        teleportHandler.handleTPARequest(new SenderReceiverPair(source.getPlayerOrException(), receiver), RequestAction.ACCEPT);
         return 1;
     }
 }

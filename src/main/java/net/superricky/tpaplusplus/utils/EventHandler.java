@@ -7,14 +7,15 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.superricky.tpaplusplus.modevents.TeleportRequestAcceptEvent;
 import net.superricky.tpaplusplus.modevents.TeleportRequestCancelledEvent;
 import net.superricky.tpaplusplus.modevents.TeleportRequestDeniedEvent;
+import net.superricky.tpaplusplus.utils.TeleportHandler;
 import org.slf4j.Logger;
 
 public class EventHandler {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final TeleportHandler teleportHandler = TeleportHandler.getInstance();
 
-    private static String getTeleportRequestType(ServerPlayer receiver) {
-        return teleportHandler.getTPARequestFromMap(receiver).type;
+    private static RequestType getTeleportRequestType(ServerPlayer sender, ServerPlayer receiver) {
+        return teleportHandler.getTPARequestFromMap(sender, receiver).type;
     }
 
     @SubscribeEvent
@@ -23,8 +24,8 @@ public class EventHandler {
         ServerPlayer receiver = event.getReceiver();
 
         // Run teleportation logic!
-        String tpaRequestType = getTeleportRequestType(event.getReceiver());
-        if (tpaRequestType == "teleport-here") {
+        RequestType tpaRequestType = getTeleportRequestType(event.getSender(), event.getReceiver());
+        if (tpaRequestType == RequestType.teleport_from) {
             if (!(TeleportHandler.getInstance().teleportReceiverToSender(sender, receiver))) {
                 event.setCanceled(true);
                 return;
@@ -38,7 +39,7 @@ public class EventHandler {
                     "§6You accepted §c" + sender.getDisplayName().getString() + "§6's TPA-HERE request!"
             ));
 
-        } else if (tpaRequestType == "teleport-to") {
+        } else if (tpaRequestType == RequestType.teleport_to) {
             if (!(TeleportHandler.getInstance().teleportSenderToReceiver(sender, receiver))) {
                 event.setCanceled(true);
                 return;

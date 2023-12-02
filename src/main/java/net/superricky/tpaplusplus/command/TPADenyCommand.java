@@ -1,11 +1,14 @@
 package net.superricky.tpaplusplus.command;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.superricky.tpaplusplus.utils.RequestAction;
+import net.superricky.tpaplusplus.utils.SenderReceiverPair;
 import net.superricky.tpaplusplus.utils.TeleportHandler;
 
 import static net.minecraft.commands.Commands.argument;
@@ -21,18 +24,18 @@ public class TPADenyCommand {
                 })
                 .then(argument("receiver", EntityArgument.player())
                         .executes(context -> {
-                            return denyTPASpecified(EntityArgument.getPlayer(context, "receiver"));
+                            return denyTPASpecified(context.getSource() ,EntityArgument.getPlayer(context, "receiver"));
                         })));
     }
-    private static int denyMostRecentTPA(CommandSourceStack source) {
+    private static int denyMostRecentTPA(CommandSourceStack source) throws CommandSyntaxException {
         TeleportHandler teleportHandler = TeleportHandler.getInstance();
-        teleportHandler.denyMostRecentTPARequest(source.getPlayer());
+        teleportHandler.handleMostRecentTPARequest(source.getPlayerOrException(), RequestAction.CANCEL);
         return 1;
     }
 
-    private static int denyTPASpecified(ServerPlayer receiver) {
+    private static int denyTPASpecified(CommandSourceStack source, ServerPlayer receiver) throws CommandSyntaxException {
         TeleportHandler teleportHandler = TeleportHandler.getInstance();
-        teleportHandler.denySpecifiedTPARequest(receiver);
+        teleportHandler.handleTPARequest(new SenderReceiverPair(source.getPlayerOrException(), receiver), RequestAction.CANCEL);
         return 1;
     }
 }

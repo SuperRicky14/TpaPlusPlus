@@ -67,7 +67,7 @@ public class TeleportHandler {
         receiver.sendSystemMessage(Component.literal("§c" + sender.getDisplayName().getString() + " §6wants to teleport to you!"));
         sender.sendSystemMessage(Component.literal("§6Sent teleport request to:§c" + receiver.getDisplayName().getString() + "§6!"));
 
-        // TODO: accept / deny buttons
+        // Generate accept / deny buttons
         generateClickButtons(receiver);
     }
 
@@ -87,7 +87,9 @@ public class TeleportHandler {
 
         // Notify receiver about request
         receiver.sendSystemMessage(Component.literal("§c" + sender.getDisplayName().getString() + " §6sent you a teleport-here request!"));
-        // TODO: accept / deny buttons
+        sender.sendSystemMessage(Component.literal("§6Sent teleport-here request to:§c" + receiver.getDisplayName().getString() + "§6!"));
+
+        // Generate accept / deny buttons
         generateClickButtons(receiver);
     }
 
@@ -192,7 +194,7 @@ public class TeleportHandler {
         }
 
         if (mostRecentRequest != null && !mostRecentRequest.accepted) {
-            cancelSpecifiedTPARequest(executor); // Invoke your existing deny method
+            cancelSpecifiedTPARequest(executor); // Invoke your existing cancel method
         } else {
             // Handle no pending request or already denied request for the executor
             executor.sendSystemMessage(Component.literal("§6No pending §cTPA request §6found to cancel."));

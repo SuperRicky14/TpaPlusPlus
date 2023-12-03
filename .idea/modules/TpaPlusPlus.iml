@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$/../.." dumb="true">
+      <excludeFolder url="file://$MODULE_DIR$/../../run/defaultconfigs" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run/logs/telemetry" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run/mods" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run/resourcepacks" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run/saves/Testing TPA/datapacks" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run/world/DIM-1" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run/world/DIM1" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run/world/data" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run/world/datapacks" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run/world/playerdata" />
+    </content>
+  </component>
+</module>

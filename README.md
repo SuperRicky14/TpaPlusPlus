@@ -1,0 +1,32 @@
+### About this Github
+This is the place to [suggest features](https://github.com/SuperRicky14/TpaPlusPlus/issues), [contribute to the mod](https://github.com/SuperRicky14/TpaPlusPlus/pulls), or look at the "[wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki)". If you just want to download the mod, use either [Modrinth](https://modrinth.com/mod/tpa++) or [Curseforge](https://www.curseforge.com/minecraft/mc-mods/tpaplusplus)! I will be providing translation files in a later release of the mod, which will allow anyone to translate the mod into their own language, or just simply change the messages included with the mod.
+
+# What's different about TPA++?
+I aim to make a fast, compatible, customizable TPA mod for forge. This will eventually include range checks:
+Range Checks are a feature that allows you to customize how close the players can be to teleport ( in order to prevent players from teleporting too close, say if you would like players to explore the map more, rather than just teleporting around to each other ). You can specify how far away players can be (if you would like to prevent players from teleporting across the map).
+Another balancing feature we would like to include is item / exp removal: This balance feature will be in place to remove any amount of item(s) from vanilla or modded mc, and / or any amount of experience from the player.
+The mod aims to be fully serverside, and compatible with other mods.
+
+## How do I use this mod?
+* /tpa | This command will send a teleport request to the other player!
+* /tpahere | This command will send a request to teleport the other player to you!
+* /tpaaccept | This command is used to accept a teleport request!
+* /tpadeny | This command is used to deny someones request to teleport to you!
+* /tpacancel | Used by the initiator of the teleport request, this command will cancel the teleport request before it can be accepted by the other player!
+
+## Why did I make this?
+I made TPA++ due to the lack of TPA mods for forge, since I wanted to add TPA to my smp I was making.
+
+## Frequently Asked Questions:
+* Will you port the mod to Fabric?
+        Currently no, but I plan to in the future!
+* Can you port to version X?
+        If it is a new version, it is coming unless I explicitly say otherwise. If it's an old version, no.
+* Can you add feature X?
+        You are welcome to request features / enhancements, I am always open to suggestions on the mods github!
+* Does this mod work in multiplayer?
+        Yes, but it is only required on the server. Players on vanilla mc or without the mod installed will still have 100% functionality with the mod. You only need it on the client if you wish to use it in singleplayer / on LAN network.
+* I found a bug / problem with the mod.
+        You can report this to me on my github. Please make sure you follow the issue guidelines.
+* Can I modify / fork your mod?
+        Yes, you are welcome to. However, please make sure to credit me and follow the MIT license.

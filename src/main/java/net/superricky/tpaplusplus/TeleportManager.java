@@ -5,7 +5,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.teleport.Teleport;
 import net.superricky.tpaplusplus.teleport.TeleportHere;
 import net.superricky.tpaplusplus.teleport.TeleportTo;
-import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -13,34 +12,49 @@ import java.util.Objects;
 
 public class TeleportManager {
     public static void sendTeleportTo(TeleportTo teleportToRequest) {
-        ServerPlayer executor = teleportToRequest.getExecutor();
-        ServerPlayer teleported = teleportToRequest.getTeleported();
+        /* The reason why we first add the @Nullable annotator, then catch it here, so we can add our own message instead of getting:
+         * "An unexpected error occurred" in our output
+         */
+        if (Objects.isNull(teleportToRequest)) throw new IllegalArgumentException("Teleport-TO request is null!");
+
+        ServerPlayer executor = teleportToRequest.executor();
+        ServerPlayer teleported = teleportToRequest.teleported();
 
         // Protect against NullPointerException
         if (Objects.isNull(executor) || Objects.isNull(teleported)) throw new IllegalArgumentException("Received null ServerPlayer object(s)");
 
-        Main.teleportRequests.put(teleportToRequest, Main.teleportRequestTimeoutTime);
+        Main.teleportRequests.put(teleportToRequest, Config.TPA_TIMEOUT_IN_SECONDS.get() * 20);
 
         executor.sendSystemMessage(Component.literal("§6Sent teleport request to §c" + teleported.getDisplayName().getString()));
         teleported.sendSystemMessage(Component.literal("§6Teleport request received from §c" + executor.getDisplayName().getString()));
     }
 
     public static void sendTeleportHere(TeleportHere teleportHereRequest) {
-        ServerPlayer executor = teleportHereRequest.getExecutor();
-        ServerPlayer teleported = teleportHereRequest.getTeleported();
+        /* The reason why we first add the @Nullable annotator, then catch it here, so we can add our own message instead of getting:
+         * "An unexpected error occurred" in our output
+         */
+        if (Objects.isNull(teleportHereRequest)) throw new IllegalArgumentException("Teleport-HERE request is null!");
+
+        ServerPlayer executor = teleportHereRequest.executor();
+        ServerPlayer teleported = teleportHereRequest.teleported();
 
         // Protect against NullPointerException
         if (Objects.isNull(executor) || Objects.isNull(teleported)) throw new IllegalArgumentException("Received null ServerPlayer object(s)");
 
-        Main.teleportRequests.put(teleportHereRequest, Main.teleportRequestTimeoutTime);
+        Main.teleportRequests.put(teleportHereRequest, Config.TPA_TIMEOUT_IN_SECONDS.get() * 20);
 
         executor.sendSystemMessage(Component.literal("§6Sent teleport §fhere §6request to §c" + teleported.getDisplayName().getString()));
         teleported.sendSystemMessage(Component.literal("§6Teleport §fhere §6request received from §c" + executor.getDisplayName().getString()));
     }
 
-    public static void acceptTeleportRequest(Teleport teleportRequest) {
-        ServerPlayer executor = teleportRequest.getExecutor();
-        ServerPlayer teleported = teleportRequest.getTeleported();
+    public static void acceptTeleportRequest(@Nullable Teleport teleportRequest) {
+        /* The reason why we first add the @Nullable annotator, then catch it here, so we can add our own message instead of getting:
+         * "An unexpected error occurred" in our output
+         */
+        if (Objects.isNull(teleportRequest)) throw new IllegalArgumentException("Teleport request is null!");
+
+        ServerPlayer executor = teleportRequest.executor();
+        ServerPlayer teleported = teleportRequest.teleported();
 
         // Protect against NullPointerException
         if (Objects.isNull(executor) || Objects.isNull(teleported)) throw new IllegalArgumentException("Received null ServerPlayer object(s)");
@@ -50,8 +64,6 @@ public class TeleportManager {
 
             executor.sendSystemMessage(Component.literal("§6Your teleport §6request for §c" + teleported.getDisplayName().getString() + " §6was accepted!"));
             teleported.sendSystemMessage(Component.literal("§6Accepted teleport §6request from §c" + executor.getDisplayName().getString()));
-
-
         } else if (teleportRequest instanceof TeleportHere) {
             teleportPlayerHere(executor, teleported);
 
@@ -62,9 +74,14 @@ public class TeleportManager {
         Main.teleportRequests.remove(teleportRequest);
     }
 
-    public static void denyTeleportRequest(Teleport teleportRequest) {
-        ServerPlayer executor = teleportRequest.getExecutor();
-        ServerPlayer teleported = teleportRequest.getTeleported();
+    public static void denyTeleportRequest(@Nullable Teleport teleportRequest) {
+        /* The reason why we first add the @Nullable annotator, then catch it here, so we can add our own message instead of getting:
+         * "An unexpected error occurred" in our output
+         */
+        if (Objects.isNull(teleportRequest)) throw new IllegalArgumentException("Teleport request is null!");
+
+        ServerPlayer executor = teleportRequest.executor();
+        ServerPlayer teleported = teleportRequest.teleported();
 
         // Protect against NullPointerException
         if (Objects.isNull(executor) || Objects.isNull(teleported)) throw new IllegalArgumentException("Received null ServerPlayer object(s)");
@@ -72,8 +89,6 @@ public class TeleportManager {
         if (teleportRequest instanceof TeleportTo) {
             executor.sendSystemMessage(Component.literal("§6Your teleport §6request for §c" + teleported.getDisplayName().getString() + " §6was denied!"));
             teleported.sendSystemMessage(Component.literal("§6Denied teleport §6request from §c" + executor.getDisplayName().getString()));
-
-
         } else if (teleportRequest instanceof TeleportHere) {
             executor.sendSystemMessage(Component.literal("§6Your teleport §fhere §6request for §c" + teleported.getDisplayName().getString() + " §6was denied!"));
             teleported.sendSystemMessage(Component.literal("§6Denied teleport §fhere §6request from §c" + executor.getDisplayName().getString()));
@@ -82,9 +97,14 @@ public class TeleportManager {
         Main.teleportRequests.remove(teleportRequest);
     }
 
-    public static void cancelTeleportRequest(Teleport teleportRequest) {
-        ServerPlayer executor = teleportRequest.getExecutor();
-        ServerPlayer teleported = teleportRequest.getTeleported();
+    public static void cancelTeleportRequest(@Nullable Teleport teleportRequest) {
+        /* The reason why we first add the @Nullable annotator, then catch it here, so we can add our own message instead of getting:
+         * "An unexpected error occurred" in our output
+         */
+        if (Objects.isNull(teleportRequest)) throw new IllegalArgumentException("Teleport request is null!");
+
+        ServerPlayer executor = teleportRequest.executor();
+        ServerPlayer teleported = teleportRequest.teleported();
 
         // Protect against NullPointerException
         if (Objects.isNull(executor) || Objects.isNull(teleported)) throw new IllegalArgumentException("Received null ServerPlayer object(s)");
@@ -100,18 +120,19 @@ public class TeleportManager {
         Main.teleportRequests.remove(teleportRequest);
     }
 
-
     // Helper Methods
     @Nullable
     public static Teleport getTeleportRequestByPlayers(ServerPlayer executor, ServerPlayer teleported) {
         for (Map.Entry<Teleport, Integer> entry : Main.teleportRequests.entrySet()) {
             Teleport teleport = entry.getKey();
-            ServerPlayer teleportExecutor = teleport.getExecutor();
-            ServerPlayer teleportTeleported = teleport.getTeleported();
+            ServerPlayer teleportExecutor = teleport.executor();
+            ServerPlayer teleportTeleported = teleport.teleported();
 
             // Check if both executor and teleported match the provided players
             if (teleportExecutor == executor && teleportTeleported == teleported) {
                 return teleport; // Return the matching teleport request
+            } else {
+                return null;
             }
         }
 
@@ -125,7 +146,7 @@ public class TeleportManager {
         // Loop through all entries in the teleportRequests map
         for (Map.Entry<Teleport, Integer> entry : Main.teleportRequests.entrySet()) {
             Teleport teleport = entry.getKey();
-            ServerPlayer teleportExecutor = teleport.getExecutor();
+            ServerPlayer teleportExecutor = teleport.executor();
 
             // Check if the executor matches the provided 'executor'
             if (teleportExecutor == executor) {

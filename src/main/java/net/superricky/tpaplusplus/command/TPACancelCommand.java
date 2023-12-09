@@ -3,7 +3,7 @@ package net.superricky.tpaplusplus.command;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.GameProfileArgument;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,12 +23,22 @@ public class TPACancelCommand {
                         .executes(context -> cancelTPASpecified(context.getSource(), EntityArgument.getPlayer(context, "player")))));
     }
     private static int cancelMostRecentTPA(CommandSourceStack source) throws CommandSyntaxException {
-        TeleportManager.cancelTeleportRequest(TeleportManager.getLargestTeleportRequest(source.getPlayerOrException()));
+        try {
+            TeleportManager.cancelTeleportRequest(TeleportManager.getLargestTeleportRequest(source.getPlayerOrException()));
+        } catch (IllegalArgumentException e) {
+            source.getPlayerOrException().sendSystemMessage(Component.literal("§cNo teleport request was found!"));
+        }
         return 1;
     }
 
     private static int cancelTPASpecified(CommandSourceStack source, ServerPlayer teleported) throws CommandSyntaxException {
-        TeleportManager.cancelTeleportRequest(TeleportManager.getTeleportRequestByPlayers(source.getPlayerOrException(), teleported));
+        try {
+            TeleportManager.cancelTeleportRequest(TeleportManager.getTeleportRequestByPlayers(source.getPlayerOrException(), teleported));
+        } catch (IllegalArgumentException e) {
+            source.getPlayerOrException().sendSystemMessage(Component.literal("§cNo teleport request was found!"));
+        } catch (Exception e) {
+            source.getPlayerOrException().sendSystemMessage(Component.literal("An unknown error occurred when searching for TPA request"));
+        }
         return 1;
     }
 }

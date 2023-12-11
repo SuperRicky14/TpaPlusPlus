@@ -31,4 +31,4 @@ I made TPA++ due to the lack of TPA mods for forge, since I wanted to add TPA to
 * I found a bug / problem with the mod.
         You can report this to me on my github. Please make sure you follow the issue guidelines.
 * Can I modify / fork your mod?
-        Yes, you are welcome to. However, please make sure to credit me and follow the MIT license.
+        Yes, you are welcome to. However, please make sure to credit me and link this original projects [Modrinth](https://modrinth.com/mod/tpa++), [Curseforge](https://curseforge.com/minecraft/mc-mods/tpaplusplus), and / or [Github Repo](https://github.com/SuperRicky14/TpaPlusPlus) somewhere in your project. This project is protected by the [MIT license](https://github.com/SuperRicky14/TpaPlusPlus/blob/master/LICENSE).

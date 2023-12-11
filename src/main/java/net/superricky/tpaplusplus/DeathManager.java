@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class DeathManager {
-
     public static void teleportToLatestDeath(@Nullable ServerPlayer executor, @Nullable Vec3 deathPosition) {
         // Protect against NullPointerException
         if (Objects.isNull(executor) || Objects.isNull(deathPosition)) throw new IllegalArgumentException("Executor and / or death position is null!");

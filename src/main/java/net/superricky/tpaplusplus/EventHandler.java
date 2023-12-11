@@ -7,6 +7,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.level.LevelEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.superricky.tpaplusplus.event.TeleportRequestTimeoutEvent;
@@ -14,13 +17,12 @@ import net.superricky.tpaplusplus.teleport.Teleport;
 import net.superricky.tpaplusplus.teleport.TeleportHere;
 import net.superricky.tpaplusplus.teleport.TeleportTo;
 
-import java.util.Iterator;
 import java.util.Map;
 
 @Mod.EventBusSubscriber
 public class EventHandler {
     /**
-     * Our custom event. This event is triggered once the timer of a teleport request reaches 0, all we do here, is notify all members which were affected.
+     * Our custom event. This event is triggered once the timer of a teleport request reaches 0, notifying all members which were affected.
      * @param event
      */
     @SubscribeEvent
@@ -49,23 +51,23 @@ public class EventHandler {
      */
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
-        Iterator<Map.Entry<Teleport, Integer>> iterator = Main.teleportRequests.entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            Map.Entry<Teleport, Integer> entry = iterator.next();
-            Teleport teleport = entry.getKey();
+        // Loop through every entry in the teleportRequests hashmap
+        for (Map.Entry<Teleport, Integer> entry : Main.teleportRequests.entrySet()) {
+            // Get how much time is remaining in the hashmap ( in game ticks )
             int remainingTime = entry.getValue();
 
+            // If the remaining time is more than 0
             if (remainingTime > 0) {
-                // Decrement the remaining time by 1
+                // Decrement remaining time by 1
                 entry.setValue(remainingTime - 1);
 
+                // If the remaining time is 0
                 if (remainingTime - 1 == 0) {
-                    MinecraftForge.EVENT_BUS.post(new TeleportRequestTimeoutEvent(teleport));
-                    // When the time reaches 0, remove the entry
-                    iterator.remove(); // Removes the current entry from the iterator
-                    // Optionally, perform any additional actions when the time reaches 0
-                    // For example: teleportRequests.remove(teleport);
+                    Teleport teleportRequest = entry.getKey();
+                    MinecraftForge.EVENT_BUS.post(new TeleportRequestTimeoutEvent(teleportRequest));
+
+                    // Remove the entry
+                    Main.teleportRequests.remove(teleportRequest, 0);
                 }
             }
         }
@@ -80,13 +82,16 @@ public class EventHandler {
      */
     @SubscribeEvent
     public static void onDeath(LivingDeathEvent event) {
+        // Get the dead entity and create an empty ServerPlayer variable
         LivingEntity deadEntity = event.getEntity();
         ServerPlayer playerEntity;
 
+        // Return if the dead entity in question is not a player
         if (deadEntity instanceof ServerPlayer) {
             playerEntity = (ServerPlayer) event.getEntity();
         } else return;
 
+        // Get the death position as a net.minecraft.world.phys Vec3 object
         Vec3 deathPosition = playerEntity.position();
 
         // Remove old playerDeathCoordinate if present.
@@ -95,4 +100,19 @@ public class EventHandler {
         // Add this playerDeathCoordinate to the map.
         Main.playerDeathCoordinates.put(playerEntity, deathPosition);
     }
+    /*
+    @SubscribeEvent
+    public static void onServerShutdown(ServerStoppedEvent event) {
+        Main.saveTeleportData();
+    }
+
+    @SubscribeEvent
+    public static void onAutoSave(LevelEvent.Save event) {
+        Main.saveTeleportData();
+    }
+
+    @SubscribeEvent
+    public static void onServerStart(ServerStartedEvent event) {
+        Main.loadTeleportData();
+    } */
 }

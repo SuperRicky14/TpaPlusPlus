@@ -11,6 +11,15 @@ import java.util.Map;
 import java.util.Objects;
 
 public class TeleportManager {
+    private static boolean alreadySentTeleportRequest(Teleport teleportRequest) {
+        /*
+         * Returns:
+         * (false) if there is no existing teleport request in the hashmap
+         * (true) if there is already a teleport request in the hashmap
+         */
+        return Main.teleportRequests.containsKey(teleportRequest);
+    }
+
     public static void sendTeleportTo(TeleportTo teleportToRequest) {
         /* The reason why we first add the @Nullable annotator, then catch it here, so we can add our own message instead of getting:
          * "An unexpected error occurred" in our output
@@ -22,6 +31,13 @@ public class TeleportManager {
 
         // Protect against NullPointerException
         if (Objects.isNull(executor) || Objects.isNull(teleported)) throw new IllegalArgumentException("Received null ServerPlayer object(s)");
+
+        // Notify and return if there already is a teleport request in the HashMap
+        if (alreadySentTeleportRequest(teleportToRequest)) {
+            executor.sendSystemMessage(Component.literal("§cYou already sent a teleport request to this player!"));
+            executor.sendSystemMessage(Component.literal("§6Run §c/tpacancel §6to cancel that request!"));
+            return;
+        }
 
         Main.teleportRequests.put(teleportToRequest, Config.TPA_TIMEOUT_IN_SECONDS.get() * 20);
 
@@ -40,6 +56,13 @@ public class TeleportManager {
 
         // Protect against NullPointerException
         if (Objects.isNull(executor) || Objects.isNull(teleported)) throw new IllegalArgumentException("Received null ServerPlayer object(s)");
+
+        // Notify and return if there already is a teleport request in the HashMap
+        if (alreadySentTeleportRequest(teleportHereRequest)) {
+            executor.sendSystemMessage(Component.literal("§cYou already sent a teleport §fhere §crequest to this player!"));
+            executor.sendSystemMessage(Component.literal("§6Run §c/tpacancel §6to cancel that request!"));
+            return;
+        }
 
         Main.teleportRequests.put(teleportHereRequest, Config.TPA_TIMEOUT_IN_SECONDS.get() * 20);
 
@@ -113,7 +136,7 @@ public class TeleportManager {
             executor.sendSystemMessage(Component.literal("§6Denied teleport §6request for §c" + teleported.getDisplayName().getString()));
             teleported.sendSystemMessage(Component.literal("§6Your teleport §6request from §c" + executor.getDisplayName().getString() + " §6was cancelled!"));
         } else if (teleportRequest instanceof TeleportHere) {
-            executor.sendSystemMessage(Component.literal("§Cancelled teleport §fhere §6request for §c" + teleported.getDisplayName().getString()));
+            executor.sendSystemMessage(Component.literal("§6Cancelled teleport §fhere §6request for §c" + teleported.getDisplayName().getString()));
             teleported.sendSystemMessage(Component.literal("§6Your teleport §fhere §6request from §c" + executor.getDisplayName().getString() + " §6was cancelled!"));
         }
 

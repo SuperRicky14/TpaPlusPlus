@@ -15,6 +15,7 @@ public class TPAPlusPlusCommand {
     @SubscribeEvent()
     public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
         event.getDispatcher().register(literal("tpaplusplus")
+                        .requires((context) -> context.hasPermission(2))
                 .executes(context -> version(context.getSource()))
                 .then(literal("version")
                         .executes(context -> version(context.getSource())))

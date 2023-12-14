@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.teleport.Teleport;
 import net.superricky.tpaplusplus.teleport.TeleportHere;
 import net.superricky.tpaplusplus.teleport.TeleportTo;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -70,17 +71,33 @@ public class TeleportManager {
         teleported.sendSystemMessage(Component.literal("§6Teleport §fhere §6request received from §c" + executor.getDisplayName().getString()));
     }
 
-    public static void acceptTeleportRequest(@Nullable Teleport teleportRequest) {
+    /**
+     * If a request is absolute, even if the tpa accept time in seconds is set to 0 ( disabled ), then we will still proceed with the request and instantly teleport the player over.
+     * If a request is not absolute, if the tpa accept time in seconds is not disabled, then we will start a countdown to whatever it's configured to in the config,
+     * once that countdown reaches 0 (code available in EventHandler.java), we will run this method with absolute turned on.
+     */
+    public static void acceptTeleportRequest(@Nullable Teleport teleportRequest, boolean ABSOLUTE) {
         /* The reason why we first add the @Nullable annotator, then catch it here, so we can add our own message instead of getting:
          * "An unexpected error occurred" in our output
          */
         if (Objects.isNull(teleportRequest)) throw new IllegalArgumentException("Teleport request is null!");
 
+        if (ABSOLUTE || Config.TPA_ACCEPT_TIME_IN_SECONDS.get() == 0) { // accept the TPA request if the request was absolute, or if the TPA accept timeout was disabled in the config
+            absoluteAccept(teleportRequest);
+        } else {
+            teleportRequest.teleported().sendSystemMessage(Component.literal("§6You are being teleported..."));
+            Main.playerTeleportTime.put(teleportRequest, Config.TPA_ACCEPT_TIME_IN_SECONDS.get() * 20);
+        }
+    }
+
+    // No need for @Nullable or catching the teleportRequest problem, since that is already handled in the acceptTeleportRequest class!
+    private static void absoluteAccept(@NotNull Teleport teleportRequest) {
         ServerPlayer executor = teleportRequest.executor();
         ServerPlayer teleported = teleportRequest.teleported();
 
         // Protect against NullPointerException
-        if (Objects.isNull(executor) || Objects.isNull(teleported)) throw new IllegalArgumentException("Received null ServerPlayer object(s)");
+        if (Objects.isNull(executor) || Objects.isNull(teleported))
+            throw new IllegalArgumentException("Received null ServerPlayer object(s)");
 
         if (teleportRequest instanceof TeleportTo) {
             teleportPlayerTo(executor, teleported);
@@ -116,7 +133,7 @@ public class TeleportManager {
             executor.sendSystemMessage(Component.literal("§6Your teleport §fhere §6request for §c" + teleported.getDisplayName().getString() + " §6was denied!"));
             teleported.sendSystemMessage(Component.literal("§6Denied teleport §fhere §6request from §c" + executor.getDisplayName().getString()));
         }
-
+        Main.playerTeleportTime.remove(teleportRequest);
         Main.teleportRequests.remove(teleportRequest);
     }
 
@@ -139,7 +156,7 @@ public class TeleportManager {
             executor.sendSystemMessage(Component.literal("§6Cancelled teleport §fhere §6request for §c" + teleported.getDisplayName().getString()));
             teleported.sendSystemMessage(Component.literal("§6Your teleport §fhere §6request from §c" + executor.getDisplayName().getString() + " §6was cancelled!"));
         }
-
+        Main.playerTeleportTime.remove(teleportRequest);
         Main.teleportRequests.remove(teleportRequest);
     }
 

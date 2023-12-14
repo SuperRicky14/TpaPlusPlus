@@ -6,7 +6,6 @@ plugins {
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
-
 group = mod_version
 version = mod_group_id
 
@@ -16,6 +15,25 @@ base {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+
+// When this is run, it will automagically fill out our mod version from gradle.properties! So now I only need to update this shit in one place
+task replaceVersionToken {
+    // Ensure the 'mod_version' property is loaded from gradle.properties
+    def modVersion = project.hasProperty('mod_version') ? project.property('mod_version') : "UNKNOWN"
+    def modID = project.hasProperty('mod_id') ? project.property('mod_id') : "UNKNOWN"
+
+    def file = file("src/main/java/net/superricky/tpaplusplus/Main.java")
+    def content = file.getText('UTF-8')
+
+    // Define the pattern to find and replace
+    def versionPattern = 'public static final String MOD_VERSION = ".*";'
+    def updatedContent = content.replaceAll(versionPattern, 'public static final String MOD_VERSION = "' + modVersion + '";')
+
+    def modIDPattern = 'public static final String MOD_ID = ".*";'
+    def modIDUpdatedContent = updatedContent.replaceAll(modIDPattern, 'public static final String MOD_ID = "' + modID + '";')
+
+    file.write(modIDUpdatedContent, 'UTF-8')
 }
 
 minecraft {
@@ -33,6 +51,8 @@ minecraft {
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
     mappings channel: mapping_channel, version: mapping_version
+
+    replaceVersionToken
 
     // When true, this property will have all Eclipse/IntelliJ IDEA run configurations run the "prepareX" task for the given run configuration before launching the game.
     // enableEclipsePrepareRuns = true

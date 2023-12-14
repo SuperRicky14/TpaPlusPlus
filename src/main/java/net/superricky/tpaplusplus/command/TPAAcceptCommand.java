@@ -24,7 +24,7 @@ public class TPAAcceptCommand {
     }
     private static int acceptMostRecentTPA(CommandSourceStack source) throws CommandSyntaxException {
         try {
-            TeleportManager.acceptTeleportRequest(TeleportManager.getLargestTeleportRequest(source.getPlayerOrException()));
+            TeleportManager.acceptTeleportRequest(TeleportManager.getLargestTeleportRequest(source.getPlayerOrException()), false);
         } catch (IllegalArgumentException e) {
             source.getPlayerOrException().sendSystemMessage(Component.literal("§cNo teleport request was found!"));
         }
@@ -33,7 +33,7 @@ public class TPAAcceptCommand {
 
     private static int acceptTPASpecified(CommandSourceStack source, ServerPlayer teleported) throws CommandSyntaxException {
         try {
-            TeleportManager.acceptTeleportRequest(TeleportManager.getTeleportRequestByPlayers(source.getPlayerOrException(), teleported));
+            TeleportManager.acceptTeleportRequest(TeleportManager.getTeleportRequestByPlayers(source.getPlayerOrException(), teleported), false);
         } catch (IllegalArgumentException e) {
             source.getPlayerOrException().sendSystemMessage(Component.literal("§cNo teleport request was found!"));
         }

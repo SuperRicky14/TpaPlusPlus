@@ -3,7 +3,7 @@
 ### About this Github
 This is the place to [suggest features](https://github.com/SuperRicky14/TpaPlusPlus/issues), [contribute to the mod](https://github.com/SuperRicky14/TpaPlusPlus/pulls), or look at the "[wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki)". If you just want to download the mod, use either [Modrinth](https://modrinth.com/mod/tpa++) or [Curseforge](https://www.curseforge.com/minecraft/mc-mods/tpaplusplus)! I will be providing translation files in a later release of the mod, which will allow anyone to translate the mod into their own language, or just simply change the messages included with the mod.
 
-### Get the latest bleeding-edge build [here](https://github.com/SuperRicky14/TpaPlusPlus/releases/tag/v1.3-1.20.x-BLEEDING_EDGE)!
+### Get the latest bleeding-edge build [here](https://urls.a3d.pro/bleedingedge2)!
 
 # What's different about TPA++?
 I aim to make a fast, compatible, customizable TPA mod for forge. This will eventually include range checks:

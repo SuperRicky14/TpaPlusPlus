@@ -1,5 +1,6 @@
 package net.superricky.tpaplusplus;
 
+import java.util.Map;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,10 +16,10 @@ import net.superricky.tpaplusplus.teleport.Teleport;
 import net.superricky.tpaplusplus.teleport.TeleportHere;
 import net.superricky.tpaplusplus.teleport.TeleportTo;
 
-import java.util.Map;
-
 @Mod.EventBusSubscriber
 public class EventHandler {
+    private EventHandler() {}
+
     /**
      * Our custom event. This event is triggered once the timer of a teleport request reaches 0, notifying all members which were affected.
      * @param event
@@ -31,13 +32,12 @@ public class EventHandler {
         ServerPlayer teleported = teleportRequest.teleported();
 
         if (teleportRequest instanceof TeleportTo) {
-            executor.sendSystemMessage(Component.literal("§6Your teleport request to §c" + teleported.getDisplayName().getString() + "§6 timed out!"));
-            teleported.sendSystemMessage(Component.literal("§6Your teleport request from §c" + executor.getDisplayName().getString() + "§6 timed out!"));
+            executor.sendSystemMessage(Component.literal(String.format("§6Your teleport request to §c%s§6 timed out!", teleported.getDisplayName().getString())));
+            teleported.sendSystemMessage(Component.literal(String.format("§6Your teleport request from §c%s§6 timed out!", executor.getDisplayName().getString())));
         } else if (teleportRequest instanceof TeleportHere) {
-            executor.sendSystemMessage(Component.literal("§6Your teleport §fhere §6request to §c" + teleported.getDisplayName().getString() + "§6 timed out!"));
-            teleported.sendSystemMessage(Component.literal("§6Your teleport §fhere §6request from §c" + executor.getDisplayName().getString() + "§6 timed out!"));
+            executor.sendSystemMessage(Component.literal(String.format("§6Your teleport §fhere §6request to §c%s§6 timed out!", teleported.getDisplayName().getString())));
+            teleported.sendSystemMessage(Component.literal(String.format("§6Your teleport §fhere §6request from §c%s§6 timed out!", executor.getDisplayName().getString())));
         }
-
     }
 
     /**
@@ -47,7 +47,7 @@ public class EventHandler {
      * Once this counter reaches 0, we remove the entry from the list and post a TimeoutEvent, which will notify all players affected that their TPA request expired.
      * @param event
      */
-    @SubscribeEvent
+    //@SubscribeEvent
     public static void decrementTeleportRequests(TickEvent.ServerTickEvent event) {
         if (Config.TPA_TIMEOUT_IN_SECONDS.get() == 0) return; // return if it is disabled in the config
 
@@ -80,9 +80,9 @@ public class EventHandler {
      * Once this counter reaches 0, we remove the entry from the list and do something that I haven't figured out yet
      * @param event
      */
-    @SubscribeEvent
+    //@SubscribeEvent
     public static void decrementTPAAcceptTime(TickEvent.ServerTickEvent event) {
-        if (Config.TPA_ACCEPT_TIME_IN_SECONDS.get() == 0) return; // return if it is disabled in the config
+        if (Config.TPA_COUNTDOWN_IN_SECONDS.get() == 0) return; // return if it is disabled in the config
 
         for (Map.Entry<Teleport, Integer> entry : Main.playerTeleportTime.entrySet()) {
             // Get how much time is remaining in the hashmap ( in game ticks)
@@ -123,7 +123,7 @@ public class EventHandler {
      */
     @SubscribeEvent
     public static void onTPAAcceptTimerSuccess(TPAAcceptSuccessEvent event) {
-        TeleportManager.acceptTeleportRequest(event.getTeleportRequest(), true);
+        event.getTeleportRequest().accept(true);
     }
 
     /**

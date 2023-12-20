@@ -15,4 +15,7 @@
       <excludeFolder url="file://$MODULE_DIR$/../../run" />
     </content>
   </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="f6374797-9efe-49b1-9d93-68288b1d66e9" />
+  </component>
 </module>

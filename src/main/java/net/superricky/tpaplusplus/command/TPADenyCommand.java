@@ -14,7 +14,8 @@ import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
 @Mod.EventBusSubscriber
-public class TPADenyCommand {
+public final class TPADenyCommand {
+    private TPADenyCommand() {}
     @SubscribeEvent
     public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
         event.getDispatcher().register(literal("tpadeny")
@@ -24,7 +25,7 @@ public class TPADenyCommand {
     }
     private static int denyMostRecentTPA(CommandSourceStack source) throws CommandSyntaxException {
         try {
-            TeleportManager.denyTeleportRequest(TeleportManager.getLargestTeleportRequest(source.getPlayerOrException()));
+            TeleportManager.getLargestTeleportRequest(source.getPlayerOrException()).deny();
         } catch (IllegalArgumentException e) {
             source.getPlayerOrException().sendSystemMessage(Component.literal("§cNo teleport request was found!"));
         }
@@ -33,11 +34,9 @@ public class TPADenyCommand {
 
     private static int denyTPASpecified(CommandSourceStack source, ServerPlayer teleported) throws CommandSyntaxException {
         try {
-            TeleportManager.denyTeleportRequest(TeleportManager.getTeleportRequestByPlayers(source.getPlayerOrException(), teleported));
+            TeleportManager.getTeleportRequestByPlayers(source.getPlayerOrException(), teleported).deny();
         } catch (IllegalArgumentException e) {
             source.getPlayerOrException().sendSystemMessage(Component.literal("§cNo teleport request was found!"));
-        } catch (Exception e) {
-            source.getPlayerOrException().sendSystemMessage(Component.literal("An unknown error occurred when searching for TPA request"));
         }
         return 1;
     }

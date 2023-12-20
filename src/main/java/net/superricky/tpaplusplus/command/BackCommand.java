@@ -13,7 +13,8 @@ import net.superricky.tpaplusplus.DeathManager;
 import static net.minecraft.commands.Commands.literal;
 
 @Mod.EventBusSubscriber
-public class BackCommand {
+public final class BackCommand {
+    private BackCommand() {}
     @SubscribeEvent
     public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
         event.getDispatcher().register(literal("back")
@@ -21,8 +22,8 @@ public class BackCommand {
     }
     private static int teleportToLastDeath(CommandSourceStack source) throws CommandSyntaxException {
         // Return and send feedback if /back is not enabled.
-        if (!(Config.BACK_COMMAND_ENABLED.get())) {
-            source.sendFailure(Component.literal("§4This command has been disabled by a server administrator."));
+        if (Config.BACK_COMMAND_ENABLED.get() == false) {
+            source.sendFailure(Component.literal("§cThis command has been disabled by a server administrator."));
             return 1;
         }
 

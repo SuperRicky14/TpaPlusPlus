@@ -11,156 +11,19 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
+
+/**
+ * A bunch of utility / helper methods for working with teleport requests!
+ */
 public class TeleportManager {
-    private static boolean alreadySentTeleportRequest(Teleport teleportRequest) {
-        /*
-         * Returns:
-         * (false) if there is no existing teleport request in the hashmap
-         * (true) if there is already a teleport request in the hashmap
-         */
-        return Main.teleportRequests.containsKey(teleportRequest);
-    }
-
-    public static void sendTeleportTo(TeleportTo teleportToRequest) {
-        /* The reason why we first add the @Nullable annotator, then catch it here, so we can add our own message instead of getting:
-         * "An unexpected error occurred" in our output
-         */
-        if (Objects.isNull(teleportToRequest)) throw new IllegalArgumentException("Teleport-TO request is null!");
-
-        ServerPlayer executor = teleportToRequest.executor();
-        ServerPlayer teleported = teleportToRequest.teleported();
-
-        // Protect against NullPointerException
-        if (Objects.isNull(executor) || Objects.isNull(teleported)) throw new IllegalArgumentException("Received null ServerPlayer object(s)");
-
-        // Notify and return if there already is a teleport request in the HashMap
-        if (alreadySentTeleportRequest(teleportToRequest)) {
-            executor.sendSystemMessage(Component.literal("§cYou already sent a teleport request to this player!"));
-            executor.sendSystemMessage(Component.literal("§6Run §c/tpacancel §6to cancel that request!"));
-            return;
-        }
-
-        Main.teleportRequests.put(teleportToRequest, Config.TPA_TIMEOUT_IN_SECONDS.get() * 20);
-
-        executor.sendSystemMessage(Component.literal("§6Sent teleport request to §c" + teleported.getDisplayName().getString()));
-        teleported.sendSystemMessage(Component.literal("§6Teleport request received from §c" + executor.getDisplayName().getString()));
-    }
-
-    public static void sendTeleportHere(TeleportHere teleportHereRequest) {
-        /* The reason why we first add the @Nullable annotator, then catch it here, so we can add our own message instead of getting:
-         * "An unexpected error occurred" in our output
-         */
-        if (Objects.isNull(teleportHereRequest)) throw new IllegalArgumentException("Teleport-HERE request is null!");
-
-        ServerPlayer executor = teleportHereRequest.executor();
-        ServerPlayer teleported = teleportHereRequest.teleported();
-
-        // Protect against NullPointerException
-        if (Objects.isNull(executor) || Objects.isNull(teleported)) throw new IllegalArgumentException("Received null ServerPlayer object(s)");
-
-        // Notify and return if there already is a teleport request in the HashMap
-        if (alreadySentTeleportRequest(teleportHereRequest)) {
-            executor.sendSystemMessage(Component.literal("§cYou already sent a teleport §fhere §crequest to this player!"));
-            executor.sendSystemMessage(Component.literal("§6Run §c/tpacancel §6to cancel that request!"));
-            return;
-        }
-
-        Main.teleportRequests.put(teleportHereRequest, Config.TPA_TIMEOUT_IN_SECONDS.get() * 20);
-
-        executor.sendSystemMessage(Component.literal("§6Sent teleport §fhere §6request to §c" + teleported.getDisplayName().getString()));
-        teleported.sendSystemMessage(Component.literal("§6Teleport §fhere §6request received from §c" + executor.getDisplayName().getString()));
-    }
+    private TeleportManager() {}
 
     /**
-     * If a request is absolute, even if the tpa accept time in seconds is set to 0 ( disabled ), then we will still proceed with the request and instantly teleport the player over.
-     * If a request is not absolute, if the tpa accept time in seconds is not disabled, then we will start a countdown to whatever it's configured to in the config,
-     * once that countdown reaches 0 (code available in EventHandler.java), we will run this method with absolute turned on.
+     * Gets a teleport request by the executor and the to be teleported player
+     * This just iterates through the list and checks if there is a teleport request with the same executor and teleported provided.
+     * @param executor A ServerPlayer that is used to find the teleport request.
+     * @return A ServerPlayer object or null if no teleport request was found.
      */
-    public static void acceptTeleportRequest(@Nullable Teleport teleportRequest, boolean ABSOLUTE) {
-        /* The reason why we first add the @Nullable annotator, then catch it here, so we can add our own message instead of getting:
-         * "An unexpected error occurred" in our output
-         */
-        if (Objects.isNull(teleportRequest)) throw new IllegalArgumentException("Teleport request is null!");
-
-        if (ABSOLUTE || Config.TPA_ACCEPT_TIME_IN_SECONDS.get() == 0) { // accept the TPA request if the request was absolute, or if the TPA accept timeout was disabled in the config
-            absoluteAccept(teleportRequest);
-        } else {
-            teleportRequest.teleported().sendSystemMessage(Component.literal("§6You are being teleported..."));
-            Main.playerTeleportTime.put(teleportRequest, Config.TPA_ACCEPT_TIME_IN_SECONDS.get() * 20);
-        }
-    }
-
-    // No need for @Nullable or catching the teleportRequest problem, since that is already handled in the acceptTeleportRequest class!
-    private static void absoluteAccept(@NotNull Teleport teleportRequest) {
-        ServerPlayer executor = teleportRequest.executor();
-        ServerPlayer teleported = teleportRequest.teleported();
-
-        // Protect against NullPointerException
-        if (Objects.isNull(executor) || Objects.isNull(teleported))
-            throw new IllegalArgumentException("Received null ServerPlayer object(s)");
-
-        if (teleportRequest instanceof TeleportTo) {
-            teleportPlayerTo(executor, teleported);
-
-            executor.sendSystemMessage(Component.literal("§6Your teleport §6request for §c" + teleported.getDisplayName().getString() + " §6was accepted!"));
-            teleported.sendSystemMessage(Component.literal("§6Accepted teleport §6request from §c" + executor.getDisplayName().getString()));
-        } else if (teleportRequest instanceof TeleportHere) {
-            teleportPlayerHere(executor, teleported);
-
-            executor.sendSystemMessage(Component.literal("§6Your teleport §fhere §6request for §c" + teleported.getDisplayName().getString() + " §6was accepted!"));
-            teleported.sendSystemMessage(Component.literal("§6Accepted teleport §fhere §6request from §c" + executor.getDisplayName().getString()));
-        }
-
-        Main.teleportRequests.remove(teleportRequest);
-    }
-
-    public static void denyTeleportRequest(@Nullable Teleport teleportRequest) {
-        /* The reason why we first add the @Nullable annotator, then catch it here, so we can add our own message instead of getting:
-         * "An unexpected error occurred" in our output
-         */
-        if (Objects.isNull(teleportRequest)) throw new IllegalArgumentException("Teleport request is null!");
-
-        ServerPlayer executor = teleportRequest.executor();
-        ServerPlayer teleported = teleportRequest.teleported();
-
-        // Protect against NullPointerException
-        if (Objects.isNull(executor) || Objects.isNull(teleported)) throw new IllegalArgumentException("Received null ServerPlayer object(s)");
-
-        if (teleportRequest instanceof TeleportTo) {
-            executor.sendSystemMessage(Component.literal("§6Your teleport §6request for §c" + teleported.getDisplayName().getString() + " §6was denied!"));
-            teleported.sendSystemMessage(Component.literal("§6Denied teleport §6request from §c" + executor.getDisplayName().getString()));
-        } else if (teleportRequest instanceof TeleportHere) {
-            executor.sendSystemMessage(Component.literal("§6Your teleport §fhere §6request for §c" + teleported.getDisplayName().getString() + " §6was denied!"));
-            teleported.sendSystemMessage(Component.literal("§6Denied teleport §fhere §6request from §c" + executor.getDisplayName().getString()));
-        }
-        Main.playerTeleportTime.remove(teleportRequest);
-        Main.teleportRequests.remove(teleportRequest);
-    }
-
-    public static void cancelTeleportRequest(@Nullable Teleport teleportRequest) {
-        /* The reason why we first add the @Nullable annotator, then catch it here, so we can add our own message instead of getting:
-         * "An unexpected error occurred" in our output
-         */
-        if (Objects.isNull(teleportRequest)) throw new IllegalArgumentException("Teleport request is null!");
-
-        ServerPlayer executor = teleportRequest.executor();
-        ServerPlayer teleported = teleportRequest.teleported();
-
-        // Protect against NullPointerException
-        if (Objects.isNull(executor) || Objects.isNull(teleported)) throw new IllegalArgumentException("Received null ServerPlayer object(s)");
-
-        if (teleportRequest instanceof TeleportTo) {
-            executor.sendSystemMessage(Component.literal("§6Denied teleport §6request for §c" + teleported.getDisplayName().getString()));
-            teleported.sendSystemMessage(Component.literal("§6Your teleport §6request from §c" + executor.getDisplayName().getString() + " §6was cancelled!"));
-        } else if (teleportRequest instanceof TeleportHere) {
-            executor.sendSystemMessage(Component.literal("§6Cancelled teleport §fhere §6request for §c" + teleported.getDisplayName().getString()));
-            teleported.sendSystemMessage(Component.literal("§6Your teleport §fhere §6request from §c" + executor.getDisplayName().getString() + " §6was cancelled!"));
-        }
-        Main.playerTeleportTime.remove(teleportRequest);
-        Main.teleportRequests.remove(teleportRequest);
-    }
-
-    // Helper Methods
     @Nullable
     public static Teleport getTeleportRequestByPlayers(ServerPlayer executor, ServerPlayer teleported) {
         for (Map.Entry<Teleport, Integer> entry : Main.teleportRequests.entrySet()) {
@@ -178,6 +41,13 @@ public class TeleportManager {
 
         return null; // Return null if no matching teleport request is found
     }
+
+    /**
+     * Gets a teleport request by the player who initialised the request
+     * This function still checks for the old Integer which was used to track which teleport request is the latest, and how long it has left but that's stupid so we are deprecating it and replacing this function
+     * @param executor A ServerPlayer that is used to find the teleport request
+     * @return A ServerPlayer object or null if no teleport request was found.
+     */
     @Nullable
     public static Teleport getLargestTeleportRequest(ServerPlayer executor) {
         Teleport largestTeleportRequest = null;
@@ -203,11 +73,35 @@ public class TeleportManager {
         return largestTeleportRequest;
     }
 
-    private static void teleportPlayerTo(ServerPlayer executor, ServerPlayer teleported) {
-        executor.teleportTo(teleported.serverLevel(), teleported.getX(), teleported.getY(), teleported.getZ(), teleported.getYRot(), teleported.getXRot());
+    // Returns true if there is either a TeleportTo request for these two players already in the map, OR if there is a TeleportHere request already for these two players in the map
+    // Useful if you want to prevent having a TeleportTo and TeleportHere request simultaneously in the map
+    public static boolean anyTeleportRequestInMap(ServerPlayer executor, ServerPlayer teleported) {
+        boolean wasFound = false;
+
+        for (Map.Entry<Teleport, Integer> entry : Main.teleportRequests.entrySet()) {
+            Teleport currentTeleportRequest = entry.getKey();
+            if (currentTeleportRequest.executor().equals(executor)
+                    && currentTeleportRequest.teleported().equals(teleported)) {
+                wasFound = true;
+                break;
+            }
+        }
+
+        return wasFound;
     }
 
-    private static void teleportPlayerHere(ServerPlayer executor, ServerPlayer teleported) {
-        teleported.teleportTo(executor.serverLevel(), executor.getX(), executor.getY(), executor.getZ(), executor.getYRot(), executor.getXRot());
+    public static boolean anyTeleportRequestInMap(Teleport teleport) {
+        boolean wasFound = false;
+
+        for (Map.Entry<Teleport, Integer> entry : Main.teleportRequests.entrySet()) {
+            Teleport currentTeleportRequest = entry.getKey();
+            if (currentTeleportRequest.executor().equals(teleport.executor())
+                    && currentTeleportRequest.teleported().equals(teleport.teleported())) {
+                wasFound = true;
+                break;
+            }
+        }
+
+        return wasFound;
     }
 }

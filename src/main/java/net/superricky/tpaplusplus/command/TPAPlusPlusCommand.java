@@ -1,5 +1,7 @@
 package net.superricky.tpaplusplus.command;
 
+import static net.minecraft.commands.Commands.literal;
+
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -8,14 +10,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.superricky.tpaplusplus.Config;
 import net.superricky.tpaplusplus.Main;
 
-import static net.minecraft.commands.Commands.literal;
-
 @Mod.EventBusSubscriber
-public class TPAPlusPlusCommand {
-    @SubscribeEvent()
+public final class TPAPlusPlusCommand {
+    private TPAPlusPlusCommand() {}
+    @SubscribeEvent
     public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
         event.getDispatcher().register(literal("tpaplusplus")
-                        .requires((context) -> context.hasPermission(2))
+                        .requires(context -> context.hasPermission(2))
                 .executes(context -> version(context.getSource()))
                 .then(literal("version")
                         .executes(context -> version(context.getSource())))

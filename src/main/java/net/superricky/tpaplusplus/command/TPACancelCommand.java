@@ -14,7 +14,8 @@ import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
 @Mod.EventBusSubscriber
-public class TPACancelCommand {
+public final class TPACancelCommand {
+    private TPACancelCommand() {}
     @SubscribeEvent
     public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
         event.getDispatcher().register(literal("tpacancel")
@@ -24,7 +25,7 @@ public class TPACancelCommand {
     }
     private static int cancelMostRecentTPA(CommandSourceStack source) throws CommandSyntaxException {
         try {
-            TeleportManager.cancelTeleportRequest(TeleportManager.getLargestTeleportRequest(source.getPlayerOrException()));
+            TeleportManager.getLargestTeleportRequest(source.getPlayerOrException()).cancel();
         } catch (IllegalArgumentException e) {
             source.getPlayerOrException().sendSystemMessage(Component.literal("§cNo teleport request was found!"));
         }
@@ -33,11 +34,9 @@ public class TPACancelCommand {
 
     private static int cancelTPASpecified(CommandSourceStack source, ServerPlayer teleported) throws CommandSyntaxException {
         try {
-            TeleportManager.cancelTeleportRequest(TeleportManager.getTeleportRequestByPlayers(source.getPlayerOrException(), teleported));
+            TeleportManager.getTeleportRequestByPlayers(source.getPlayerOrException(), teleported).cancel();
         } catch (IllegalArgumentException e) {
             source.getPlayerOrException().sendSystemMessage(Component.literal("§cNo teleport request was found!"));
-        } catch (Exception e) {
-            source.getPlayerOrException().sendSystemMessage(Component.literal("An unknown error occurred when searching for TPA request"));
         }
         return 1;
     }

@@ -14,7 +14,9 @@ import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
 @Mod.EventBusSubscriber
-public class TPAAcceptCommand {
+public final class TPAAcceptCommand {
+    private TPAAcceptCommand() {}
+
     @SubscribeEvent()
     public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
         event.getDispatcher().register(literal("tpaaccept")
@@ -24,7 +26,7 @@ public class TPAAcceptCommand {
     }
     private static int acceptMostRecentTPA(CommandSourceStack source) throws CommandSyntaxException {
         try {
-            TeleportManager.acceptTeleportRequest(TeleportManager.getLargestTeleportRequest(source.getPlayerOrException()), false);
+            TeleportManager.getLargestTeleportRequest(source.getPlayerOrException()).accept(false);
         } catch (IllegalArgumentException e) {
             source.getPlayerOrException().sendSystemMessage(Component.literal("§cNo teleport request was found!"));
         }
@@ -33,7 +35,7 @@ public class TPAAcceptCommand {
 
     private static int acceptTPASpecified(CommandSourceStack source, ServerPlayer teleported) throws CommandSyntaxException {
         try {
-            TeleportManager.acceptTeleportRequest(TeleportManager.getTeleportRequestByPlayers(source.getPlayerOrException(), teleported), false);
+            TeleportManager.getTeleportRequestByPlayers(source.getPlayerOrException(), teleported).accept(false);
         } catch (IllegalArgumentException e) {
             source.getPlayerOrException().sendSystemMessage(Component.literal("§cNo teleport request was found!"));
         }

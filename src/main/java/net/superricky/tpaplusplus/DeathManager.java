@@ -1,13 +1,12 @@
 package net.superricky.tpaplusplus;
 
+import java.util.Objects;
+import javax.annotation.Nullable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
-import java.util.Objects;
-
-public class DeathManager {
+public final class DeathManager {
     public static void teleportToLatestDeath(@Nullable ServerPlayer executor, @Nullable Vec3 deathPosition) {
         // Protect against NullPointerException
         if (Objects.isNull(executor) || Objects.isNull(deathPosition)) throw new IllegalArgumentException("Executor and / or death position is null!");
@@ -19,6 +18,8 @@ public class DeathManager {
 
         executor.sendSystemMessage(Component.literal("§6You have been teleported!"));
     }
+
+    private DeathManager() {} // hide the public constructor since everything is static
 
     @Nullable
     public static Vec3 getDeathPosition(ServerPlayer executor) {

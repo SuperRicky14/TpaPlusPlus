@@ -1,4 +1,4 @@
-package net.superricky.tpaplusplus;
+package _TESTING.superricky.tpaplusplus.test;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -7,7 +7,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class DeathManager {
+public class _DeathManager {
     public static void teleportToLatestDeath(@Nullable ServerPlayer executor, @Nullable Vec3 deathPosition) {
         // Protect against NullPointerException
         if (Objects.isNull(executor) || Objects.isNull(deathPosition)) throw new IllegalArgumentException("Executor and / or death position is null!");
@@ -15,7 +15,7 @@ public class DeathManager {
         executor.sendSystemMessage(Component.literal("§6Teleporting you to your §clatest death §6position..."));
 
         teleportToLastPosition(executor, deathPosition); // Teleport the player to their last position!
-        Main.playerDeathCoordinates.remove(executor); // Remove the player from the death coordinates afterward.
+        _Main.playerDeathCoordinates.remove(executor); // Remove the player from the death coordinates afterward.
 
         executor.sendSystemMessage(Component.literal("§6You have been teleported!"));
     }
@@ -24,7 +24,7 @@ public class DeathManager {
     public static Vec3 getDeathPosition(ServerPlayer executor) {
         // No need for any fancy loops here! We already handle duplicates in our event!
         @Nullable
-        Vec3 deathPosition = Main.playerDeathCoordinates.get(executor);
+        Vec3 deathPosition = _Main.playerDeathCoordinates.get(executor);
 
         return deathPosition;
     }

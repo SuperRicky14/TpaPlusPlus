@@ -1,39 +1,36 @@
-package net.superricky.tpaplusplus;
+package _TESTING.superricky.tpaplusplus.test;
 
+import _TESTING.superricky.tpaplusplus.test.event._TPAAcceptSuccessEvent;
+import _TESTING.superricky.tpaplusplus.test.event._TeleportRequestTimeoutEvent;
+import _TESTING.superricky.tpaplusplus.test.teleport._Teleport;
+import _TESTING.superricky.tpaplusplus.test.teleport._TeleportHere;
+import _TESTING.superricky.tpaplusplus.test.teleport._TeleportTo;
+import _TESTING.superricky.tpaplusplus.test.teleport.manager._TeleportManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.superricky.tpaplusplus.event.TPAAcceptSuccessEvent;
-import net.superricky.tpaplusplus.event.TeleportRequestTimeoutEvent;
-import net.superricky.tpaplusplus.teleport.Teleport;
-import net.superricky.tpaplusplus.teleport.TeleportHere;
-import net.superricky.tpaplusplus.teleport.TeleportTo;
-
-import java.util.Map;
 
 @Mod.EventBusSubscriber
-public class EventHandler {
+public class _EventHandler {
     /**
      * Our custom event. This event is triggered once the timer of a teleport request reaches 0, notifying all members which were affected.
      * @param event
      */
     @SubscribeEvent
-    public static void onTimeoutEvent(TeleportRequestTimeoutEvent event) {
-        Teleport teleportRequest = event.getTeleportRequest();
+    public static void onTimeoutEvent(_TeleportRequestTimeoutEvent event) {
+        _Teleport teleportRequest = event.getTeleportRequest();
 
         ServerPlayer executor = teleportRequest.executor();
         ServerPlayer teleported = teleportRequest.teleported();
 
-        if (teleportRequest instanceof TeleportTo) {
+        if (teleportRequest instanceof _TeleportTo) {
             executor.sendSystemMessage(Component.literal("§6Your teleport request to §c" + teleported.getDisplayName().getString() + "§6 timed out!"));
             teleported.sendSystemMessage(Component.literal("§6Your teleport request from §c" + executor.getDisplayName().getString() + "§6 timed out!"));
-        } else if (teleportRequest instanceof TeleportHere) {
+        } else if (teleportRequest instanceof _TeleportHere) {
             executor.sendSystemMessage(Component.literal("§6Your teleport §fhere §6request to §c" + teleported.getDisplayName().getString() + "§6 timed out!"));
             teleported.sendSystemMessage(Component.literal("§6Your teleport §fhere §6request from §c" + executor.getDisplayName().getString() + "§6 timed out!"));
         }
@@ -47,7 +44,7 @@ public class EventHandler {
      * Once this counter reaches 0, we remove the entry from the list and post a TimeoutEvent, which will notify all players affected that their TPA request expired.
      * @param event
      */
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void decrementTeleportRequests(TickEvent.ServerTickEvent event) {
         if (Config.TPA_TIMEOUT_IN_SECONDS.get() == 0) return; // return if it is disabled in the config
 
@@ -71,7 +68,7 @@ public class EventHandler {
                 }
             }
         }
-    }
+    }*/
 
     /**
      * Triggered on every tick.
@@ -80,11 +77,11 @@ public class EventHandler {
      * Once this counter reaches 0, we remove the entry from the list and do something that I haven't figured out yet
      * @param event
      */
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void decrementTPAAcceptTime(TickEvent.ServerTickEvent event) {
         if (Config.TPA_ACCEPT_TIME_IN_SECONDS.get() == 0) return; // return if it is disabled in the config
 
-        for (Map.Entry<Teleport, Integer> entry : Main.playerTeleportTime.entrySet()) {
+        for (Map.Entry<Teleport, Integer> entry : Main.teleportingPlayers.entrySet()) {
             // Get how much time is remaining in the hashmap ( in game ticks)
             int remainingTime = entry.getValue();
 
@@ -109,11 +106,11 @@ public class EventHandler {
 
                     // Remove the entry from the playerTeleportTime hashmap and the teleportRequests hashmap to stop de-sync
                     Main.teleportRequests.remove(teleportRequest);
-                    Main.playerTeleportTime.remove(teleportRequest);
+                    Main.teleportingPlayers.remove(teleportRequest);
                 }
             }
         }
-    }
+    } */
 
     /**
      * Triggered when a TPAAcceptTimer is successful.
@@ -122,8 +119,8 @@ public class EventHandler {
      * @param event
      */
     @SubscribeEvent
-    public static void onTPAAcceptTimerSuccess(TPAAcceptSuccessEvent event) {
-        TeleportManager.acceptTeleportRequest(event.getTeleportRequest(), true);
+    public static void onTPAAcceptTimerSuccess(_TPAAcceptSuccessEvent event) {
+        _TeleportManager.acceptTeleportRequest(event.getTeleportRequest(), true);
     }
 
     /**
@@ -148,9 +145,9 @@ public class EventHandler {
         Vec3 deathPosition = playerEntity.position();
 
         // Remove old playerDeathCoordinate if present.
-        Main.playerDeathCoordinates.remove(playerEntity);
+        _Main.playerDeathCoordinates.remove(playerEntity);
 
         // Add this playerDeathCoordinate to the map.
-        Main.playerDeathCoordinates.put(playerEntity, deathPosition);
+        _Main.playerDeathCoordinates.put(playerEntity, deathPosition);
     }
 }

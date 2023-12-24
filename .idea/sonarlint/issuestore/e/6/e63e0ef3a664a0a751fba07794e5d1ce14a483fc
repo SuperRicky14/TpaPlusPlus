@@ -1,0 +1,15 @@
+
+
+java:S1192,"GDefine a constant instead of duplicating this literal "-force" 5 times.(¹øãÛüÿÿÿÿ8ÒÌ“×É1J$b2e3f94d-b6a3-4b76-ad1f-00e5e2507c65
+
+java:S1192."GDefine a constant instead of duplicating this literal "config" 4 times.(Í¨üºøÿÿÿÿ8ÒÌ“×É1J$82952370-0bce-4462-98d8-14bd8ae186eb
+}
+java:S1118":Add a private constructor to hide the implicit public one.(÷åğ¼8÷Ì“×É1J$fa9bb2db-6b49-479a-bde6-739d84e13c8e
+›
+java:S1128"SRemove this unused import 'com.mojang.brigadier.exceptions.CommandSyntaxException'.(·£¾Áùÿÿÿÿ8Í“×É1J$75a838b3-0d8d-4f3e-ab45-c36439d2a9f2
+˜
+java:S1128"URemove this unused import 'com.sun.jna.platform.win32.COM.util.annotation.ComObject'.(ÀÊ…±8Í“×É1J$f65eba46-1427-48b9-8151-2f67249dd511
+‰
+java:S1128"FRemove this unused import 'org.checkerframework.checker.units.qual.C'.(ÏıÁÊ8Í“×É1J$438d7e3e-274b-4de6-baf7-7ddd79f4563c
+i
+java:S1128"&Remove this unused import 'java.util'.(Î€ŒÙ8Í“×É1J$223de97b-2e7f-4b26-a698-780893558948

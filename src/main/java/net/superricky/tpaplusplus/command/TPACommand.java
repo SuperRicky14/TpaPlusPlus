@@ -8,8 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.superricky.tpaplusplus.TeleportManager;
-import net.superricky.tpaplusplus.teleport.TeleportTo;
+import net.superricky.tpaplusplus.util.RequestManager;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -24,13 +23,7 @@ public class TPACommand {
     }
 
     private static int teleportPlayer(CommandSourceStack source, ServerPlayer teleported) throws CommandSyntaxException {
-        try {
-            TeleportManager.sendTeleportTo(new TeleportTo(source.getPlayerOrException(), teleported));
-        } catch (IllegalArgumentException e) {
-            source.getPlayerOrException().sendSystemMessage(Component.literal("§cNo teleport request was found!"));
-        } catch (Exception e) {
-            source.getPlayerOrException().sendSystemMessage(Component.literal("An unknown error occurred when searching for TPA request"));
-        }
+        RequestManager.sendTeleportRequest(source.getPlayerOrException(), teleported, false);
         return 1;
     }
 }

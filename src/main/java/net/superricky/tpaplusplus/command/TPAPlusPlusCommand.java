@@ -1,8 +1,6 @@
 package net.superricky.tpaplusplus.command;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.sun.jna.platform.win32.COM.util.annotation.ComObject;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -14,14 +12,12 @@ import net.superricky.tpaplusplus.Messages;
 import net.superricky.tpaplusplus.util.DeathManager;
 import net.superricky.tpaplusplus.util.MessageReformatter;
 import net.superricky.tpaplusplus.util.RequestManager;
-import org.checkerframework.checker.units.qual.C;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
-import java.util.*;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -38,7 +34,7 @@ public class TPAPlusPlusCommand {
                         .then(literal("messages")
                                 .then(literal("color-set"))
                                         .then(argument("colors", StringArgumentType.string())
-                                                .executes(context -> printRawMessages(context.getSource(), StringArgumentType.getString(context, "colors"))))
+                                                .executes(context -> refactorColorSet(context.getSource(), StringArgumentType.getString(context, "colors"))))
                                 .then(literal("reset")
                                         .executes(context -> resetMessages(context.getSource(), false))
                                         .then(literal("-force")
@@ -102,7 +98,7 @@ public class TPAPlusPlusCommand {
         return 1;
     }
 
-    private static int printRawMessages(CommandSourceStack source, String colors) {
+    private static int refactorColorSet(CommandSourceStack source, String colors) {
         colors = colors.replace(" ", "");
         String[] colorList = colors.split(",");
 
@@ -119,12 +115,17 @@ public class TPAPlusPlusCommand {
             }
         }
 
-        String oldMainColor = colorList[0].replace("&", "§");
-        String oldSecondaryColor = colorList[1].replace("&", "§");
-        String oldErrorColor = colorList[2].replace("&", "§");
-        String newMainColor = colorList[3].replace("&", "§");
-        String newSecondaryColor = colorList[4].replace("&", "§");
-        String newErrorColor = colorList[5].replace("&", "§");
+        String oldMainColor = colorList[0].replace("&", "§").toLowerCase();
+        String oldSecondaryColor = colorList[1].replace("&", "§").toLowerCase();
+        String oldErrorColor = colorList[2].replace("&", "§").toLowerCase();
+        String newMainColor = colorList[3].replace("&", "§").toLowerCase();
+        String newSecondaryColor = colorList[4].replace("&", "§").toLowerCase();
+        String newErrorColor = colorList[5].replace("&", "§").toLowerCase();
+
+        if (oldMainColor.equals(oldSecondaryColor) || newMainColor.equals(newSecondaryColor)) {
+            source.sendSystemMessage(Component.literal("§cThe main and secondary colours cannot be the same!"));
+            return 1;
+        }
 
         MessageReformatter.updateColorsAndSave(MessageReformatter.loadRawConfig(),
                 oldMainColor,

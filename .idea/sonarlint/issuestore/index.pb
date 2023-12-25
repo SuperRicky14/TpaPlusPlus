@@ -111,3 +111,6 @@ M
 .idea/modules/TpaPlusPlus.iml,0\a\0a187e80df3382636d759e61cf4d93fc98625123
 R
 ".idea/modules/TpaPlusPlus.main.iml,f\9\f9c0f566e4e1abcde375c96728524fb51ee6b9f4
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302

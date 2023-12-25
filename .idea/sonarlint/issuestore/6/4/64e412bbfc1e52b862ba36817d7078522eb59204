@@ -1,5 +1,12 @@
 
-d
-java:S5411"(Use a primitive boolean expression here.(ÿ©¡J$d5328e15-9ea6-46a9-986c-c53b3874242e
-j
-java:S1125"'Remove the unnecessary boolean literal.(ÿ©¡8øºï©È1J$a9352248-290a-4a53-b101-a04e5172fdae
+\
+java:S1118":Add a private constructor to hide the implicit public one.(Üíá®ûÿÿÿÿ8„´úÉ1
+c
+java:S1128"ARemove this unused import 'net.minecraft.network.chat.Component'.(‡“Ò°ûÿÿÿÿ8‰´úÉ1
+a
+java:S1128"DRemove this unused import 'net.minecraft.server.level.ServerPlayer'.(‘¤ñ’8‰´úÉ1
+`
+java:S1128
+">Remove this unused import 'net.superricky.tpaplusplus.Config'.(†Ë¡ºøÿÿÿÿ8‰´úÉ1
+\
+java:S1128"@Remove this unused import 'net.superricky.tpaplusplus.Messages'.(æª˜J8Š´úÉ1

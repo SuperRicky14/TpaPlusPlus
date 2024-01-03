@@ -12,7 +12,7 @@ import net.superricky.tpaplusplus.util.configuration.Messages;
 public class Main {
     // Our mod id
     public static final String MOD_ID = "tpaplusplus";
-    public static final String MOD_VERSION = "1.3-1.20.x-BETA-2.1";
+    public static final String MOD_VERSION = "1.3-1.20.x-BETA-2.2";
 
     public Main() {
         MinecraftForge.EVENT_BUS.register(this);

@@ -41,3 +41,5 @@ q
 Asrc/main/java/net/superricky/tpaplusplus/command/BackCommand.java,6\4\64e412bbfc1e52b862ba36817d7078522eb59204
 t
 Dsrc/main/java/net/superricky/tpaplusplus/command/TPAHereCommand.java,c\a\ca5855e90b21450f6b5ad7d9e0a8afd2203196fc
+A
+gradle.properties,2\a\2afbb999f001938c88fa43fc2ef52abf0f8213e4

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
-  <component name="CheckStyle-IDEA-Module" serialisationVersion="2">
-    <option name="activeLocationsIds" />
-  </component>
   <component name="FacetManager">
     <facet type="minecraft" name="Minecraft">
       <configuration>
@@ -16,13 +13,13 @@
     </facet>
   </component>
   <component name="McpModuleSettings">
-    <option name="mappingFile" value="E:\Java Projects\Minecraft\Forge\TpaPlusPlus\build\createMcpToSrg\output.tsrg" />
+    <option name="mappingFile" value="D:\Java Projects\Minecraft\Forge\TpaPlusPlus\build\createMcpToSrg\output.tsrg" />
     <option name="mcpVersion" value="parchment_2023.09.03-1.20.1" />
     <option name="minecraftVersion" value="1.20.1" />
     <option name="platformVersion" value="47.2.14" />
     <option name="srgType" value="TSRG" />
   </component>
   <component name="SonarLintModuleSettings">
-    <option name="uniqueId" value="0e33cde6-59bd-4aae-8e3f-44a22a68ebf5" />
+    <option name="uniqueId" value="a7046a58-c6a4-4e25-8a35-e7b1e0e94781" />
   </component>
 </module>

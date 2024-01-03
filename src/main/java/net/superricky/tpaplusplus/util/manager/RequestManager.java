@@ -1,8 +1,11 @@
-package net.superricky.tpaplusplus.util;
+package net.superricky.tpaplusplus.util.manager;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.superricky.tpaplusplus.Messages;
+import net.superricky.tpaplusplus.util.Request;
+import net.superricky.tpaplusplus.util.configuration.Config;
+import net.superricky.tpaplusplus.util.configuration.Messages;
+import net.superricky.tpaplusplus.util.limitations.LimitationManager;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -10,39 +13,27 @@ import java.util.Objects;
 import java.util.Set;
 
 public class RequestManager {
-    public static final Set<Request> requestSet = new HashSet<>();
+    static final Set<Request> requestSet = new HashSet<>();
+
+    private RequestManager() {
+    }
 
     public static boolean isPlayerIdentical(ServerPlayer player1, ServerPlayer player2) {
         return player1.getUUID().equals(player2.getUUID());
     }
 
+    public static void clearRequestSet() {
+        requestSet.clear();
+    }
 
-    // Send command is run by the sender, hence why its in the sender's point of view
-    public static void sendTeleportRequest(ServerPlayer sender, ServerPlayer receiver, boolean isHereRequest) {
-        if (isPlayerIdentical(sender, receiver)) {
-            sender.sendSystemMessage(Component.literal(Messages.ERR_NO_SELF_TELEPORT.get()));
-            return;
+    public static boolean alreadySentTeleportRequest(Request request) {
+        for (Request currentRequest : requestSet) {
+            if (isPlayerIdentical(request.getSender(), currentRequest.getSender())
+                    && isPlayerIdentical(request.getReceiver(), currentRequest.getReceiver())) {
+                return true;
+            }
         }
-
-        if (isHereRequest) {
-            Request request = new Request(sender, receiver, true);
-            sender.sendSystemMessage(Component.literal(String.format(Messages.SENDER_SENT_TPAHERE.get(), receiver.getName().getString())));
-            receiver.sendSystemMessage(Component.literal(String.format(Messages.RECEIVER_GOT_TPAHERE.get(), sender.getName().getString())));
-
-            requestSet.add(request);
-
-            AsyncTaskManager.scheduleTeleportTimeout(request);
-            return;
-        }
-
-        Request request = new Request(sender, receiver, false);
-
-        sender.sendSystemMessage(Component.literal(String.format(Messages.SENDER_SENT_TPA.get(), receiver.getName().getString())));
-        receiver.sendSystemMessage(Component.literal(String.format(Messages.RECEIVER_GOT_TPA.get(), sender.getName().getString())));
-
-        requestSet.add(request);
-
-        AsyncTaskManager.scheduleTeleportTimeout(request);
+        return false;
     }
 
     // Deny command is run by the receiver, hence why it's in the receiver's point of view.
@@ -90,13 +81,46 @@ public class RequestManager {
         cancelFunctionality(request, sender);
     }
 
+    // Send command is run by the sender, hence why its in the sender's point of view
+    public static void sendTeleportRequest(ServerPlayer sender, ServerPlayer receiver, boolean isHereRequest) {
+        if (isPlayerIdentical(sender, receiver)) {
+            sender.sendSystemMessage(Component.literal(Messages.ERR_NO_SELF_TELEPORT.get()));
+            return;
+        }
+
+        // run the notify function and return if it false, to stop the player from sending the request.
+        if (!LimitationManager.notifyAndCheckAllowedToTeleport(sender, receiver, false)) return;
+
+        Request request = new Request(sender, receiver, isHereRequest);
+
+        requestSet.add(request);
+
+        AsyncTaskManager.scheduleTeleportTimeout(request);
+
+        if (isHereRequest) {
+            sender.sendSystemMessage(Component.literal(String.format(Messages.SENDER_SENT_TPAHERE.get(), receiver.getName().getString())));
+            receiver.sendSystemMessage(Component.literal(String.format(Messages.RECEIVER_GOT_TPAHERE.get(), sender.getName().getString())));
+        } else {
+            sender.sendSystemMessage(Component.literal(String.format(Messages.SENDER_SENT_TPA.get(), receiver.getName().getString())));
+            receiver.sendSystemMessage(Component.literal(String.format(Messages.RECEIVER_GOT_TPA.get(), sender.getName().getString())));
+        }
+    }
+
     // Accept command is run by the sender, hence why it's in the sender's point of view.
-    private static void acceptFunctionality(Request request, ServerPlayer receiver) {
+    static void acceptFunctionality(Request request, ServerPlayer receiver, boolean absolute) {
         if (Objects.isNull(request)) {
             receiver.sendSystemMessage(Component.literal(Messages.ERR_REQUEST_NOT_FOUND.get()));
             return;
         }
 
+        if (absolute || Config.TPA_ACCEPT_TIME_IN_SECONDS.get() == 0) {
+            absoluteAcceptFunctionality(request, receiver);
+        } else {
+            AsyncTaskManager.startTPAAcceptCountdown(request);
+        }
+    }
+
+    private static void absoluteAcceptFunctionality(Request request, ServerPlayer receiver) {
         receiver.sendSystemMessage(Component.literal(String.format(Messages.RECEIVER_ACCEPTS_TPA.get(), request.getSender().getName().getString())));
         request.getSender().sendSystemMessage(Component.literal(String.format(Messages.SENDER_GOT_ACCEPTED_TPA.get(), request.getSender().getName().getString())));
 
@@ -104,14 +128,15 @@ public class RequestManager {
 
         requestSet.remove(request);
     }
+
     public static void acceptTeleportRequest(ServerPlayer receiver) {
         Request request = RequestGrabUtil.getReceiverRequest(receiver);
-        acceptFunctionality(request, receiver);
+        acceptFunctionality(request, receiver, false);
     }
 
     public static void acceptTeleportRequest(ServerPlayer receiver, ServerPlayer sender) {
         Request request = RequestGrabUtil.getReceiverRequest(receiver, sender);
-        acceptFunctionality(request, receiver);
+        acceptFunctionality(request, receiver, false);
     }
 
     public static void teleport(Request request) {

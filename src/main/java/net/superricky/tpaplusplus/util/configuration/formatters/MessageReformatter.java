@@ -1,4 +1,7 @@
-package net.superricky.tpaplusplus.util;
+package net.superricky.tpaplusplus.util.configuration.formatters;
+
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -8,25 +11,14 @@ import java.util.Set;
 
 public class MessageReformatter {
     private static final Random RANDOM = new Random();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final Set<String> LEGAL_COLORS = Set.of(
             "&4", "&c", "&6", "&e", "&2", "&a", "&b", "&3",
             "&1", "&9", "&d", "&5", "&f", "&7", "&8", "&0"
     );
 
-    public static List<String> loadRawConfig() {
-        List<String> configLines = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader("config" + File.separator + "tpaplusplus-messages.toml"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                configLines.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return configLines;
+    private MessageReformatter() {
     }
 
     public static List<String> updateColorsAndSave(List<String> configLines, String oldMainColor, String newMainColor, String oldSecondaryColor, String newSecondaryColor, String oldErrorColor, String newErrorColor) {
@@ -52,15 +44,19 @@ public class MessageReformatter {
         return line.replace(oldMainColor, newMainColor).replace(oldSecondaryColor, newSecondaryColor);
     }
 
-    public static void writeUpdatedConfig(List<String> updatedConfigLines) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("config" + File.separator + "tpaplusplus-messages.toml"))) {
-            for (String line : updatedConfigLines) {
-                writer.write(line);
-                writer.newLine(); // Add a new line after each line
+    public static List<String> loadRawConfig() {
+        List<String> configLines = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader("config" + File.separator + "tpaplusplus-messages.toml"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                configLines.add(line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.toString());
         }
+
+        return configLines;
     }
 
     public static String getRandomColorCode() {
@@ -69,5 +65,16 @@ public class MessageReformatter {
 
     public static boolean isValidColor(String color) {
         return LEGAL_COLORS.contains(color);
+    }
+
+    public static void writeUpdatedConfig(List<String> updatedConfigLines) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("config" + File.separator + "tpaplusplus-messages.toml"))) {
+            for (String line : updatedConfigLines) {
+                writer.write(line);
+                writer.newLine(); // Add a new line after each line
+            }
+        } catch (IOException e) {
+            LOGGER.error(e.toString());
+        }
     }
 }

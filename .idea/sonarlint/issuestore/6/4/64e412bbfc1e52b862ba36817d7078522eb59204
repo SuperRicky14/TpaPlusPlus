@@ -1,12 +1,0 @@
-
-\
-java:S1118":Add a private constructor to hide the implicit public one.(Üíá®ûÿÿÿÿ8„´úÉ1
-c
-java:S1128"ARemove this unused import 'net.minecraft.network.chat.Component'.(‡“Ò°ûÿÿÿÿ8‰´úÉ1
-a
-java:S1128"DRemove this unused import 'net.minecraft.server.level.ServerPlayer'.(‘¤ñ’8‰´úÉ1
-`
-java:S1128
-">Remove this unused import 'net.superricky.tpaplusplus.Config'.(†Ë¡ºøÿÿÿÿ8‰´úÉ1
-\
-java:S1128"@Remove this unused import 'net.superricky.tpaplusplus.Messages'.(æª˜J8Š´úÉ1

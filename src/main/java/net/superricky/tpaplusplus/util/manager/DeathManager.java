@@ -1,8 +1,9 @@
-package net.superricky.tpaplusplus.util;
+package net.superricky.tpaplusplus.util.manager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.superricky.tpaplusplus.Config;
-import net.superricky.tpaplusplus.Messages;
+import net.superricky.tpaplusplus.util.LevelBoundVec3;
+import net.superricky.tpaplusplus.util.configuration.Config;
+import net.superricky.tpaplusplus.util.configuration.Messages;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -10,15 +11,18 @@ import java.util.Map;
 import java.util.Objects;
 
 public class DeathManager {
-    public static final Map<ServerPlayer, DeathPos> playerDeathCoordinates = new HashMap<>();
+    static final Map<ServerPlayer, LevelBoundVec3> playerDeathCoordinates = new HashMap<>();
+
+    private DeathManager() {
+    }
 
     public static void teleportToLatestDeath(ServerPlayer executor) {
-        if (!Config.BACK_COMMAND_ENABLED.get()) {
+        if (Boolean.FALSE.equals(Config.BACK_COMMAND_ENABLED.get())) {
             executor.sendSystemMessage(Component.literal(Messages.ERR_BACK_COMMAND_DISABLED.get()));
             return;
         }
 
-        @Nullable DeathPos deathPosition = playerDeathCoordinates.get(executor);
+        @Nullable LevelBoundVec3 deathPosition = playerDeathCoordinates.get(executor);
 
         // Protect against NullPointerException
         if (Objects.isNull(deathPosition)) {
@@ -34,7 +38,11 @@ public class DeathManager {
         executor.sendSystemMessage(Component.literal(Messages.DEATH_TELEPORTED.get()));
     }
 
-    public static void teleportToLastPosition(@Nullable ServerPlayer executor, @Nullable DeathPos deathPosition) {
-        executor.teleportTo(deathPosition.getDeathLevel(), deathPosition.x, deathPosition.y, deathPosition.z, executor.getYRot(), executor.getXRot());
+    public static void teleportToLastPosition(ServerPlayer executor, LevelBoundVec3 deathPosition) {
+        executor.teleportTo(deathPosition.serverLevel(), deathPosition.x, deathPosition.y, deathPosition.z, executor.getYRot(), executor.getXRot());
+    }
+
+    public static void clearDeathCoordinates() {
+        playerDeathCoordinates.clear();
     }
 }

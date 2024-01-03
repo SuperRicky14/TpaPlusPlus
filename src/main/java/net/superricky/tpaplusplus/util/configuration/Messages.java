@@ -1,4 +1,4 @@
-package net.superricky.tpaplusplus;
+package net.superricky.tpaplusplus.util.configuration;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
@@ -8,6 +8,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
  * This is why we use a forge config here, to avoid the issue of having to install this mod on the client, keeping everything 100% server-side.
  */
 public class Messages {
+    private static final String DISTANCE_PLACEHOLDER_COMMENT = " Placeholders: \"${distance}\": \"The distance between the two players.\"";
+
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
 
@@ -32,6 +34,11 @@ public class Messages {
     // /tpaaccept
     public static final ForgeConfigSpec.ConfigValue<String> RECEIVER_ACCEPTS_TPA;
     public static final ForgeConfigSpec.ConfigValue<String> SENDER_GOT_ACCEPTED_TPA;
+    public static final ForgeConfigSpec.ConfigValue<String> ACCEPT_COUNTDOWN_MESSAGE_START;
+    public static final ForgeConfigSpec.ConfigValue<String> ACCEPT_COUNTDOWN_MESSAGE;
+    public static final ForgeConfigSpec.ConfigValue<String> OTHER_PLAYER_ACCEPT_COUNTDOWN_MESSAGE;
+    public static final ForgeConfigSpec.ConfigValue<String> SENDER_REQUEST_TO_RECEIVER_MOVED_DURING_COUNTDOWN;
+    public static final ForgeConfigSpec.ConfigValue<String> RECEIVER_MOVED_DURING_COUNTDOWN;
 
     // /tpa
     public static final ForgeConfigSpec.ConfigValue<String> SENDER_SENT_TPA;
@@ -47,6 +54,14 @@ public class Messages {
     public static final ForgeConfigSpec.ConfigValue<String> SENDER_TPAHERE_TIMEOUT;
     public static final ForgeConfigSpec.ConfigValue<String> RECEIVER_TPAHERE_TIMEOUT;
 
+    // Limitation Messages
+    public static final ForgeConfigSpec.ConfigValue<String> ERR_TOO_FAR_EXECUTOR;
+    public static final ForgeConfigSpec.ConfigValue<String> ERR_TOO_FAR_OTHER_PLAYER;
+    public static final ForgeConfigSpec.ConfigValue<String> ERR_TOO_CLOSE_EXECUTOR;
+    public static final ForgeConfigSpec.ConfigValue<String> ERR_TOO_CLOSE_OTHER_PLAYER;
+    public static final ForgeConfigSpec.ConfigValue<String> ERR_DIFFERENT_DIMENSIONS_EXECUTOR;
+    public static final ForgeConfigSpec.ConfigValue<String> ERR_DIFFERENT_DIMENSIONS_OTHER_PLAYER;
+
     // /tpaplusplus Messages
     public static final ForgeConfigSpec.ConfigValue<String> TPAPLUSPLUS_VERSION;
     public static final ForgeConfigSpec.ConfigValue<String> TPAPLUSPLUS_RELOADING_EVERYTHING;
@@ -58,6 +73,7 @@ public class Messages {
     public static final ForgeConfigSpec.ConfigValue<String> TPAPLUSPLUS_RELOADING_CONFIG;
     public static final ForgeConfigSpec.ConfigValue<String> TPAPLUSPLUS_RELOADED_CONFIG;
     public static final ForgeConfigSpec.ConfigValue<String> ERR_TPAPLUSPLUS_COLORS_REQUIRE_SIX_COLORS;
+    public static final ForgeConfigSpec.ConfigValue<String> ERR_TPAPLUSPLUS_COLORS_CANNOT_BE_THE_SAME;
     public static final ForgeConfigSpec.ConfigValue<String> ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS;
     public static final ForgeConfigSpec.ConfigValue<String> ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS_EXAMPLES;
     public static final ForgeConfigSpec.ConfigValue<String> TPAPLUSPLUS_COLORS_SUCCESS;
@@ -65,6 +81,8 @@ public class Messages {
     static {
         BUILDER.push("TPA++ Messages");
         BUILDER.comment(" Don't know how Minecrafts §<color code> formatting works? Check out: https://www.digminecraft.com/lists/color_list_pc.php");
+        BUILDER.comment("\n Due to the nature of now Strings are immutable in java, all values in this configuration require a restart to take affect!");
+        BUILDER.comment("\n ALL MESSAGES SUPPORT JAVA SYNTAX FORMATTING! If you say want to put a newline into the message, just enter \\n, or if you want to add double quotes into a message enter \\\"");
 
         BUILDER.comment("\n-------------------------General TPA stuff-------------------------");
 
@@ -111,32 +129,54 @@ public class Messages {
         BUILDER.comment("\n-------------------------/tpaaccept Messages-------------------------");
 
         RECEIVER_ACCEPTS_TPA = BUILDER.comment("\n The message that is sent to the player who executes /tpaaccept")
-                        .comment(" Placeholders: \"%s\": \"The sender's name who sent the request\"")
-                        .define("RECEIVER_ACCEPTS_TPA", "§6Accepted teleport request from §c%s");
+                .comment(" Placeholders: \"%s\": \"The sender's name who sent the request\"")
+                .define("RECEIVER_ACCEPTS_TPA", "§6Accepted teleport request from §c%s");
 
         SENDER_GOT_ACCEPTED_TPA = BUILDER.comment("\n The message that is sent to the sender of the TPA request, when their TPA request is accepted")
-                        .comment(" Placeholders: \"%s\": \"The receiver's name who accepted the request\"")
-                        .define("SENDER_GOT_ACCEPTED_TPA", "§6Your teleport request for §c%s §6was accepted!");
+                .comment(" Placeholders: \"%s\": \"The receiver's name who accepted the request\"")
+                .define("SENDER_GOT_ACCEPTED_TPA", "§6Your teleport request for §c%s §6was accepted!");
+
+        ACCEPT_COUNTDOWN_MESSAGE_START = BUILDER.comment("\n The message that is displayed when a player initiates an accept")
+                .define("ACCEPT_COUNTDOWN_MESSAGE_START", "§6Your request will be §cfulfilled §6in...");
+
+        ACCEPT_COUNTDOWN_MESSAGE = BUILDER.comment("\n The countdown message that is sent to the player being teleported.")
+                .comment(" Placeholders: \"%s\": \"The amount of time left (in seconds) until the request is fulfilled\"")
+                .define("ACCEPT_COUNTDOWN_MESSAGE", "§6You will be teleported in §c%s");
+
+        OTHER_PLAYER_ACCEPT_COUNTDOWN_MESSAGE = BUILDER.comment("\n The countdown message that is sent to the player that is NOT being teleported.")
+                .comment(" This has no affect when it is disabled in the config.")
+                .comment(" Placeholders: \"${otherPlayerName}\": \"The players name who is being teleported\"")
+                .comment("      \"${timeRemaining}\": \"The amount of time remaining until the other player is teleported\"")
+                .define("OTHER_PLAYER_ACCEPT_COUNTDOWN_MESSAGE", "§c${otherPlayerName} §6will be teleported in §c${timeRemaining}");
+
+        SENDER_REQUEST_TO_RECEIVER_MOVED_DURING_COUNTDOWN = BUILDER.comment("\n The message that is sent to the sender of the TPA request, when the receiver moves out of range, cancelling the request")
+                .comment(" This has no affect when it is disabled in the config.")
+                .comment(" Placeholders: \"${receiverName}\": \"The name of the receiver who moved\"")
+                .define("SENDER_REQUEST_TO_RECEIVER_MOVED_DURING_COUNTDOWN", "§c${receiverName} §6has §cmoved §6during the §ccountdown§6, so your request was §ccancelled§6!");
+
+        RECEIVER_MOVED_DURING_COUNTDOWN = BUILDER.comment("\n The message that is sent to the receiver of the TPA request, when they move out of range, cancelling the request")
+                .comment(" This has no affect when it is disabled in the config.")
+                .define("RECEIVER_MOVED_DURING_COUNTDOWN", "§cYou moved too much §6during the §ccountdown§6, so your §crequest §6was §ccancelled§6!");
 
         BUILDER.comment("\n-------------------------/tpa Messages-------------------------");
 
         SENDER_SENT_TPA = BUILDER.comment("\n The message that is sent to the player that executes /tpa")
-                        .comment(" Placeholders: \"%s\": \"The receiver's name who got sent the TPA request\"")
-                        .define("SENDER_SENT_TPA", "§6Successfully sent teleport request to §c%s");
+                .comment(" Placeholders: \"%s\": \"The receiver's name who got sent the TPA request\"")
+                .define("SENDER_SENT_TPA", "§6Successfully sent teleport request to §c%s");
 
         RECEIVER_GOT_TPA = BUILDER.comment("\n The message that is sent to the receiver of a TPA request")
-                        .comment(" Placeholders: \"%s\": \"The sender's name who sent the TPA request\"")
-                        .define("RECEIVER_GOT_TPA", "§c%s §6wants to teleport to you!");
+                .comment(" Placeholders: \"%s\": \"The sender's name who sent the TPA request\"")
+                .define("RECEIVER_GOT_TPA", "§c%s §6wants to teleport to you!");
 
         BUILDER.comment("\n-------------------------/tpahere Messages-------------------------");
 
         SENDER_SENT_TPAHERE = BUILDER.comment("\n The message that is sent to the player that executes /tpahere")
                         .comment(" Placeholders: \"%s\": \"The receiver's name who got sent the TPAHERE request\"")
-                        .define("SENDER_SENT_TPA", "§6Successfully sent teleport §chere §6request to §c%s");
+                        .define("SENDER_SENT_TPAHERE", "§6Successfully sent teleport §chere §6request to §c%s");
 
         RECEIVER_GOT_TPAHERE = BUILDER.comment("\n The message that is sent to the receiver of a TPAHERE request")
                         .comment(" Placeholders: \"%s\": \"The sender's name who sent the TPAHERE request\"")
-                        .define("RECEIVER_GOT_TPA", "§c%s §6wants §cyou §6to teleport to §cthem!");
+                        .define("RECEIVER_GOT_TPAHERE", "§c%s §6wants §cyou §6to teleport to §cthem!");
 
         BUILDER.comment("\n-------------------------TPA Request Timeout Messages-------------------------");
 
@@ -155,6 +195,53 @@ public class Messages {
         RECEIVER_TPAHERE_TIMEOUT = BUILDER.comment("\n The message that is sent to the receiver of a TPAHERE request, when their TPAHERE request expires")
                         .comment(" Placeholders: \"%s\": \"The sender's name who sent the receiver the TPAHERE request\"")
                         .define("RECEIVER_TPA_TIMEOUT", "§6Your teleport §chere §6request from §c%s §6timed out!");
+
+        BUILDER.comment("\n-------------------------Limitation Messages-------------------------");
+
+        ERR_TOO_FAR_EXECUTOR = BUILDER.comment("\n The message displayed when the player accepting or sending a TPA request, is too far away.")
+                .comment(DISTANCE_PLACEHOLDER_COMMENT)
+                .comment("     \"${expectedDistance}\": \"The maximum distance players can be from eachother to teleport\"")
+                .define("ERR_TOO_FAR_EXECUTOR", """
+                            §cYou are too far! You are ${distance} blocks apart!
+                            §cYou must be a maximum of ${expectedDistance} blocks apart!""");
+
+        ERR_TOO_FAR_OTHER_PLAYER = BUILDER.comment("\n The message displayed to the other player, when the TPA request is too far away")
+                .comment(DISTANCE_PLACEHOLDER_COMMENT)
+                .comment("     \"${expectedDistance}\": \"The maximum distance players can be from eachother to teleport\"")
+                .comment("     \"${otherPlayerName}\": \"The name of the executor.\"")
+                .define("ERR_TOO_FAR_OTHER_PLAYER", """
+                                §c${otherPlayerName} failed to teleport: You are too far! You are ${distance} blocks apart!
+                                §cYou must be a maximum of ${expectedDistance} blocks apart!""");
+
+        ERR_TOO_CLOSE_EXECUTOR = BUILDER.comment("\n The message displayed when the player accepting or sending a TPA request, is too close.")
+                .comment(DISTANCE_PLACEHOLDER_COMMENT)
+                .comment("     \"${expectedDistance}\": \"The minimum distance players can be from eachother to teleport\"")
+                .define("ERR_TOO_CLOSE_EXECUTOR", """
+                            §cYou are too close! You are ${distance} blocks apart!
+                            §cYou must be a minimum of ${expectedDistance} blocks apart!""");
+
+        ERR_TOO_CLOSE_OTHER_PLAYER = BUILDER.comment("\n The message displayed to the other player, when the TPA request is too close.")
+                .comment(DISTANCE_PLACEHOLDER_COMMENT)
+                .comment("     \"${expectedDistance}\": \"The minimum distance players can be from eachother to teleport\"")
+                .define("ERR_TOO_CLOSE_OTHER_PLAYER", """
+                                §c${otherPlayerName} failed to teleport: You are too close! You are ${distance} blocks apart!
+                                §cYou must be a minimum of ${expectedDistance} blocks apart!""");
+
+        ERR_DIFFERENT_DIMENSIONS_EXECUTOR = BUILDER.comment("\n The message displayed when the player accepting or sending a TPA request, is in another dimension")
+                .comment(" Placeholders: \"${executorDimension}\": \"The name of the dimension the executor is in\"")
+                .comment("     \"${otherPlayerDimension\": \"The name of the dimension the other player is in\"")
+                .define("ERR_DIFFERENT_DIMENSIONS_EXECUTOR", """
+                            §cYou must be in the same dimension!
+                            §cYou are in: ${executorDimension}
+                            §cThey are in: ${otherPlayerDimension}""");
+
+        ERR_DIFFERENT_DIMENSIONS_OTHER_PLAYER = BUILDER.comment("\n The message displayed to the other player, when the TPA request is from another dimension.")
+                .comment(" Placeholders: \"${executorDimension}\": \"The name of the dimension the executor is in\"")
+                .comment("     \"${otherPlayerDimension\": \"The name of the dimension the other player is in\"")
+                .define("ERR_DIFFERENT_DIMENSIONS_EXECUTOR", """
+                            §cYou must be in the same dimension!
+                            §cYou are in: ${otherPlayerDimension}
+                            §cThey are in: ${executorDimension}""");
 
         BUILDER.comment("\n-------------------------/tpaplusplus Messages-------------------------");
 
@@ -188,7 +275,10 @@ public class Messages {
 
         ERR_TPAPLUSPLUS_COLORS_REQUIRE_SIX_COLORS = BUILDER.comment("\n The message displayed when someone runs \"/tpaplusplus refactor colors\" with not enough colors specified")
                 .comment("Placeholders: \"%s\": \"The amount of colours that the player entered.\"")
-                .define("TPAPLUSPLUS_COLORS_REQUIRE_SIX_COLORS", "§cIllegal Arguments! Required 6 colors, you entered: %s");
+                .define("ERR_TPAPLUSPLUS_COLORS_REQUIRE_SIX_COLORS", "§cIllegal Arguments! Required 6 colors, you entered: %s");
+
+        ERR_TPAPLUSPLUS_COLORS_CANNOT_BE_THE_SAME = BUILDER.comment("\n The message displayed when someone runs \"/tpaplusplus refactor colors\" when the primary and secondary colours are the same")
+                .define("ERR_TPAPLUSPLUS_COLORS_CANNOT_BE_THE_SAME", "§cThe main and secondary colours cannot be the same!");
 
         ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS = BUILDER.comment("\n The message displayed when someone runs \"/tpaplusplus refactor colors\" with invalid colour codes")
                 .comment("Placeholders: \"%s\": \"The string the user entered instead of a valid colour code.\"")
@@ -203,5 +293,8 @@ public class Messages {
 
         BUILDER.pop();
         SPEC = BUILDER.build();
+    }
+
+    private Messages() {
     }
 }

@@ -22,19 +22,14 @@
       <option name="url" value="https://repo.maven.apache.org/maven2/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="maven" />
-      <option name="name" value="maven" />
-      <option name="url" value="https://maven.minecraftforge.net/" />
-    </remote-repository>
-    <remote-repository>
       <option name="id" value="ParchmentMC" />
       <option name="name" value="ParchmentMC" />
       <option name="url" value="https://maven.parchmentmc.org/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="Modrinth" />
-      <option name="name" value="Modrinth" />
-      <option name="url" value="https://api.modrinth.com/maven" />
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="https://maven.minecraftforge.net/" />
     </remote-repository>
   </component>
 </project>

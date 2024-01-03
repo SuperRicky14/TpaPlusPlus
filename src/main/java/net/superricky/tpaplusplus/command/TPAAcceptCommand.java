@@ -7,7 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.superricky.tpaplusplus.util.RequestManager;
+import net.superricky.tpaplusplus.util.manager.RequestManager;
 import org.apache.commons.lang3.NotImplementedException;
 
 import static net.minecraft.commands.Commands.argument;
@@ -22,6 +22,7 @@ public class TPAAcceptCommand {
                 .then(argument("player", EntityArgument.player())
                         .executes(context -> acceptTPASpecified(context.getSource(), EntityArgument.getPlayer(context, "player")))));
     }
+
     private static int acceptMostRecentTPA(CommandSourceStack source) throws CommandSyntaxException, NotImplementedException {
         RequestManager.acceptTeleportRequest(source.getPlayerOrException());
         return 1;
@@ -30,5 +31,8 @@ public class TPAAcceptCommand {
     private static int acceptTPASpecified(CommandSourceStack source, ServerPlayer sender) throws CommandSyntaxException, NotImplementedException {
         RequestManager.acceptTeleportRequest(source.getPlayerOrException(), sender);
         return 1;
+    }
+
+    private TPAAcceptCommand() {
     }
 }

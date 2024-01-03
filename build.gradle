@@ -4,7 +4,7 @@ plugins {
     id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id "org.sonarqube" version "4.4.1.3373"
+    id 'org.sonarqube' version '4.4.1.3373'
 }
 
 group = mod_version
@@ -16,6 +16,13 @@ base {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+
+task sonarQubeAnalysis(type: Exec) {
+    String sonarQubeToken = System.getenv("SONARQUBE_TOKEN")
+
+    workingDir '.'
+    commandLine "./gradlew sonar -D \"sonar.projectKey=TPAPlusPlus\" -D \"sonar.projectName='TPAPlusPlus'\" -D \"sonar.host.url=http://localhost:9000\" -D \"sonar.token=$sonarQubeToken\" --stacktrace"
 }
 
 // When this is run, it will automagically fill out our mod version from gradle.properties! So now I only need to update this shit in one place

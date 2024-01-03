@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.superricky.tpaplusplus.util.configuration.Config;
 import net.superricky.tpaplusplus.util.manager.RequestManager;
 
 import static net.minecraft.commands.Commands.argument;
@@ -24,7 +25,7 @@ public class TPACommand {
 
     @SubscribeEvent
     public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
-        event.getDispatcher().register(literal("tpa")
+        event.getDispatcher().register(literal(Config.TPA_COMMAND_NAME.get())
                 .then(argument("player", EntityArgument.player())
                         .executes(context -> teleportPlayer(context.getSource(), EntityArgument.getPlayer(context, "player")))));
     }

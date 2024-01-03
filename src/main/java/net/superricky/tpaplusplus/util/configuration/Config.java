@@ -12,6 +12,7 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Boolean> SEND_TELEPORT_REQUEST_COUNTDOWN_TO_BOTH_PLAYERS;
     public static final ForgeConfigSpec.ConfigValue<Double> ALLOWED_MOVEMENT_DURING_ACCEPT_COUNTDOWN;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SEND_COUNTDOWN_MOVEMENT_CANCEL_TO_BOTH_PLAYERS;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ALLOW_TPTOGGLED_PLAYERS_TO_SEND_REQUESTS;
 
     // Commands
     public static final ForgeConfigSpec.ConfigValue<String> TPA_COMMAND_NAME;
@@ -19,6 +20,7 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<String> TPAACCEPT_COMMAND_NAME;
     public static final ForgeConfigSpec.ConfigValue<String> TPADENY_COMMAND_NAME;
     public static final ForgeConfigSpec.ConfigValue<String> TPACANCEL_COMMAND_NAME;
+    public static final ForgeConfigSpec.ConfigValue<String> TPTOGGLE_COMMAND_NAME;
     public static final ForgeConfigSpec.ConfigValue<String> BACK_COMMAND_NAME;
 
     // Limitations
@@ -26,6 +28,11 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Double> CLOSEST_ALLOWED_DISTANCE;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ALLOW_INTER_DIMENSIONAL_TELEPORT;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DISABLE_RANGE_CHECKS_INTER_DIMENSIONAL;
+
+    // Advanced Settings
+    public static final ForgeConfigSpec.ConfigValue<Integer> ASYNC_GENERAL_TASKS_THREAD_POOL;
+    public static final ForgeConfigSpec.ConfigValue<Integer> ASYNC_AUTOSAVE_THREAD_POOL;
+    public static final ForgeConfigSpec.ConfigValue<Integer> AUTOSAVE_INTERVAL;
 
     static {
         BUILDER.push("TPA++ Configuration");
@@ -64,6 +71,10 @@ public class Config {
         SEND_COUNTDOWN_MOVEMENT_CANCEL_TO_BOTH_PLAYERS = BUILDER.comment("\n Whether to send a message to the sender when the receiver moves during a TPA accept countdown.")
                 .define("Send Countdown Movement Cancel To Both Players", true);
 
+        // ALLOW SENDERS TO SEND REQUESTS BUT HAVE TPTOGGLE ON
+        ALLOW_TPTOGGLED_PLAYERS_TO_SEND_REQUESTS = BUILDER.comment("\n Whether to allow players with /tptoggle enabled, to send a teleport request")
+                .define("Allow TPToggled Players To Send Requests", false);
+
         BUILDER.comment("\n-------------------------Commands-------------------------");
         BUILDER.comment(" This section of the config allows you to change the commands to whatever you please!");
         BUILDER.comment(" For example, you can change the /tpa command to /teleport-request, which means instead of entering /tpa players will have to enter /teleport-request");
@@ -85,6 +96,9 @@ public class Config {
 
         TPACANCEL_COMMAND_NAME = BUILDER.comment("\n The name of the /tpacancel command")
                 .define("TPACANCEL_COMMAND_NAME", "tpacancel");
+
+        TPTOGGLE_COMMAND_NAME = BUILDER.comment("\n The name of the /tptoggle command")
+                .define("TPTOGGLE_COMMAND_NAME", "tptoggle");
 
         BACK_COMMAND_NAME = BUILDER.comment("\n The name of the /back command")
                 .comment(" This has no affect if /back is not enabled in the configuration file.")
@@ -114,6 +128,24 @@ public class Config {
                 .comment(" TPAPlusPlus will automatically account for the nether's coordinate system ( 1 block in the nether is 8 blocks in the overworld! )")
                 .comment(" Set this to false if you wish to disable this limitation")
                 .define("Disable Inter Dimensional Range Checks", true);
+
+        BUILDER.comment("\n-------------------------Advanced Settings-------------------------");
+        BUILDER.comment(" WARNING: CHANGING THESE SETTINGS COULD SEVERELY DAMAGE YOUR SERVER, COMPUTER, OR CAUSE CORRUPTION OF DATA.");
+        BUILDER.comment(" IT IS NOT RECOMMENDED TO CHANGE THESE VALUES FROM THE DEFAULTS UNLESS YOU KNOW EXACTLY WHAT YOU ARE DOING");
+        BUILDER.comment(" Most options here have already been optimized for most systems, I doubt you will experience significant performance gains by changing the options below.");
+
+        // THREAD POOL FOR GENERAL ASYNC TASKS
+        ASYNC_GENERAL_TASKS_THREAD_POOL = BUILDER.comment("\n How many threads to use for general async tasks in the mod, such as the TPA Accept Countdown, or the TPA Timeout Timer.")
+                .defineInRange("ASYNC_GENERAL_TASKS_THREAD_POOL", 1, 0, Integer.MAX_VALUE);
+
+        // THREAD POOL FOR AUTO-SAVING
+        ASYNC_AUTOSAVE_THREAD_POOL = BUILDER.comment("\n How many threads to use for asynchronous autosaving of data in the mod.")
+                .comment(" Changing this setting will only provide negligible performance gains, even if you are using a very short autosave interval, this is because everything is synchronized between threads, preventing more than one thread from accessing it at a time.")
+                .defineInRange("ASYNC_AUTOSAVE_THREAD_POOL", 1, 0, Integer.MAX_VALUE);
+
+        // AUTO-SAVE INTERVAL
+        AUTOSAVE_INTERVAL = BUILDER.comment("\n How long (in seconds) between autosaves, if you experience data loss, set this number lower.")
+                .defineInRange("AUTOSAVE_INTERVAL", 300, 0, Integer.MAX_VALUE);
 
         BUILDER.pop();
         SPEC = BUILDER.build();

@@ -9,24 +9,24 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.superricky.tpaplusplus.util.configuration.Config;
 import net.superricky.tpaplusplus.util.manager.RequestManager;
+import net.superricky.tpaplusplus.util.manager.saved.TPToggleManager;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
 @Mod.EventBusSubscriber
-public class TPAHereCommand {
-    @SubscribeEvent
-    public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
-        event.getDispatcher().register(literal(Config.TPAHERE_COMMAND_NAME.get())
-                .then(argument("player", EntityArgument.player())
-                        .executes(context -> teleportPlayer(context.getSource(), EntityArgument.getPlayer(context, "player")))));
+public class TPToggleCommand {
+    private TPToggleCommand() {
     }
 
-    private static int teleportPlayer(CommandSourceStack source, ServerPlayer teleported) throws CommandSyntaxException {
-        RequestManager.sendTeleportRequest(source.getPlayerOrException(), teleported, true);
+    private static int teleportPlayer(CommandSourceStack source) throws CommandSyntaxException {
+        TPToggleManager.toggleTP(source.getPlayerOrException());
         return 1;
     }
 
-    private TPAHereCommand() {
+    @SubscribeEvent
+    public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
+        event.getDispatcher().register(literal(Config.TPTOGGLE_COMMAND_NAME.get())
+                .executes(context -> teleportPlayer(context.getSource())));
     }
 }

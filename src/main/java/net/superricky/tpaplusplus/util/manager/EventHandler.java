@@ -6,6 +6,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.level.LevelEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.superricky.tpaplusplus.Main;
@@ -17,6 +20,7 @@ import net.superricky.tpaplusplus.util.configuration.Messages;
 import net.superricky.tpaplusplus.event.RequestAcceptSuccessEvent;
 import net.superricky.tpaplusplus.event.RequestTimeoutEvent;
 import net.superricky.tpaplusplus.util.configuration.formatters.MessageParser;
+import net.superricky.tpaplusplus.util.manager.saved.SaveDataManager;
 
 import java.util.Map;
 
@@ -34,8 +38,11 @@ public class EventHandler {
     public static void onTimeoutEvent(RequestTimeoutEvent event) {
         Request request = event.getRequest();
 
-        // Check if the request has not been accepted or denied, so you don't print timeout messages multiple times.
-        if (RequestManager.alreadySentTeleportRequest(request)) return;
+        /* Check if the request has not been accepted or denied, so you don't print timeout messages multiple times.
+         * UPDATE: This now ACTUALLY prevents printing timeout messages multiple times, because now the check is inverted (see RequestManager#alreadySentTeleportRequest),
+         * since before we were only displaying your timeout message IF the timeout message did NOT expire, which you can imagine that caused problems.
+         */
+        if (Boolean.FALSE.equals(RequestManager.alreadySentTeleportRequest(request))) return;
 
         ServerPlayer receiver = request.getReceiver();
         ServerPlayer sender = request.getSender();
@@ -84,6 +91,17 @@ public class EventHandler {
         }
 
         RequestManager.requestSet.remove(request);
+    }
+
+    @SubscribeEvent
+    public static void onServerStart(ServerStartedEvent event) {
+        SaveDataManager.loadPlayerData(); // load data that was saved before
+        AsyncTaskManager.AsyncAutosave.initialiseAutoSaveService(); // start auto-saving
+    }
+
+    @SubscribeEvent
+    public static void onServerStop(ServerStoppedEvent event) {
+        SaveDataManager.savePlayerData();
     }
 
     /**

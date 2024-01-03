@@ -10,6 +10,7 @@ import net.superricky.tpaplusplus.event.RequestAcceptSuccessEvent;
 import net.superricky.tpaplusplus.event.RequestTimeoutEvent;
 import net.superricky.tpaplusplus.util.configuration.formatters.MessageParser;
 import net.superricky.tpaplusplus.util.limitations.LimitationManager;
+import net.superricky.tpaplusplus.util.manager.saved.SaveDataManager;
 
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -17,7 +18,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class AsyncTaskManager {
-    private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+    private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(Config.ASYNC_GENERAL_TASKS_THREAD_POOL.get());
 
     private AsyncTaskManager() {
     }
@@ -75,6 +76,23 @@ public class AsyncTaskManager {
         } else {
             executorService.schedule(() ->
                     MinecraftForge.EVENT_BUS.post(new RequestAcceptSuccessEvent(request)), 0, TimeUnit.SECONDS);
+        }
+    }
+
+    public static class AsyncAutosave {
+        private static final ScheduledExecutorService autoSaveService = Executors.newScheduledThreadPool(Config.ASYNC_AUTOSAVE_THREAD_POOL.get());
+
+        public static void initialiseAutoSaveService() {
+            autoSaveService.schedule(() ->
+                    autoSave(), Config.AUTOSAVE_INTERVAL.get(), TimeUnit.SECONDS);
+        }
+
+        // Use recursion to continously AutoSave the PlayerData.
+        private static void autoSave() {
+            SaveDataManager.savePlayerData();
+
+            autoSaveService.schedule(() ->
+                    autoSave(), Config.AUTOSAVE_INTERVAL.get(), TimeUnit.SECONDS);
         }
     }
 }

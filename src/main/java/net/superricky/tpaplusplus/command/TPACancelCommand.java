@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.superricky.tpaplusplus.util.configuration.Config;
 import net.superricky.tpaplusplus.util.manager.RequestManager;
 
 import static net.minecraft.commands.Commands.argument;
@@ -16,7 +17,7 @@ import static net.minecraft.commands.Commands.literal;
 public class TPACancelCommand {
     @SubscribeEvent
     public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
-        event.getDispatcher().register(literal("tpacancel")
+        event.getDispatcher().register(literal(Config.TPACANCEL_COMMAND_NAME.get())
                 .executes(context -> cancelMostRecentTPA(context.getSource()))
                 .then(argument("player", EntityArgument.player())
                         .executes(context -> cancelTPASpecified(context.getSource(), EntityArgument.getPlayer(context, "player")))));

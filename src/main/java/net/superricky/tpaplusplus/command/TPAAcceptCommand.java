@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.superricky.tpaplusplus.util.configuration.Config;
 import net.superricky.tpaplusplus.util.manager.RequestManager;
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -17,7 +18,7 @@ import static net.minecraft.commands.Commands.literal;
 public class TPAAcceptCommand {
     @SubscribeEvent()
     public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
-        event.getDispatcher().register(literal("tpaaccept")
+        event.getDispatcher().register(literal(Config.TPAACCEPT_COMMAND_NAME.get())
                 .executes(context -> acceptMostRecentTPA(context.getSource()))
                 .then(argument("player", EntityArgument.player())
                         .executes(context -> acceptTPASpecified(context.getSource(), EntityArgument.getPlayer(context, "player")))));

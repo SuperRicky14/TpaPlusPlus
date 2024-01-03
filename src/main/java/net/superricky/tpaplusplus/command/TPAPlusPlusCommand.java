@@ -20,7 +20,6 @@ import static net.minecraft.commands.Commands.literal;
 @Mod.EventBusSubscriber
 public class TPAPlusPlusCommand {
     private static final String FORCE_PARAMETER = "-force";
-    private static final String CONFIG_PARAMETER = "config"; // WARNING: DON'T TOUCH, THIS IS ALSO USED IN THE RESET CONFIG FUNCTIONALITY!!!!!
 
     @SubscribeEvent
     public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
@@ -40,7 +39,7 @@ public class TPAPlusPlusCommand {
                         .executes(context -> reloadConfig(context.getSource(), false))
                         .then(literal(FORCE_PARAMETER)
                                 .executes(context -> reloadConfig(context.getSource(), true)))
-                        .then(literal(CONFIG_PARAMETER)
+                        .then(literal("config")
                                 .executes(context -> reloadConfig(context.getSource(), false))
                                 .then(literal(FORCE_PARAMETER)
                                         .executes(context -> reloadConfig(context.getSource(), true)))))

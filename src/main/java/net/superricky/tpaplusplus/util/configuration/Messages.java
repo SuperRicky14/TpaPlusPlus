@@ -16,6 +16,8 @@ public class Messages {
     // General TPA stuff
     public static final ForgeConfigSpec.ConfigValue<String> ERR_REQUEST_NOT_FOUND;
     public static final ForgeConfigSpec.ConfigValue<String> ERR_NO_SELF_TELEPORT;
+    public static final ForgeConfigSpec.ConfigValue<String> ERR_RECEIVER_TP_DISABLED;
+    public static final ForgeConfigSpec.ConfigValue<String> ERR_SENDER_TP_DISABLED;
 
     // /back
     public static final ForgeConfigSpec.ConfigValue<String> ERR_BACK_COMMAND_DISABLED;
@@ -47,6 +49,10 @@ public class Messages {
     // /tpahere
     public static final ForgeConfigSpec.ConfigValue<String> SENDER_SENT_TPAHERE;
     public static final ForgeConfigSpec.ConfigValue<String> RECEIVER_GOT_TPAHERE;
+
+    // /tptoggle
+    public static final ForgeConfigSpec.ConfigValue<String> TPTOGGLE_ENABLED;
+    public static final ForgeConfigSpec.ConfigValue<String> TPTOGGLE_DISABLED;
 
     // TPA Timeout Messages
     public static final ForgeConfigSpec.ConfigValue<String> SENDER_TPA_TIMEOUT;
@@ -91,6 +97,14 @@ public class Messages {
 
         ERR_NO_SELF_TELEPORT = BUILDER.comment("\n The message for when a player attempts to use /tpa or /tpahere on themselves")
                         .define("ERR_NO_SELF_TELEPORT", "§cYou can't send a teleport request to yourself!");
+
+        ERR_RECEIVER_TP_DISABLED = BUILDER.comment("\n The message sent to the sender of a TPA request when the receiver has /tptoggle on, preventing all outside teleport requests")
+                .comment(" Placeholders: \"${receiverName}\": \"The name of the receiver that they are trying to teleport to.\"")
+                .define("ERR_RECEIVER_TP_DISABLED", "§c${receiverName} has disabled outside teleport requests!");
+
+        ERR_SENDER_TP_DISABLED = BUILDER.comment("\n The message sent to the sender of a TPA request when the sender (themselves) has /tptoggle on, preventing all outside teleport requests")
+                .comment(" This has no affect if this is disabled in the config")
+                .define("ERR_SENDER_TP_DISABLED", "§cYou have disabled outside teleport requests!");
 
         BUILDER.comment("\n-------------------------/back Messages-------------------------");
 
@@ -177,6 +191,14 @@ public class Messages {
         RECEIVER_GOT_TPAHERE = BUILDER.comment("\n The message that is sent to the receiver of a TPAHERE request")
                         .comment(" Placeholders: \"%s\": \"The sender's name who sent the TPAHERE request\"")
                         .define("RECEIVER_GOT_TPAHERE", "§c%s §6wants §cyou §6to teleport to §cthem!");
+
+        BUILDER.comment("\n-------------------------/tptoggle Messages-------------------------");
+
+        TPTOGGLE_ENABLED = BUILDER.comment("\n The message that is sent to the player that executes /tptoggle, when their tptoggle is enabled")
+                .define("TPTOGGLE_ENABLED", "§6You are §cnow §6automatically §cdenying §6outside §cteleport requests§6!");
+
+        TPTOGGLE_DISABLED = BUILDER.comment("\n The message that is sent to the player that executes /tptoggle, when their tptoggle is disabled")
+                .define("TPTOGGLE_DISABLED", "§6You are §cno longer §6automatically §cdenying §6outside §cteleport requests§6!");
 
         BUILDER.comment("\n-------------------------TPA Request Timeout Messages-------------------------");
 

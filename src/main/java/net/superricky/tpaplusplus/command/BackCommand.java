@@ -5,6 +5,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.superricky.tpaplusplus.util.configuration.Config;
 import net.superricky.tpaplusplus.util.manager.DeathManager;
 
 import static net.minecraft.commands.Commands.literal;
@@ -13,7 +14,7 @@ import static net.minecraft.commands.Commands.literal;
 public class BackCommand {
     @SubscribeEvent
     public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
-        event.getDispatcher().register(literal("back")
+        event.getDispatcher().register(literal(Config.BACK_COMMAND_NAME.get())
                 .executes(context -> teleportToLastDeath(context.getSource())));
     }
 

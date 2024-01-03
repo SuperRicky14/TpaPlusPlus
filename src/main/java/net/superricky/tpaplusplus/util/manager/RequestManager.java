@@ -5,12 +5,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.util.Request;
 import net.superricky.tpaplusplus.util.configuration.Config;
 import net.superricky.tpaplusplus.util.configuration.Messages;
+import net.superricky.tpaplusplus.util.configuration.formatters.MessageParser;
 import net.superricky.tpaplusplus.util.limitations.LimitationManager;
+import net.superricky.tpaplusplus.util.manager.saved.PlayerData;
+import net.superricky.tpaplusplus.util.manager.saved.SaveDataManager;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class RequestManager {
     static final Set<Request> requestSet = new HashSet<>();
@@ -86,6 +87,23 @@ public class RequestManager {
         if (isPlayerIdentical(sender, receiver)) {
             sender.sendSystemMessage(Component.literal(Messages.ERR_NO_SELF_TELEPORT.get()));
             return;
+        }
+
+        PlayerData receiverData = SaveDataManager.getPlayerData(receiver);
+
+        if (Boolean.FALSE.equals(Objects.isNull(receiverData)) && receiverData.getTPToggle()) { // receiverData is not null && receiver TP toggle is enabled.
+            sender.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.ERR_RECEIVER_TP_DISABLED.get(),
+                    Map.of("receiverName", receiver.getName().getString()))));
+            return;
+        }
+
+        if (Boolean.FALSE.equals(Config.ALLOW_TPTOGGLED_PLAYERS_TO_SEND_REQUESTS.get())) { // Allow TPToggled players to send requests is disabled in the config
+            PlayerData senderData = SaveDataManager.getPlayerData(sender);
+
+            if (Boolean.FALSE.equals(Objects.isNull(senderData)) && senderData.getTPToggle()) { // senderData is not null && sender TP toggle is enabled.
+                sender.sendSystemMessage(Component.literal(Messages.ERR_SENDER_TP_DISABLED.get()));
+                return;
+            }
         }
 
         // run the notify function and return if it false, to stop the player from sending the request.

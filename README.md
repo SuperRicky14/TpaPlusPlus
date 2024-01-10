@@ -39,7 +39,7 @@ I made TPA++ due to the lack of TPA mods for forge, since I wanted to add TPA to
 
 ## Frequently Asked Questions:
 * Will you port the mod to Fabric?
-        Currently no, but I plan to in the future!
+        Yes, once the mod is complete, I will port the mod over to **both Fabric AND NeoForge**
 * Can you port to version X?
         If it is a new version, it is coming unless I explicitly say otherwise. If it's an old version, no.
 * Can you add feature X?

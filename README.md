@@ -1,4 +1,5 @@
 ### Releases are now only avaliable on Modrinth and CurseForge
+* **Check out the new and improved** [TPAPlusPlus Wiki!](https://github.com/SuperRicky14/TpaPlusPlus/wiki)
 * Links: [Modrinth](https://modrinth.com/mod/tpa++) | [Curseforge](https://www.curseforge.com/minecraft/mc-mods/tpaplusplus)
 
 ### About this Github

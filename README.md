@@ -6,19 +6,32 @@ This is the place to [suggest features](https://github.com/SuperRicky14/TpaPlusP
 ### Get the latest bleeding-edge build [here](https://urls.a3d.pro/bleedingedge2)!
 
 # What's different about TPA++?
-I aim to make a fast, compatible, customizable TPA mod for forge. This will eventually include range checks:
-Range Checks are a feature that allows you to customize how close the players can be to teleport ( in order to prevent players from teleporting too close, say if you would like players to explore the map more, rather than just teleporting around to each other ). You can specify how far away players can be (if you would like to prevent players from teleporting across the map).
-Another balancing feature we would like to include is item / exp removal: This balance feature will be in place to remove any amount of item(s) from vanilla or modded mc, and / or any amount of experience from the player.
-The mod aims to be fully serverside, and compatible with other mods.
+I aim to make a fast, compatible, **customizable** TPA mod for forge. This **NOW INCLUDES** range checks:
+Range Checks are a feature that allows you to customize how close the players can be to teleport (in order to prevent players from teleporting too close, say if you would like players to explore the map more, rather than just teleporting around to each other). You can specify how far away players can be (if you would like to prevent players from teleporting across the map).
+
+The mod is by far one of the most customizable TPA mods out there. Want to change the names of the commands from /tpa, /tpahere, etc to whatever you want? You can do that in the "tpaplusplus-common.toml" config! Want to change every single message in the mod? You can also do that in the "tpaplusplus-messages.toml" config under the config folder!
+
+What I also like about this mod is the ability to instantly and easily customize the mod to your liking, without having to dig through hundreds of lines of configuration. Many instant, useful utilities are available under the /tpaplusplus command, check out the **below documentation on the /tpaplusplus command** for help!
+
+**The mod is fully server-side, and aims to be compatible with other mods.**
+
+**Unlike some other mods, the mod is 100% open source!** You are welcome to help out and contribute to the mod, help document the wiki or this description page you are reading right now! **I am open to suggestions and feedback and will try to get back to you as fast as possible!**
+
+**The mod is under an extremely permissive license ([The MIT License](https://github.com/SuperRicky14/TpaPlusPlus/blob/master/LICENSE))**
 
 ## How do I use this mod?
-* /tpa | This command will send a teleport request to the other player!
-* /tpahere | This command will send a request to teleport the other player to you!
-* /tpaaccept | This command is used to accept a teleport request!
-* /tpadeny | This command is used to deny someones request to teleport to you!
-* /tpacancel | Used by the initiator of the teleport request, this command will cancel the teleport request before it can be accepted by the other player!
-* /back | When executed by a player after their death, it will teleport them directly back to the location of their latest death. Once they use this command, they will no longer be able to teleport to that same death! (This can be disabled in the config)
-* /tpaplusplus (*new!*) | When executed by an operator, it will display the current version of the mod that was installed. If the operator runs "/tpaplusplus reload", then it will reload the configuration during runtime! All options do not require a restart, and you can change / modify them whenever you want, once you reload the config, all those settings will be updated! ( changing the timeout time and the time until a tpa request accept will only work for teleport requests sent AFTER the configuration was changed. )
+TPAPlusPlus currently features eight custom commands, here is a quick run-through over each of them (Command arguments marked with $ are optional!):
+* `/tpa [player]` • Sends a teleport request to any player.
+* `/tpahere [player]` • Sends a teleport here request to any player.
+* `/tpaaccept $[player]` • Accepts the latest teleport request. If a player is specified, accepts the teleport request from that player.
+* `/tpadeny $[player]` • Denies the latest teleport request. If a player is specified, denies the teleport request from that player.
+* `/tpacancel $[player]` • Cancels the last teleport request that you sent. If a player is specified, cancels the teleport request to that player.
+* `/tptoggle` • Toggles on/off teleport request's for the player running the command.
+* `/tpblock [player]` • Prevents a player from sending teleport requests to you.
+* `/tpunblock [player]` • Allows a blocked player to send teleport requests to you again.
+* `/back` • After a player dies, running this command will teleport them to their latest death. This is optional and can be disabled in the config.
+* `/tpaplusplus` • [This command has been moved to it's own section in the new TPAPlusPlus wiki!](https://github.com/SuperRicky14/TpaPlusPlus/wiki/TPAPlusPlus-Server-Management-Command)
+
 ## Why did I make this?
 I made TPA++ due to the lack of TPA mods for forge, since I wanted to add TPA to my smp I was making.
 

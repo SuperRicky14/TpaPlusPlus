@@ -8,21 +8,6 @@ import java.util.Map;
  * A utility class to format messages with a basic implementation of f-strings, since String.format does not suffice!
  */
 public class MessageParser {
-    @ContainsPlaceholders(value = {"${distance}", "${expectedDistance}"})
-    public static @NotNull String formatDistanceMessages(String formattedString, long distance, long expectedDistance) {
-        return formattedString.replace("{distance}", Long.toString(distance)).replace("{expectedDistance}", Long.toString(expectedDistance));
-    }
-
-    @ContainsPlaceholders(value = {"${playerName}", "${time-remaining}"})
-    public static @NotNull String formatTeleportAcceptTimeReceiverPOV(String formattedString, String senderName, Integer timeRemaining) {
-        return formattedString.replace("${playerName}", senderName).replace("${time-remaining}", Integer.toString(timeRemaining));
-    }
-
-    @ContainsPlaceholders(value = {"${playerName}", "${time-remaining}"})
-    public static @NotNull String formatTeleportAcceptTimeSenderPOV(String formattedString, String receiverName, Integer timeRemaining) {
-        return formattedString.replace("${playerName}", receiverName).replace("${time-remaining}", Integer.toString(timeRemaining));
-    }
-
     // black magic using substrings and index's to get something similar to f-strings in other languages.
     public static String enhancedFormatter(String formatString, Object... args) {
         // current position where we're searching for placeholders

@@ -18,6 +18,8 @@ public class Messages {
     public static final ForgeConfigSpec.ConfigValue<String> ERR_NO_SELF_TELEPORT;
     public static final ForgeConfigSpec.ConfigValue<String> ERR_RECEIVER_TP_DISABLED;
     public static final ForgeConfigSpec.ConfigValue<String> ERR_SENDER_TP_DISABLED;
+    public static final ForgeConfigSpec.ConfigValue<String> SENDER_BLOCKED_RECEIVER;
+    public static final ForgeConfigSpec.ConfigValue<String> RECEIVER_BLOCKED_SENDER;
 
     // /back
     public static final ForgeConfigSpec.ConfigValue<String> ERR_BACK_COMMAND_DISABLED;
@@ -53,6 +55,18 @@ public class Messages {
     // /tptoggle
     public static final ForgeConfigSpec.ConfigValue<String> TPTOGGLE_ENABLED;
     public static final ForgeConfigSpec.ConfigValue<String> TPTOGGLE_DISABLED;
+
+    // /tpblock
+    public static final ForgeConfigSpec.ConfigValue<String> CANNOT_BLOCK_SELF;
+    public static final ForgeConfigSpec.ConfigValue<String> ALREADY_BLOCKED_PLAYER;
+    public static final ForgeConfigSpec.ConfigValue<String> SENDER_BLOCKED_PLAYER;
+    public static final ForgeConfigSpec.ConfigValue<String> PLAYER_BLOCKED_BY_SENDER;
+
+    // /tpunblock
+    public static final ForgeConfigSpec.ConfigValue<String> CANNOT_UNBLOCK_SELF;
+    public static final ForgeConfigSpec.ConfigValue<String> HAVENT_BLOCKED_PLAYER;
+    public static final ForgeConfigSpec.ConfigValue<String> SENDER_UNBLOCKED_PLAYER;
+    public static final ForgeConfigSpec.ConfigValue<String> PLAYER_UNBLOCKED_BY_SENDER;
 
     // TPA Timeout Messages
     public static final ForgeConfigSpec.ConfigValue<String> SENDER_TPA_TIMEOUT;
@@ -105,6 +119,14 @@ public class Messages {
         ERR_SENDER_TP_DISABLED = BUILDER.comment("\n The message sent to the sender of a TPA request when the sender (themselves) has /tptoggle on, preventing all outside teleport requests")
                 .comment(" This has no affect if this is disabled in the config")
                 .define("ERR_SENDER_TP_DISABLED", "§cYou have disabled outside teleport requests!");
+
+        SENDER_BLOCKED_RECEIVER = BUILDER.comment("\n The message that is sent to the sender of a TPA request when the sender (themselves) has blocked the recipient")
+                .comment(" Placeholders: \"${blocked_player}\": \"The name of the player who has been blocked by the sender\"")
+                .define("SENDER_BLOCKED_RECEIVER", "§6You have §cblocked ${blocked_player}§6!");
+
+        RECEIVER_BLOCKED_SENDER = BUILDER.comment("\n The message that is sent to the sender of a TPA request, when the receiver has blocked the sender")
+                .comment(" Placeholders: \"${blocking_player}\": \"The name of the player who has blocked the sender\"")
+                .define("RECEIVER_BLOCKED_SENDER", "§c${blocking_player} §6has §cblocked §6you!");
 
         BUILDER.comment("\n-------------------------/back Messages-------------------------");
 
@@ -199,6 +221,42 @@ public class Messages {
 
         TPTOGGLE_DISABLED = BUILDER.comment("\n The message that is sent to the player that executes /tptoggle, when their tptoggle is disabled")
                 .define("TPTOGGLE_DISABLED", "§6You are §cno longer §6automatically §cdenying §6outside §cteleport requests§6!");
+
+        BUILDER.comment("\n-------------------------/tpblock Messages-------------------------");
+
+        CANNOT_BLOCK_SELF = BUILDER.comment("\n The message that is sent to the player that executes /tpblock, when they attempt to block themselves")
+                .define("CANNOT_BLOCK_SELF", "§6You §ccannot §6block §cyourself§6!");
+
+        ALREADY_BLOCKED_PLAYER = BUILDER.comment("\n The message that is sent to the player that executes /tpblock, when they attempt to block a player whom they have already blocked")
+                .comment(" Placeholders: \"${blocked_player}\": \"The player who has already been blocked\"")
+                .define("ALREADY_BLOCKED_PLAYER", "§6You have §calready §6blocked §c${blocked_player}§6!");
+
+        SENDER_BLOCKED_PLAYER = BUILDER.comment("\n The message that is sent to the player that executes /tpblock, when their block was successful")
+                .comment(" Placeholders: \"${blocked_player}\": \"The player who was unblocked\"")
+                .define("SENDER_BLOCKED_PLAYER", "§6Successfully blocked §c${blocked_player}§6!");
+
+        PLAYER_BLOCKED_BY_SENDER = BUILDER.comment("\n The message that is sent to the player that was blocked by the sender")
+                .comment(" This has no affect when it is disabled in the config.")
+                .comment(" Placeholders: \"${sender_name}\": \"The player who blocked the recipient\"")
+                .define("PLAYER_BLOCKED_BY_SENDER", "§6You have been §cblocked §6by §c${sender_name}§6!");
+
+        BUILDER.comment("\n-------------------------/tpunblock Messages-------------------------");
+
+        CANNOT_UNBLOCK_SELF = BUILDER.comment("\n The message that is sent to the player that executes /tpunblock, when they attempt to unblock themselves")
+                .define("CANNOT_UNBLOCK_SELF", "§6You §ccannot §6unblock §cyourself§6!");
+
+        HAVENT_BLOCKED_PLAYER = BUILDER.comment("\n The message that is sent to the player that executes /tpunblock, when they attempt to unblock a player whom they have not already blocked")
+                .comment(" Placeholders: \"${blocked_player}\": \"The player who hasn't been blocked\"")
+                .define("HAVENT_BLOCKED_PLAYER", "§6You §chaven't §6blocked §c${blocked_player}");
+
+        SENDER_UNBLOCKED_PLAYER = BUILDER.comment("\n The message that is sent to the player that executes /tpunblock, when their unblock was successful")
+                .comment(" Placeholders: \"${unblocked_player}\": \"The player who was unblocked\"")
+                .define("SENDER_UNBLOCKED_PLAYER", "§6Successfully unblocked §c${unblocked_player}§6!");
+
+        PLAYER_UNBLOCKED_BY_SENDER = BUILDER.comment("\n The message that is sent to the player that was unblocked by the sender")
+                .comment(" This has no affect when it is disabled in the config.")
+                .comment(" Placeholders: \"${sender_name}\": \"The player who blocked the recipient\"")
+                .define("PLAYER_UNBLOCKED_BY_SENDER", "§6You have been §cunblocked §6by §c${sender_name}§6!");
 
         BUILDER.comment("\n-------------------------TPA Request Timeout Messages-------------------------");
 

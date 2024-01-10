@@ -89,6 +89,8 @@ public class RequestManager {
             return;
         }
 
+        if (PlayerBlockingManager.isPlayerBlocked(sender, receiver)) return; // Return if one of the players has blocked the other player.
+
         PlayerData receiverData = SaveDataManager.getPlayerData(receiver);
 
         if (Boolean.FALSE.equals(Objects.isNull(receiverData)) && receiverData.getTPToggle()) { // receiverData is not null && receiver TP toggle is enabled.

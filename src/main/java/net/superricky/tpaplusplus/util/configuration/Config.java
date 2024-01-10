@@ -13,6 +13,7 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Double> ALLOWED_MOVEMENT_DURING_ACCEPT_COUNTDOWN;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SEND_COUNTDOWN_MOVEMENT_CANCEL_TO_BOTH_PLAYERS;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ALLOW_TPTOGGLED_PLAYERS_TO_SEND_REQUESTS;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> SEND_BLOCKED_MESSAGES_TO_BOTH_PLAYERS;
 
     // Commands
     public static final ForgeConfigSpec.ConfigValue<String> TPA_COMMAND_NAME;
@@ -21,6 +22,8 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<String> TPADENY_COMMAND_NAME;
     public static final ForgeConfigSpec.ConfigValue<String> TPACANCEL_COMMAND_NAME;
     public static final ForgeConfigSpec.ConfigValue<String> TPTOGGLE_COMMAND_NAME;
+    public static final ForgeConfigSpec.ConfigValue<String> TPBLOCK_COMMAND_NAME;
+    public static final ForgeConfigSpec.ConfigValue<String> TPUNBLOCK_COMMAND_NAME;
     public static final ForgeConfigSpec.ConfigValue<String> BACK_COMMAND_NAME;
 
     // Limitations
@@ -71,9 +74,13 @@ public class Config {
         SEND_COUNTDOWN_MOVEMENT_CANCEL_TO_BOTH_PLAYERS = BUILDER.comment("\n Whether to send a message to the sender when the receiver moves during a TPA accept countdown.")
                 .define("Send Countdown Movement Cancel To Both Players", true);
 
-        // ALLOW SENDERS TO SEND REQUESTS BUT HAVE TPTOGGLE ON
+        // ALLOW SENDERS TO SEND REQUESTS EVEN IF THEY HAVE TPTOGGLE ENABLED
         ALLOW_TPTOGGLED_PLAYERS_TO_SEND_REQUESTS = BUILDER.comment("\n Whether to allow players with /tptoggle enabled, to send a teleport request")
                 .define("Allow TPToggled Players To Send Requests", false);
+
+        // SEND MESSAGE TO THE PERSON BEING BLOCKED / UNBLOCKED
+        SEND_BLOCKED_MESSAGES_TO_BOTH_PLAYERS = BUILDER.comment("\n Whether to send a message to the person being blocked / unblocked, when the sender blocks them.")
+                        .define("Send Blocked Messages To Both Players", true);
 
         BUILDER.comment("\n-------------------------Commands-------------------------");
         BUILDER.comment(" This section of the config allows you to change the commands to whatever you please!");
@@ -82,23 +89,29 @@ public class Config {
         BUILDER.comment(" It is NOT recommended to use anything other than ASCII characters here!");
         BUILDER.comment(" Modifying any of these commands requires a restart to take effect.");
 
-        TPA_COMMAND_NAME = BUILDER.comment("\n The name of the /tpa command")
+        TPA_COMMAND_NAME = BUILDER.comment("\n The name of the /tpa command (what players run in chat)")
                 .define("TPA_COMMAND_NAME", "tpa");
 
-        TPAHERE_COMMAND_NAME = BUILDER.comment("\n The name of the /tpahere command")
+        TPAHERE_COMMAND_NAME = BUILDER.comment("\n The name of the /tpahere command (what players run in chat)")
                 .define("TPAHERE_COMMAND_NAME", "tpahere");
 
-        TPAACCEPT_COMMAND_NAME = BUILDER.comment("\n The name of the /tpaaccept command")
+        TPAACCEPT_COMMAND_NAME = BUILDER.comment("\n The name of the /tpaaccept command (what players run in chat)")
                 .define("TPAACCEPT_COMMAND_NAME", "tpaaccept");
 
-        TPADENY_COMMAND_NAME = BUILDER.comment("\n The name of the /tpadeny command")
+        TPADENY_COMMAND_NAME = BUILDER.comment("\n The name of the /tpadeny command (what players run in chat)")
                 .define("TPADENY_COMMAND_NAME", "tpadeny");
 
-        TPACANCEL_COMMAND_NAME = BUILDER.comment("\n The name of the /tpacancel command")
+        TPACANCEL_COMMAND_NAME = BUILDER.comment("\n The name of the /tpacancel command (what players run in chat)")
                 .define("TPACANCEL_COMMAND_NAME", "tpacancel");
 
-        TPTOGGLE_COMMAND_NAME = BUILDER.comment("\n The name of the /tptoggle command")
+        TPTOGGLE_COMMAND_NAME = BUILDER.comment("\n The name of the /tptoggle command (what players run in chat)")
                 .define("TPTOGGLE_COMMAND_NAME", "tptoggle");
+
+        TPBLOCK_COMMAND_NAME = BUILDER.comment("\n The name of the /tpblock command (what players run in chat)")
+                .define("TPBLOCK_COMMAND_NAME", "tpblock");
+
+        TPUNBLOCK_COMMAND_NAME = BUILDER.comment("\n The name of the /tpunblock command (what players run in chat)")
+                .define("TPUNBLOCK_COMMAND_NAME", "tpunblock");
 
         BACK_COMMAND_NAME = BUILDER.comment("\n The name of the /back command")
                 .comment(" This has no affect if /back is not enabled in the configuration file.")

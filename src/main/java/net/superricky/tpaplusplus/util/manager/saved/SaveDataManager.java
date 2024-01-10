@@ -7,10 +7,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 
-import javax.annotation.Nullable;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,23 +16,20 @@ import java.util.UUID;
 public class SaveDataManager {
     private static final String MOD_SAVEDATA_FOLDER_PATH = "mods" + File.separator + ".tpaplusplus" + File.separator;
     private static final String MOD_SAVEDATA_FILE_PATH = MOD_SAVEDATA_FOLDER_PATH + File.separator + "tpaplusplus_savedata.json";
-    private static final String MOD_README_NOTICE_FILE_PATH = MOD_SAVEDATA_FOLDER_PATH + File.separator + "README.txt";
-    private static final File MOD_README_NOTICE_FILE = new File(MOD_README_NOTICE_FILE_PATH);
     private static final File MOD_SAVEDATA_FOLDER = new File(MOD_SAVEDATA_FOLDER_PATH);
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static Map<UUID, PlayerData> playerDataMap = Collections.synchronizedMap(new HashMap<>());
+    private static Map<UUID, PlayerData> playerDataMap = Collections.synchronizedMap(new HashMap<>());
 
-    public static Map<UUID, PlayerData> getPlayerDataMap() {
-        return playerDataMap;
-    }
-
-    @Nullable
     public static PlayerData getPlayerData(ServerPlayer player) {
         for (Map.Entry<UUID, PlayerData> entry : playerDataMap.entrySet()) {
             if (entry.getKey().equals(player.getUUID())) return entry.getValue(); // return the playerData
         }
-        return null; // Didn't find playerData
+        // Didn't find playerData
+        PlayerData newPlayerData = new PlayerData(); // Create PlayerData since it doesn't exist
+        playerDataMap.put(player.getUUID(), newPlayerData); // Put the reference to our new PlayerData into the playerDataMap
+
+        return newPlayerData; // Return the newly made PlayerData
     }
 
     public static void savePlayerData() {
@@ -82,19 +76,11 @@ public class SaveDataManager {
         return true;
     }
 
-    /*
-    public static void checkForReadMeNotice() {
-        if (!MOD_README_NOTICE_FILE.exists()) {
-            InputStream readMeNoticeSteam = SaveDataManager.class.getResourceAsStream("/README.txt");
+    public static void replacePlayerData(UUID playerUUID, PlayerData playerData) {
+        playerDataMap.remove(playerUUID);
 
-            try {
-                Files.copy(readMeNoticeSteam, MOD_README_NOTICE_FILE.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                LOGGER.error("Failed to generate the mod's savedata README.txt file.");
-                e.printStackTrace();
-            }
-        }
-    }*/
+        playerDataMap.put(playerUUID, playerData);
+    }
 
     private SaveDataManager() {
     }

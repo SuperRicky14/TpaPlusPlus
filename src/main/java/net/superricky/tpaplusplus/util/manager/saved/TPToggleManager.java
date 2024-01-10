@@ -10,17 +10,9 @@ import java.util.*;
 
 public class TPToggleManager {
     public static void toggleTP(ServerPlayer executor) {
-        UUID executorUUID = executor.getUUID();
-        PlayerData executorData = SaveDataManager.playerDataMap.get(executorUUID);
-
-        // Create executorData if it doesn't already exist in the map.
-        if (Objects.isNull(executorData)) executorData = new PlayerData();
+        PlayerData executorData = SaveDataManager.getPlayerData(executor);
 
         executorData.setTPToggle(!executorData.getTPToggle()); // Switch the TPToggle of the player
-
-        SaveDataManager.playerDataMap.remove(executorUUID);
-
-        SaveDataManager.playerDataMap.put(executorUUID, executorData);
 
         if (executorData.getTPToggle()) {
             executor.sendSystemMessage(Component.literal(Messages.TPTOGGLE_ENABLED.get()));

@@ -1,8 +1,13 @@
 package net.superricky.tpaplusplus.util.manager;
 
-import net.minecraft.client.Minecraft;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.mojang.logging.LogUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.MinecraftForge;
+import net.superricky.tpaplusplus.Main;
 import net.superricky.tpaplusplus.util.Request;
 import net.superricky.tpaplusplus.util.configuration.Config;
 import net.superricky.tpaplusplus.util.configuration.Messages;
@@ -11,13 +16,22 @@ import net.superricky.tpaplusplus.event.RequestTimeoutEvent;
 import net.superricky.tpaplusplus.util.configuration.formatters.MessageParser;
 import net.superricky.tpaplusplus.util.limitations.LimitationManager;
 import net.superricky.tpaplusplus.util.manager.saved.SaveDataManager;
+import org.slf4j.Logger;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+
 public class AsyncTaskManager {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(Config.ASYNC_GENERAL_TASKS_THREAD_POOL.get());
 
     private AsyncTaskManager() {
@@ -80,10 +94,8 @@ public class AsyncTaskManager {
     }
 
     public static class AsyncAutosave {
-        private static final ScheduledExecutorService autoSaveService = Executors.newScheduledThreadPool(Config.ASYNC_AUTOSAVE_THREAD_POOL.get());
-
         public static void initialiseAutoSaveService() {
-            autoSaveService.schedule(() ->
+            executorService.schedule(() ->
                     autoSave(), Config.AUTOSAVE_INTERVAL.get(), TimeUnit.SECONDS);
         }
 
@@ -91,7 +103,7 @@ public class AsyncTaskManager {
         private static void autoSave() {
             SaveDataManager.savePlayerData();
 
-            autoSaveService.schedule(() ->
+            executorService.schedule(() ->
                     autoSave(), Config.AUTOSAVE_INTERVAL.get(), TimeUnit.SECONDS);
         }
     }

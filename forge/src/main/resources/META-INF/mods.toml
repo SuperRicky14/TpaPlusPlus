@@ -1,0 +1,36 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "tpaplusplus"
+version = "${version}"
+displayName = "TPA++"
+authors = "SuperRicky14"
+description = '''
+The most customizable TPA mod out there!
+'''
+displayTest="IGNORE_ALL_VERSION"
+#logoFile = ""
+
+[[dependencies.tpaplusplus]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.tpaplusplus]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.tpaplusplus]]
+modId = "architectury"
+mandatory = true
+versionRange = "[9.1.12,)"
+ordering = "AFTER"
+side = "BOTH"

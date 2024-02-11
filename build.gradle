@@ -5,14 +5,6 @@ plugins {
     id "org.sonarqube" version "4.4.1.3373"
 }
 
-
-sonar {
-    properties {
-        property "sonar.projectKey", "TPAPlusPlus-Architectury"
-        property "sonar.projectName", "TPAPlusPlus Architectury"
-    }
-}
-
 architectury {
     minecraft = rootProject.minecraft_version
 }

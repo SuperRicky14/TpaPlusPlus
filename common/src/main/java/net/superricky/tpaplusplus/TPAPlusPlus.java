@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 public class TPAPlusPlus {
     public static final String MOD_ID = "tpaplusplus";
-    public static final String MOD_VERSION = "1.0.0";
+    public static final String MOD_VERSION = "1.4.0-1.20.x-BETA";
     private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     // We can use this if we don't want to use DeferredRegister
 

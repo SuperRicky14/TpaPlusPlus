@@ -4,8 +4,8 @@ import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
 import net.minecraftforge.fml.config.ModConfig;
 import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.superricky.tpaplusplus.fabriclike.TPAPlusPlusFabricLike;
-import net.superricky.tpaplusplus.util.configuration.Config;
-import net.superricky.tpaplusplus.util.configuration.Messages;
+import net.superricky.tpaplusplus.config.Config;
+import net.superricky.tpaplusplus.config.Messages;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 

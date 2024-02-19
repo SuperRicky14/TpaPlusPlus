@@ -6,8 +6,8 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.superricky.tpaplusplus.util.configuration.Config;
-import net.superricky.tpaplusplus.util.configuration.Messages;
+import net.superricky.tpaplusplus.config.Config;
+import net.superricky.tpaplusplus.config.Messages;
 
 @Mod(TPAPlusPlus.MOD_ID)
 public class TPAPlusPlusForge {

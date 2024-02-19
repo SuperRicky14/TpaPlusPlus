@@ -8,8 +8,9 @@
     "SuperRicky14"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "modrinth": "https://modrinth.com/mod/tpa++",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/tpaplusplus",
+    "sources": "https://github.com/SuperRicky14/TpaPlusPlus"
   },
   "license": "MIT",
   "icon": "assets/tpaplusplus/icon.png",

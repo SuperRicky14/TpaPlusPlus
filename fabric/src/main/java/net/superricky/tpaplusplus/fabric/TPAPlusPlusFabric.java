@@ -5,8 +5,8 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.superricky.tpaplusplus.fabriclike.TPAPlusPlusFabricLike;
 import net.fabricmc.api.ModInitializer;
-import net.superricky.tpaplusplus.util.configuration.Config;
-import net.superricky.tpaplusplus.util.configuration.Messages;
+import net.superricky.tpaplusplus.config.Config;
+import net.superricky.tpaplusplus.config.Messages;
 
 public class TPAPlusPlusFabric implements ModInitializer {
     @Override

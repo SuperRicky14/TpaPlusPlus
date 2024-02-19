@@ -12,6 +12,10 @@ architectury {
 forgix {
     group = "net.superricky.tpaplusplus"
     mergedJarName = "TPA++ - " + rootProject.mod_version + ".jar"
+
+    quilt {
+
+    }
 }
 
 // When this is run, it will automagically fill out our mod version from gradle.properties! So now I only need to update this shit in one place
@@ -84,7 +88,7 @@ allprojects {
         }
     }
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = "UTF-8"
         options.release = 17
     }

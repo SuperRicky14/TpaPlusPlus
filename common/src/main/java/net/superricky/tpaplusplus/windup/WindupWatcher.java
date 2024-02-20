@@ -42,16 +42,10 @@ public class WindupWatcher {
     }
 
     public static void startAsyncTickLoop(int rate) {
-        final long[] lastTickTimeMillis = {System.currentTimeMillis()};
-
         scheduler.scheduleAtFixedRate(() -> {
             runTick();
 
-            long evalTickTimeMillis = System.currentTimeMillis();
-            if (evalTickTimeMillis - lastTickTimeMillis[0] > 1000 / rate) {
-                WATCHDOG_LOGGER.warn(MessageParser.enhancedFormatter("A single tick took ${evalTickTimeMillis}, which is longer than the specified rate of ${rate}! Lower your update rate in the config if this happens frequently.", rate, evalTickTimeMillis));
-            }
-            lastTickTimeMillis[0] = evalTickTimeMillis;
+            // TODO: Implement a warning logging system for when this tick loop lags out.
         }, 1000 / rate, 1000 / rate, TimeUnit.MILLISECONDS);
     }
 
@@ -75,6 +69,8 @@ public class WindupWatcher {
                 windupData.getCancelled().set(true);
 
                 windupData.getPlayers()[0].sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.PLAYER_MOVED_DURING_WINDUP.get(), Map.of("command_used", getWindupCommand(windupData)))));
+
+                trackedWindupData.remove(windupData);
             }
         }
     }

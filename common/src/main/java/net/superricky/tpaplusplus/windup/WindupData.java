@@ -45,7 +45,7 @@ public class WindupData {
         this.deathPosition = null;
         this.playerData = null;
         this.delay = new AtomicInteger(delay);
-        this.isCancelled = new AtomicBoolean(true);
+        this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
     }
@@ -59,7 +59,7 @@ public class WindupData {
         this.deathPosition = null;
         this.playerData = playerData;
         this.delay = new AtomicInteger(delay);
-        this.isCancelled = new AtomicBoolean(true);
+        this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
     }
@@ -73,7 +73,7 @@ public class WindupData {
         this.deathPosition = null;
         this.playerData = null;
         this.delay = new AtomicInteger(delay);
-        this.isCancelled = new AtomicBoolean(true);
+        this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
     }
@@ -87,7 +87,7 @@ public class WindupData {
         this.deathPosition = null;
         this.playerData = null;
         this.delay = new AtomicInteger(delay);
-        this.isCancelled = new AtomicBoolean(true);
+        this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
     }
@@ -101,7 +101,7 @@ public class WindupData {
         this.deathPosition = deathPosition;
         this.playerData = null;
         this.delay = new AtomicInteger(delay);
-        this.isCancelled = new AtomicBoolean(true);
+        this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
     }

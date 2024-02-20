@@ -3,7 +3,7 @@ package net.superricky.tpaplusplus.config.formatters;
 import java.util.Map;
 
 /**
- * A utility class to format messages with a basic implementation of f-strings, since String.format does not suffice!
+ * A utility class to format messages with a basic implementation of f-strings, since String.format doesn't have the customizablity that we want.
  */
 public class MessageParser {
     // black magic using substrings and index's to get something similar to f-strings in other languages.

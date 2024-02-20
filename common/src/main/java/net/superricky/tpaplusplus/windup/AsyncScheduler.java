@@ -60,7 +60,7 @@ public class AsyncScheduler {
             return;
         }
 
-        if (Boolean.FALSE.equals(windupData.getCancelled().get())) {
+        if (windupData.getCancelled().get()) {
             throw new IllegalArgumentException("Tried to schedule a windupData that has already been cancelled.");
         }
 
@@ -92,9 +92,19 @@ public class AsyncScheduler {
                 throw new IllegalStateException("Scheduler is null!");
             }
 
+            if (windupData.getCancelled().get()) {
+                WindupWatcher.getTrackedWindupData().remove(windupData);
+                return;
+            }
+
             AsyncSchedulerHelper.fastMSG(MessageParser.enhancedFormatter(Messages.WINDUP_TIME_REMAINING.get(), Map.of("time", Integer.toString(windupData.getDelay()))), windupData.getPlayers());
             windupData.setDelay(windupData.getDelay() - 1);
             scheduler.schedule(() -> countdown(windupData), 1, TimeUnit.SECONDS);
+            return;
+        }
+
+        if (windupData.getCancelled().get()) {
+            WindupWatcher.getTrackedWindupData().remove(windupData);
             return;
         }
 

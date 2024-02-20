@@ -38,7 +38,6 @@ public class SaveDataManager {
         if (Boolean.FALSE.equals(checkForSaveDataExistence())) return; // Make sure the folder(s) exist and were automatically created successfully before writing to the file
         try (Writer writer = new FileWriter(MOD_SAVEDATA_FILE_PATH)) {
             gson.toJson(playerDataMap, writer);
-            LOGGER.info("Successfully saved player data!");
         } catch (IOException e) {
             LOGGER.error("An IOException occurred when trying to save playerData.");
             LOGGER.error(e.getMessage());

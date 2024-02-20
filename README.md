@@ -1,6 +1,9 @@
-### Releases are only avaliable on Modrinth and CurseForge
-* **This page is being rewritten**
-* **Check out the new and improved** [TPAPlusPlus Wiki!](https://github.com/SuperRicky14/TpaPlusPlus/wiki)
+# (NEW) YOU CAN CUSTOMIZE HOW LONG ANY COMMAND TAKES TO EXECUTE 
+* This feature is called Windups. You can now specify how long **every single command** in the mod takes to execute, and for **each command** you can specify the maximum distance the player can travel (Basically the /tpaaccept timer from the old version, except it now supports every command).
+* TPA++ Now runs much of it's heavy code asynchronously, allowing you to enable a tick loop that runs concurrently with the main thread. This means you can support a **huge amount** of players **without** lag.
+* TPA++ **NOW SUPPORTS 1.20.1 - 1.20.4** (inclusive)
+* TPA++ Supports all modloaders (NEOFORGE, FORGE, FABRIC AND QUILT).
+* Check out the [TPAPlusPlus Wiki!](https://github.com/SuperRicky14/TpaPlusPlus/wiki)
 * Links: [Modrinth](https://modrinth.com/mod/tpa++) | [Curseforge](https://www.curseforge.com/minecraft/mc-mods/tpaplusplus)
 
 ### About this Github

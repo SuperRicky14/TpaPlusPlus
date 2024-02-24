@@ -8,12 +8,7 @@
 ### Links: [Modrinth](https://modrinth.com/mod/tpa++) | [Curseforge](https://www.curseforge.com/minecraft/mc-mods/tpaplusplus)
 
 ### About this Github
-This is the place to [suggest features](https://github.com/SuperRicky14/TpaPlusPlus/issues), [contribute to the mod](https://github.com/SuperRicky14/TpaPlusPlus/pulls), or look at the "[wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki)". If you just want to download the mod, use either [Modrinth](https://modrinth.com/mod/tpa++) or [Curseforge](https://www.curseforge.com/minecraft/mc-mods/tpaplusplus)! I will be providing translation files in a later release of the mod, which will allow anyone to translate the mod into their own language, or just simply change the messages included with the mod.
-
-# NEW: TPA++ NOW SUPPORTS ALL MODLOADERS (NEOFORGE, FORGE, FABRIC AND QUILT)!!
-* Check out the new and improved [TPAPlusPlus Wiki!](https://github.com/SuperRicky14/TpaPlusPlus/wiki)
-* **`/tpblock` and `/tpunblock` is now avaliable in the latest and greatest release yet!**
-* Links: [Modrinth](https://modrinth.com/mod/pPuyOJU7) | [Curseforge](https://www.curseforge.com/minecraft/mc-mods/tpaplusplus)
+This is the place to [suggest features](https://github.com/SuperRicky14/TpaPlusPlus/issues), [contribute to the mod](https://github.com/SuperRicky14/TpaPlusPlus/pulls), or look at the "[wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki)". If you just want to download the mod, use either [Modrinth](https://modrinth.com/mod/tpa++) or [Curseforge](https://www.curseforge.com/minecraft/mc-mods/tpaplusplus)!
 
 ## Dependancies
 TPA++ now has a few dependancies you must install depending on which modloader you are using.

@@ -5,7 +5,7 @@
 * TPA++ Supports all modloaders (NEOFORGE, FORGE, FABRIC AND QUILT).
 * Check out the [TPAPlusPlus Wiki!](https://github.com/SuperRicky14/TpaPlusPlus/wiki)
 
-### Links: [Modrinth](https://modrinth.com/mod/tpa++) | [Curseforge](https://www.curseforge.com/minecraft/mc-mods/tpaplusplus)
+### Links: [Modrinth](https://modrinth.com/mod/pPuyOJU7) | [Curseforge](https://curseforge.com/minecraft/mc-mods/tpaplusplus) | [Wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki)
 
 ### About this Github
 This is the place to [suggest features](https://github.com/SuperRicky14/TpaPlusPlus/issues), [contribute to the mod](https://github.com/SuperRicky14/TpaPlusPlus/pulls), or look at the "[wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki)". If you just want to download the mod, use either [Modrinth](https://modrinth.com/mod/tpa++) or [Curseforge](https://www.curseforge.com/minecraft/mc-mods/tpaplusplus)!

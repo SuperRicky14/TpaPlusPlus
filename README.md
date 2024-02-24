@@ -3,7 +3,6 @@
 * TPA++ Now runs much of it's heavy code asynchronously, allowing you to enable a tick loop that runs concurrently with the main thread. This means you can support a **huge amount** of players **without** lag.
 * TPA++ **NOW SUPPORTS 1.20.1 - 1.20.4** (inclusive)
 * TPA++ Supports all modloaders (NEOFORGE, FORGE, FABRIC AND QUILT).
-* Check out the [TPAPlusPlus Wiki!](https://github.com/SuperRicky14/TpaPlusPlus/wiki)
 
 ### Links: [Modrinth](https://modrinth.com/mod/pPuyOJU7) | [Curseforge](https://curseforge.com/minecraft/mc-mods/tpaplusplus) | [Wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki)
 

@@ -1,13 +1,11 @@
-package net.superricky.tpaplusplus.windup;
+package net.superricky.tpaplusplus.windupcooldown.windup;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class AsyncSchedulerHelper {
+public class AsyncWindupHelper {
 
     /**
      * A method for checking whether a method using the schedule function actually passed in a proper set of players.
@@ -62,6 +60,6 @@ public class AsyncSchedulerHelper {
         }
     }
 
-    private AsyncSchedulerHelper() {
+    private AsyncWindupHelper() {
     }
 }

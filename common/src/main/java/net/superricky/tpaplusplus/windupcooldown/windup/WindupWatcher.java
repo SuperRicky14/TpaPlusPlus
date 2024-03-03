@@ -1,4 +1,4 @@
-package net.superricky.tpaplusplus.windup;
+package net.superricky.tpaplusplus.windupcooldown.windup;
 
 import net.minecraft.network.chat.Component;
 import net.superricky.tpaplusplus.TPAPlusPlus;
@@ -25,7 +25,6 @@ public class WindupWatcher {
     private static final Logger LOGGER = LoggerFactory.getLogger(TPAPlusPlus.MOD_ID);
 
     private static final String SWITCH_DISTANCE_FAILURE_ERROR_MESSAGE = "Switch statement could not find the respective windup distance!";
-    private static final String SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE = "Switch statement could not find the respective command!";
 
     private static final boolean USE_NON_BLOCKING_ASYNC_TICK_LOOP = Config.USE_NON_BLOCKING_ASYNC_TICK_LOOP.get();
 
@@ -42,11 +41,7 @@ public class WindupWatcher {
     }
 
     public static void startAsyncTickLoop(int rate) {
-        scheduler.scheduleAtFixedRate(() -> {
-            runTick();
-
-            // TODO: Implement a warning logging system for when this tick loop lags out.
-        }, 1000 / rate, 1000 / rate, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(WindupWatcher::runTick, 1000 / rate, 1000 / rate, TimeUnit.MILLISECONDS);
     }
 
     private static void runTick() {
@@ -68,7 +63,7 @@ public class WindupWatcher {
                 // Distance between the position which they started the countdown, and their current position is larger than the allowed distance set in the Config.
                 windupData.getCancelled().set(true);
 
-                windupData.getPlayers()[0].sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.PLAYER_MOVED_DURING_WINDUP.get(), Map.of("command_used", getWindupCommand(windupData)))));
+                windupData.getPlayers()[0].sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.PLAYER_MOVED_DURING_WINDUP.get(), Map.of("command_used", TPAPlusPlus.getCommandNameFromType(windupData.getType(), Boolean.TRUE.equals(windupData.getHereRequest()))))));
 
                 trackedWindupData.remove(windupData);
             }
@@ -104,43 +99,6 @@ public class WindupWatcher {
         }
         LOGGER.error(SWITCH_DISTANCE_FAILURE_ERROR_MESSAGE);
         throw new IllegalStateException(SWITCH_DISTANCE_FAILURE_ERROR_MESSAGE);
-    }
-
-    private static String getWindupCommand(WindupData windupData) {
-        switch (windupData.getType()) {
-            case BACK -> {
-                return Config.BACK_COMMAND_NAME.get();
-            }
-            case ACCEPT -> {
-                return Config.TPAACCEPT_COMMAND_NAME.get();
-            }
-            case DENY -> {
-                return Config.TPADENY_COMMAND_NAME.get();
-            }
-            case CANCEL -> {
-                return Config.TPACANCEL_COMMAND_NAME.get();
-            }
-            case SEND -> {
-                if (Boolean.TRUE.equals(windupData.getHereRequest())) {
-                    // Sent request is a here-request
-                    return Config.TPAHERE_COMMAND_NAME.get();
-                } else {
-                    // Sent request is a normal request
-                    return Config.TPA_COMMAND_NAME.get();
-                }
-            }
-            case BLOCK -> {
-                return Config.TPBLOCK_COMMAND_NAME.get();
-            }
-            case TOGGLE -> {
-                return Config.TPTOGGLE_COMMAND_NAME.get();
-            }
-            case UNBLOCK -> {
-                return Config.TPUNBLOCK_COMMAND_NAME.get();
-            }
-        }
-        LOGGER.error(SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE);
-        throw new IllegalStateException(SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE);
     }
 
     public static boolean deInstantiateScheduledExecutorService() throws InterruptedException {

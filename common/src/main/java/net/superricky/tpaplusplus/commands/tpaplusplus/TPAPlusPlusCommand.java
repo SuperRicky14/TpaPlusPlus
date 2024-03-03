@@ -13,8 +13,8 @@ import net.superricky.tpaplusplus.config.formatters.MessageReformatter;
 import net.superricky.tpaplusplus.io.AutosaveScheduler;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.timeout.TimeoutScheduler;
-import net.superricky.tpaplusplus.windup.AsyncScheduler;
-import net.superricky.tpaplusplus.windup.WindupWatcher;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
+import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -130,7 +130,7 @@ public class TPAPlusPlusCommand {
      */
     private static int reloadConfig(CommandSourceStack source, boolean force) {
         try {
-            logAndWarnTerminatedScheduledExecutorService(source, AsyncScheduler.stopScheduledExecutorService());
+            logAndWarnTerminatedScheduledExecutorService(source, AsyncWindup.stopScheduledExecutorService());
             logAndWarnTerminatedScheduledExecutorService(source, AutosaveScheduler.stopScheduledExecutorService());
             logAndWarnTerminatedScheduledExecutorService(source, TimeoutScheduler.stopScheduledExecutorService());
             logAndWarnTerminatedScheduledExecutorService(source, WindupWatcher.stopScheduledExecutorService());
@@ -148,7 +148,7 @@ public class TPAPlusPlusCommand {
             WindupWatcher.clearTrackedWindupData();
             source.sendSystemMessage(Component.literal(Messages.TPAPLUSPLUS_FORCE_RELOADED_CONFIG.get()));
             try {
-                AsyncScheduler.reCreateScheduledExecutorService();
+                AsyncWindup.reCreateScheduledExecutorService();
                 AutosaveScheduler.reCreateScheduledExecutorService();
                 TimeoutScheduler.reCreateScheduledExecutorService();
                 WindupWatcher.reCreateScheduledExecutorService();
@@ -164,7 +164,7 @@ public class TPAPlusPlusCommand {
         Config.SPEC.afterReload();
         source.sendSystemMessage(Component.literal(Messages.TPAPLUSPLUS_RELOADED_CONFIG.get()));
         try {
-            AsyncScheduler.reCreateScheduledExecutorService();
+            AsyncWindup.reCreateScheduledExecutorService();
             AutosaveScheduler.reCreateScheduledExecutorService();
             TimeoutScheduler.reCreateScheduledExecutorService();
             WindupWatcher.reCreateScheduledExecutorService();

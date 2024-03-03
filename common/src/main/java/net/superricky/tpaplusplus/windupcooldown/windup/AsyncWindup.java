@@ -1,4 +1,4 @@
-package net.superricky.tpaplusplus.windup;
+package net.superricky.tpaplusplus.windupcooldown.windup;
 
 import net.minecraft.network.chat.Component;
 import net.superricky.tpaplusplus.TPAPlusPlus;
@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class AsyncScheduler {
+public class AsyncWindup {
     // We have to create our own executor to allow us to modify the internal scheduler.
     private static ScheduledExecutorService scheduler = Executors.unconfigurableScheduledExecutorService(Executors.newScheduledThreadPool(1));
 
@@ -36,24 +36,24 @@ public class AsyncScheduler {
         if (windupData.getDelay() <= 0) {
             // Delay is LOWER than OR EQUAL to zero, throw an error
             LOGGER.error("IllegalArgumentException: Delay for Scheduled Task must be greater than 0! Please report this issue to the TPA++ issue page immediately.");
-            AsyncSchedulerHelper.fastMSG("Delay for Scheduled Task must be greater than 0! Please report this issue to the TPA++ issue page immediately.", windupData.getPlayers());
+            AsyncWindupHelper.fastMSG("Delay for Scheduled Task must be greater than 0! Please report this issue to the TPA++ issue page immediately.", windupData.getPlayers());
             throw new IllegalArgumentException("Delay for Scheduled Task must be greater than 0! Please report this issue to the TPA++ issue page immediately.");
         }
 
-        if (AsyncSchedulerHelper.playersAreNull(windupData.getPlayers())) {
+        if (AsyncWindupHelper.playersAreNull(windupData.getPlayers())) {
             LOGGER.error("IllegalArgumentException: The playerlist or one of the players inside is null! Please report this issue to the TPA++ issue page immediately.");
             throw new IllegalArgumentException("The playerlist or one of the players inside is null! Please report this issue to the TPA++ issue page immediately.");
         }
 
         if (windupData.getPlayers().length == 0) {
             LOGGER.error("IllegalArgumentException: The playerlist or one of the players inside is null! Please report this issue to the TPA++ issue page immediately.");
-            AsyncSchedulerHelper.fastMSG("No players were specified when attempting to schedule this task! Please report this issue to the TPA++ issue page immediately.", windupData.getPlayers());
+            AsyncWindupHelper.fastMSG("No players were specified when attempting to schedule this task! Please report this issue to the TPA++ issue page immediately.", windupData.getPlayers());
             throw new IllegalArgumentException("No players were specified when attempting to schedule this task! Please report this issue to the TPA++ issue page immediately.");
         }
 
         // Prevent the tasks specified from being in an illegal state (e.g: the caller specified an ACCEPT type, although there was no request to accept).
         try {
-            AsyncSchedulerHelper.getErrorMessage(windupData);
+            AsyncWindupHelper.getErrorMessage(windupData);
         } catch (IllegalArgumentException e) {
             LOGGER.error(e.getMessage());
             windupData.getPlayers()[0].sendSystemMessage(Component.literal("§4A fatal internal server error occurred, please check console for more information."));
@@ -97,7 +97,7 @@ public class AsyncScheduler {
                 return;
             }
 
-            AsyncSchedulerHelper.fastMSG(MessageParser.enhancedFormatter(Messages.WINDUP_TIME_REMAINING.get(), Map.of("time", Integer.toString(windupData.getDelay()))), windupData.getPlayers());
+            AsyncWindupHelper.fastMSG(MessageParser.enhancedFormatter(Messages.WINDUP_TIME_REMAINING.get(), Map.of("time", Integer.toString(windupData.getDelay()))), windupData.getPlayers());
             windupData.setDelay(windupData.getDelay() - 1);
             scheduler.schedule(() -> countdown(windupData), 1, TimeUnit.SECONDS);
             return;
@@ -169,7 +169,7 @@ public class AsyncScheduler {
         scheduler = Executors.unconfigurableScheduledExecutorService(Executors.newScheduledThreadPool(1));
     }
 
-    private AsyncScheduler() {
+    private AsyncWindup() {
     }
 }
 

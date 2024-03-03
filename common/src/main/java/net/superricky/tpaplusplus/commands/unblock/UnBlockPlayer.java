@@ -9,14 +9,19 @@ import net.superricky.tpaplusplus.config.formatters.MessageParser;
 import net.superricky.tpaplusplus.io.PlayerData;
 import net.superricky.tpaplusplus.io.SaveDataManager;
 import net.superricky.tpaplusplus.requests.RequestHelper;
-import net.superricky.tpaplusplus.windup.AsyncScheduler;
-import net.superricky.tpaplusplus.windup.CommandType;
-import net.superricky.tpaplusplus.windup.WindupData;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownData;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
+import net.superricky.tpaplusplus.windupcooldown.CommandType;
+import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 
 import java.util.Map;
 
 public class UnBlockPlayer {
     public static void unBlockPlayer(ServerPlayer executor, ServerPlayer blockedPlayer) {
+        // run the notify cooldown function and return if its false, to stop the player from unblocking the player.
+        if (!AsyncCooldownHelper.notifyAndCheckCooldown(executor, executor.getUUID(), CommandType.UNBLOCK)) return;
+
         if (RequestHelper.isPlayerIdentical(executor, blockedPlayer)) {
             // Player is trying to block themselves
             executor.sendSystemMessage(Component.literal(Messages.CANNOT_UNBLOCK_SELF.get()));
@@ -32,10 +37,13 @@ public class UnBlockPlayer {
             return;
         }
 
+        if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.UNBLOCK, Config.UNBLOCK_COOLDOWN.get()));
+
         if (Config.UNBLOCK_WINDUP.get() == 0) {
             absoluteUnBlockPlayer(executorData, executor, blockedPlayer);
         } else {
-            AsyncScheduler.schedule(new WindupData(executorData, Config.UNBLOCK_WINDUP.get(), executor.getX(), executor.getY(), executor.getZ(), CommandType.UNBLOCK, new ServerPlayer[]{executor, blockedPlayer}));
+            AsyncWindup.schedule(new WindupData(executorData, Config.UNBLOCK_WINDUP.get(), executor.getX(), executor.getY(), executor.getZ(), CommandType.UNBLOCK, new ServerPlayer[]{executor, blockedPlayer}));
         }
     }
 
@@ -50,6 +58,10 @@ public class UnBlockPlayer {
             blockedPlayer.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.PLAYER_UNBLOCKED_BY_SENDER.get(),
                     Map.of("sender_name", executor.getName().getString()))));
         }
+
+        if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.UNBLOCK, Config.UNBLOCK_COOLDOWN.get()));
+
     }
 
     private UnBlockPlayer() {

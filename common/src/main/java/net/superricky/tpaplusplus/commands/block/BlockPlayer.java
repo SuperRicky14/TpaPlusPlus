@@ -8,14 +8,19 @@ import net.superricky.tpaplusplus.config.formatters.MessageParser;
 import net.superricky.tpaplusplus.io.PlayerData;
 import net.superricky.tpaplusplus.io.SaveDataManager;
 import net.superricky.tpaplusplus.requests.RequestHelper;
-import net.superricky.tpaplusplus.windup.AsyncScheduler;
-import net.superricky.tpaplusplus.windup.CommandType;
-import net.superricky.tpaplusplus.windup.WindupData;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownData;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
+import net.superricky.tpaplusplus.windupcooldown.CommandType;
+import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 
 import java.util.Map;
 
 public class BlockPlayer {
     public static void blockPlayer(ServerPlayer executor, ServerPlayer blockedPlayer) {
+        // run the notify cooldown function and return if its false, to stop the player from blocking the player.
+        if (!AsyncCooldownHelper.notifyAndCheckCooldown(executor, executor.getUUID(), CommandType.BLOCK)) return;
+
         if (RequestHelper.isPlayerIdentical(executor, blockedPlayer)) {
             // Player is trying to block themselves
             executor.sendSystemMessage(Component.literal(Messages.CANNOT_BLOCK_SELF.get()));
@@ -31,10 +36,13 @@ public class BlockPlayer {
             return;
         }
 
+        if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.BLOCK, Config.BLOCK_COOLDOWN.get()));
+
         if (Config.BLOCK_WINDUP.get() == 0) {
             absoluteBlockPlayer(executorData, executor, blockedPlayer);
         } else {
-            AsyncScheduler.schedule(new WindupData(executorData, Config.BLOCK_WINDUP.get(), executor.getX(), executor.getY(), executor.getZ(), CommandType.BLOCK, new ServerPlayer[]{executor, blockedPlayer}));
+            AsyncWindup.schedule(new WindupData(executorData, Config.BLOCK_WINDUP.get(), executor.getX(), executor.getY(), executor.getZ(), CommandType.BLOCK, new ServerPlayer[]{executor, blockedPlayer}));
         }
     }
 
@@ -49,6 +57,9 @@ public class BlockPlayer {
             blockedPlayer.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.PLAYER_BLOCKED_BY_SENDER.get(),
                     Map.of("sender_name", executor.getName().getString()))));
         }
+
+        if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.BLOCK, Config.BLOCK_COOLDOWN.get()));
     }
 
     private BlockPlayer() {

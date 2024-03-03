@@ -93,6 +93,7 @@ public class Messages {
     // Countdown Messages
     public static final ForgeConfigSpec.ConfigValue<String> WINDUP_TIME_REMAINING;
     public static final ForgeConfigSpec.ConfigValue<String> PLAYER_MOVED_DURING_WINDUP;
+    public static final ForgeConfigSpec.ConfigValue<String> ERR_COMMAND_ON_COOLDOWN_MESSAGE;
 
     static {
         BUILDER.push("TPA++ Messages");
@@ -356,6 +357,14 @@ public class Messages {
         PLAYER_MOVED_DURING_WINDUP = BUILDER.comment("\n The message displayed during a windup for a command when the player moves further than the allowed distance in the config")
                 .comment("Placeholders: \"${command_used}\": \"The command that the player tried to execute, but they moved too far. This placeholder respects the command names set in the config.\"")
                 .define("PLAYER_MOVED_DURING_WINDUP", "§cYou moved too much whilst trying to execute ${command_used}, so it was cancelled.");
+
+        BUILDER.pop();
+        BUILDER.push("Cooldowns");
+
+        ERR_COMMAND_ON_COOLDOWN_MESSAGE = BUILDER.comment("\n The message displayed when a player tries to execute a command but it is currently on cooldown.")
+                .comment("Placeholders: \"${command_used}\": \"The command that was on cooldown. This placeholder respects the command names set in the config.\"")
+                .comment("              \"${time_remaining}\": \"How long is left on the cooldown (in seconds)\"")
+                .define("ERR_COMMAND_ON_COOLDOWN_MESSAGE", "§c\"/{command_used}\" is currently on cooldown, please wait {time_remaining}s!");
 
         BUILDER.pop(2);
         SPEC = BUILDER.build();

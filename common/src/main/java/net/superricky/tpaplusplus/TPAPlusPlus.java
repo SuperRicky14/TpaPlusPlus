@@ -4,8 +4,6 @@ import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.TickEvent;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.Component;
 import net.superricky.tpaplusplus.commands.accept.TPAAcceptCommand;
 import net.superricky.tpaplusplus.commands.back.BackCommand;
 import net.superricky.tpaplusplus.commands.back.DeathHelper;
@@ -22,7 +20,10 @@ import net.superricky.tpaplusplus.config.formatters.MessageParser;
 import net.superricky.tpaplusplus.io.AutosaveEventHandler;
 import net.superricky.tpaplusplus.timeout.RequestTimeoutEvent;
 import net.superricky.tpaplusplus.timeout.TimeoutEventHandler;
-import net.superricky.tpaplusplus.windup.WindupWatcher;
+import net.superricky.tpaplusplus.windupcooldown.CommandType;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldown;
+import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
+import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,8 @@ public class TPAPlusPlus {
 
     public static final String CONFIG_PATH = "tpaplusplus-config.toml";
     public static final String MESSAGES_CONFIG_PATH = "tpaplusplus-messages.toml";
+
+    private static final String SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE = "Switch statement could not find the respective command!";
 
     public static void init() {
         LOGGER.info("INITIALIZING...");
@@ -86,6 +89,9 @@ public class TPAPlusPlus {
             }
         }
 
+        LOGGER.info("LOADING COOLDOWN LOOP...");
+        AsyncCooldown.instantiateCooldownLoop();
+
         LOGGER.info("...INITIALIZATION COMPLETE");
     }
 
@@ -99,5 +105,70 @@ public class TPAPlusPlus {
         return Math.sqrt(Math.pow(x2 - x1, 2) +
                 Math.pow(y2 - y1, 2) +
                 Math.pow(z2 - z1, 2));
+    }
+
+    public static String getCommandNameFromType(CommandType commandType, boolean isHereRequest) {
+        switch (commandType) {
+            case BACK -> {
+                return Config.BACK_COMMAND_NAME.get();
+            }
+            case ACCEPT -> {
+                return Config.TPAACCEPT_COMMAND_NAME.get();
+            }
+            case DENY -> {
+                return Config.TPADENY_COMMAND_NAME.get();
+            }
+            case CANCEL -> {
+                return Config.TPACANCEL_COMMAND_NAME.get();
+            }
+            case SEND -> {
+                if (Boolean.TRUE.equals(isHereRequest)) {
+                    // Sent request is a here-request
+                    return Config.TPAHERE_COMMAND_NAME.get();
+                } else {
+                    // Sent request is a normal request
+                    return Config.TPA_COMMAND_NAME.get();
+                }
+            }
+            case BLOCK -> {
+                return Config.TPBLOCK_COMMAND_NAME.get();
+            }
+            case TOGGLE -> {
+                return Config.TPTOGGLE_COMMAND_NAME.get();
+            }
+            case UNBLOCK -> {
+                return Config.TPUNBLOCK_COMMAND_NAME.get();
+            }
+        }
+        LOGGER.error(SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE);
+        throw new IllegalStateException(SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE);
+    }
+
+    public static String getCommandNameFromType(CommandType commandType) {
+        switch (commandType) {
+            case BACK -> {
+                return Config.BACK_COMMAND_NAME.get();
+            }
+            case ACCEPT -> {
+                return Config.TPAACCEPT_COMMAND_NAME.get();
+            }
+            case DENY -> {
+                return Config.TPADENY_COMMAND_NAME.get();
+            }
+            case CANCEL -> {
+                return Config.TPACANCEL_COMMAND_NAME.get();
+            }
+            case BLOCK -> {
+                return Config.TPBLOCK_COMMAND_NAME.get();
+            }
+            case TOGGLE -> {
+                return Config.TPTOGGLE_COMMAND_NAME.get();
+            }
+            case UNBLOCK -> {
+                return Config.TPUNBLOCK_COMMAND_NAME.get();
+            }
+        }
+        LOGGER.error(SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE);
+        throw new IllegalStateException(SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE);
     }
 }

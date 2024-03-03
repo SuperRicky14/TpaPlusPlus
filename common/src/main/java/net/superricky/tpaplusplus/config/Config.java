@@ -49,6 +49,17 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Double> BLOCK_WINDUP_DISTANCE;
     public static final ForgeConfigSpec.ConfigValue<Double> UNBLOCK_WINDUP_DISTANCE;
 
+    // Cooldown
+    public static final ForgeConfigSpec.ConfigValue<Integer> BACK_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Integer> ACCEPT_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Integer> DENY_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Integer> CANCEL_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SEND_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Integer> TOGGLE_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Integer> BLOCK_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Integer> UNBLOCK_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS;
+
     // Advanced Settings
     public static final ForgeConfigSpec.ConfigValue<Integer> AUTOSAVE_INTERVAL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> USE_NON_BLOCKING_ASYNC_TICK_LOOP;
@@ -146,6 +157,7 @@ public class Config {
         BUILDER.push("Windups");
         BUILDER.push("Delay");
         BUILDER.comment(" This section of the config controls how long things like commands take to execute.");
+        BUILDER.comment(" This is measured in seconds.");
         BUILDER.comment(" Set this to 0 if you wish to disable the countdown");
 
         BACK_WINDUP = BUILDER.comment("\n How long it takes for players to run /back.")
@@ -175,34 +187,71 @@ public class Config {
         BUILDER.pop();
         BUILDER.push("Distance");
         BUILDER.comment(" This section of the config controls how far away people can be, from the position that they executed each command.");
+        BUILDER.comment(" This is measured in blocks.");
         BUILDER.comment(" Set this to 0 if you want players to not be able to move at all during a countdown, or to -1 to completely disable this feature and allow them to move around freely during a windup.");
         BUILDER.comment(" WARNING: SETTING THESE VALUES IN-BETWEEN 0 AND -1 WILL CAUSE THEIR RESPECTIVE COMMAND TO BE UNUSABLE.");
 
         BACK_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /back.")
                 .defineInRange("Back Windup Distance", 0, -1, Double.MAX_VALUE);
 
-        ACCEPT_WINDUP_DISTANCE = BUILDER.comment("\n How long it takes for players to run /tpaaccept.")
+        ACCEPT_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpaaccept.")
                 .defineInRange("Accept Windup Distance", 0, -1, Double.MAX_VALUE);
 
-        DENY_WINDUP_DISTANCE = BUILDER.comment("\n How long it takes for players to run /tpadeny.")
+        DENY_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpadeny.")
                 .defineInRange("Deny Windup Distance", 0, -1, Double.MAX_VALUE);
 
-        CANCEL_WINDUP_DISTANCE = BUILDER.comment("\n How long it takes for players to run /tpacancel.")
+        CANCEL_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpacancel.")
                 .defineInRange("Cancel Windup Distance", 0, -1, Double.MAX_VALUE);
 
-        SEND_WINDUP_DISTANCE = BUILDER.comment("\n How long it takes for players to run /tpa or /tpahere.")
+        SEND_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpa or /tpahere.")
                 .defineInRange("Send Windup Distance", 0, -1, Double.MAX_VALUE);
 
-        TOGGLE_WINDUP_DISTANCE = BUILDER.comment("\n How long it takes for players to run /tptoggle.")
+        TOGGLE_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tptoggle.")
                 .defineInRange("Toggle Windup Distance", 0, -1, Double.MAX_VALUE);
 
-        BLOCK_WINDUP_DISTANCE = BUILDER.comment("\n How long it takes for players to run /tpblock.")
+        BLOCK_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpblock.")
                 .defineInRange("Block Windup Distance", 0, -1, Double.MAX_VALUE);
 
-        UNBLOCK_WINDUP_DISTANCE = BUILDER.comment("\n How long it takes for players to run /tpunblock.")
+        UNBLOCK_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpunblock.")
                 .defineInRange("Unblock Windup Distance", 0, -1, Double.MAX_VALUE);
 
         BUILDER.pop(2);
+
+        BUILDER.push("Cooldowns");
+        BUILDER.comment(" This section of the config controls the cooldown (how long the player must wait) after a command executes.");
+        BUILDER.comment(" This is measured in seconds.");
+        BUILDER.comment(" Set this to 0 if you wish to disable the cooldown");
+
+        BACK_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /back.")
+                .defineInRange("Back Cooldown", 0, 0, Integer.MAX_VALUE);
+
+        ACCEPT_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpaaccept.")
+                .defineInRange("Accept Cooldown", 0, 0, Integer.MAX_VALUE);
+
+        DENY_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpadeny.")
+                .defineInRange("Deny Cooldown", 0, 0, Integer.MAX_VALUE);
+
+        CANCEL_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpacancel.")
+                .defineInRange("Cancel Cooldown", 0, 0, Integer.MAX_VALUE);
+
+        SEND_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpa or /tpahere.")
+                .defineInRange("Send Cooldown", 0, 0, Integer.MAX_VALUE);
+
+        TOGGLE_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tptoggle.")
+                .defineInRange("Toggle Cooldown", 0, 0, Integer.MAX_VALUE);
+
+        BLOCK_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpblock.")
+                .defineInRange("Block Cooldown", 0, 0, Integer.MAX_VALUE);
+
+        UNBLOCK_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpunblock.")
+                .defineInRange("Unblock Cooldown", 0, 0, Integer.MAX_VALUE);
+
+        ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS = BUILDER.comment("\n Whether to start the cooldown if the command executes successfully (e.g. at the end of a windup)")
+                .comment(" Setting this value to true will only start the cooldown if the command runs successfully.")
+                .comment(" Setting this value to false will start the countdown before starting a windup.")
+                .define("Only Start Countdown On Command Success", true);
+
+        BUILDER.pop();
         BUILDER.push("Advanced Settings");
         BUILDER.comment(" WARNING: These options are related to asynchronous operations. Modifying these from the defaults has a small chance to corrupt data.");
         BUILDER.comment(" WARNING: It is only recommended to change these values from their defaults if you know how they work internally.");

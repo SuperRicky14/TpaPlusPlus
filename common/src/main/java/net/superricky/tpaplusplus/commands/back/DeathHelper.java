@@ -6,11 +6,12 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class DeathHelper {
-    private static final Map<ServerPlayer, LevelBoundVec3> playerDeathCoordinates = new HashMap<>();
+    private static final Map<UUID, LevelBoundVec3> playerDeathCoordinates = new HashMap<>();
 
-    public static Map<ServerPlayer, LevelBoundVec3> getPlayerDeathCoordinates() {
+    public static Map<UUID, LevelBoundVec3> getPlayerDeathCoordinates(){
         return playerDeathCoordinates;
     }
 
@@ -34,10 +35,10 @@ public class DeathHelper {
         LevelBoundVec3 deathPosition = new LevelBoundVec3(playerEntity.serverLevel(), playerEntity.getX(), playerEntity.getY(), playerEntity.getZ());
 
         // Remove old playerDeathCoordinate if present.
-        playerDeathCoordinates.remove(playerEntity);
+        playerDeathCoordinates.remove(playerEntity.getUUID());
 
         // Add this playerDeathCoordinate to the map.
-        playerDeathCoordinates.put(playerEntity, deathPosition);
+        playerDeathCoordinates.put(playerEntity.getUUID(), deathPosition);
 
         return EventResult.pass();
     }

@@ -21,7 +21,7 @@ public class Back {
             return;
         }
 
-        @Nullable LevelBoundVec3 deathPosition = DeathHelper.getPlayerDeathCoordinates().get(executor);
+        @Nullable LevelBoundVec3 deathPosition = DeathHelper.getPlayerDeathCoordinates().get(executor.getUUID());
 
         // Protect against NullPointerException
         if (Objects.isNull(deathPosition)) {
@@ -40,7 +40,7 @@ public class Back {
         executor.sendSystemMessage(Component.literal(Messages.DEATH_BEING_TELEPORTED.get()));
 
         teleportToLastPosition(executor, deathPosition); // Teleport the player to their last position!
-        DeathHelper.getPlayerDeathCoordinates().remove(executor); // Remove the player from the death coordinates afterward.
+        DeathHelper.getPlayerDeathCoordinates().remove(executor.getUUID()); // Remove the player from the death coordinates afterward.
 
         executor.sendSystemMessage(Component.literal(Messages.DEATH_TELEPORTED.get()));
     }

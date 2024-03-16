@@ -13,3 +13,6 @@
    There should be a line called "org.gradle.jvmargs" near or at the very top. In here you can change the value after the -Xmx to something else.\
    It is measured in megabytes, for example 6GB would be 6144M (which it is set to by default), and 10GB would be 10240M.
    You can calculate this by doing: Megabytes of RAM = 1024 * (how many gigabytes you want to allocate to gradle).
+
+# Important Note:
+**Add <org.gradle.parallel=true> just underneath the <org.gradle.jvmargs=-Xmx6144M> line for greatly reduced build times.** This is because Architectury uses multiple project modules, but when building the whole project, gradle supports running these builds (along with many other operations) in parallel, using all your CPU cores. The reason why it isn't already added beforehand (anymore), is because importing the gradle project completely fails when this is enabled. After you initially import the project, you can add this line to speedup gradle.

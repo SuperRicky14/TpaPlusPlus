@@ -1,8 +1,8 @@
-# How to contribute to TPA++
+## How to contribute to TPA++ (for developers)
 1. Just clone the repository (https://github.com/SuperRicky14/TpaPlusPlus.git) into anywhere on your computer.
 2. Open up Intellij (don't know about Eclipse) and open TPA++ as a gradle project.
 
-# How to open TPA++ as a Gradle Project
+## How to open TPA++ as a Gradle Project
 1. In Intellij, click File -> Open...
 2. Now in the window that opened, find where you cloned TPA++
 3. Then click on the file called "build.gradle". You may see more than one "build.gradle" but it is important you click on the one in the root directory. Do NOT click on the build.gradle inside common, fabric, forge, etc.

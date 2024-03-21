@@ -5,13 +5,6 @@ labels: ["bug"]
 projects: []
 assignees: []
 body:
-  - type: checkboxes
-    id: already-exists-report
-    attributes:
-      label: Have you searched for this bug in the already reported issues?
-      options:
-        - label: I have not found this bug in already reported issues.
-          required: true
   - type: dropdown
     id: mc-version
     attributes:

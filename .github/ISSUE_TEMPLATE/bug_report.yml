@@ -47,7 +47,7 @@ body:
     validations:
       required: true
   - type: input
-    id: mod-loader-version
+    id: fcapi-port-version
     attributes:
       label: FCAPI Port (if present) Version
       description: The version of the Forge Config API Port you are using (Only applicable to Fabric / Quilt).

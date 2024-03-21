@@ -17,8 +17,8 @@ public class TPToggle {
         // run the notify cooldown function and return if its false, to stop the player from toggling tp.
         if (!AsyncCooldownHelper.notifyAndCheckCooldown(executor, executor.getUUID(), CommandType.TOGGLE)) return;
 
-        if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.TOGGLE, Config.TOGGLE_COOLDOWN.get()));
+        //if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.TOGGLE, Config.TOGGLE_COOLDOWN.get()));
 
         if (Config.TOGGLE_WINDUP.get() == 0) {
             toggleTP(executor);
@@ -38,8 +38,8 @@ public class TPToggle {
             executor.sendSystemMessage(Component.literal(Messages.TPTOGGLE_DISABLED.get()));
         }
 
-        if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.TOGGLE, Config.TOGGLE_COOLDOWN.get()));
+        //if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.TOGGLE, Config.TOGGLE_COOLDOWN.get()));
     }
 
     private TPToggle() {

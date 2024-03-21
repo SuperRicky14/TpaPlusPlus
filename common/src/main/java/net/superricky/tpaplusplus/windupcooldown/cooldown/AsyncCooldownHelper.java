@@ -27,6 +27,9 @@ public class AsyncCooldownHelper {
      * @return TRUE if the player passed the cooldown check, FALSE if they failed
      */
     public static boolean notifyAndCheckCooldown(ServerPlayer playerToNotify, UUID playerToGrab, CommandType commandToCheck, boolean isHereRequest) {
+        return true;
+
+        /* Work In Progress!
         CooldownData cooldownData = getCooldownData(playerToGrab, commandToCheck);
 
         if (cooldownData == null) {
@@ -35,12 +38,16 @@ public class AsyncCooldownHelper {
 
         playerToNotify.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.ERR_COMMAND_ON_COOLDOWN_MESSAGE.get(), Map.of("command_used", TPAPlusPlus.getCommandNameFromType(commandToCheck, isHereRequest)), Map.of("time_remaining", cooldownData.getDelay()))));
         return false;
+        */
     }
 
     /**
      * @return TRUE if the player passed the cooldown check, FALSE if they failed
      */
     public static boolean notifyAndCheckCooldown(ServerPlayer playerToNotify, UUID playerToGrab, CommandType commandToCheck) {
+        return true;
+
+        /* Work In Progress!
         CooldownData cooldownData = getCooldownData(playerToGrab, commandToCheck);
 
         if (cooldownData == null) {
@@ -54,6 +61,7 @@ public class AsyncCooldownHelper {
 
         playerToNotify.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.ERR_COMMAND_ON_COOLDOWN_MESSAGE.get(), Map.of("command_used", TPAPlusPlus.getCommandNameFromType(commandToCheck)), Map.of("time_remaining", cooldownData.getDelay()))));
         return false;
+         */
     }
 
     @Nullable

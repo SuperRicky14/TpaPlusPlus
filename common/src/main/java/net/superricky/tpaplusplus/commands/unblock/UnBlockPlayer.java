@@ -37,8 +37,8 @@ public class UnBlockPlayer {
             return;
         }
 
-        if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.UNBLOCK, Config.UNBLOCK_COOLDOWN.get()));
+        //if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.UNBLOCK, Config.UNBLOCK_COOLDOWN.get()));
 
         if (Config.UNBLOCK_WINDUP.get() == 0) {
             absoluteUnBlockPlayer(executorData, executor, blockedPlayer);
@@ -59,9 +59,8 @@ public class UnBlockPlayer {
                     Map.of("sender_name", executor.getName().getString()))));
         }
 
-        if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.UNBLOCK, Config.UNBLOCK_COOLDOWN.get()));
-
+        //if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.UNBLOCK, Config.UNBLOCK_COOLDOWN.get()));
     }
 
     private UnBlockPlayer() {

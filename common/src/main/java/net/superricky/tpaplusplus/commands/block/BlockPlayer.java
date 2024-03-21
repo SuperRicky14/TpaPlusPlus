@@ -36,8 +36,8 @@ public class BlockPlayer {
             return;
         }
 
-        if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.BLOCK, Config.BLOCK_COOLDOWN.get()));
+        //if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.BLOCK, Config.BLOCK_COOLDOWN.get()));
 
         if (Config.BLOCK_WINDUP.get() == 0) {
             absoluteBlockPlayer(executorData, executor, blockedPlayer);
@@ -58,8 +58,8 @@ public class BlockPlayer {
                     Map.of("sender_name", executor.getName().getString()))));
         }
 
-        if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.BLOCK, Config.BLOCK_COOLDOWN.get()));
+        //if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.BLOCK, Config.BLOCK_COOLDOWN.get()));
     }
 
     private BlockPlayer() {

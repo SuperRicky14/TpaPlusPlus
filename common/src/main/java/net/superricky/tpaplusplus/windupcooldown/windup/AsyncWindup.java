@@ -161,6 +161,14 @@ public class AsyncWindup {
         return scheduler.awaitTermination(5, TimeUnit.SECONDS);
     }
 
+    public static boolean forceQuitScheduledExecutorService() throws InterruptedException {
+        // Shutdown the ScheduledExecutorService immediately
+        scheduler.shutdownNow();
+
+        // Forcefully shutdown the executor
+        return scheduler.awaitTermination(5, TimeUnit.SECONDS);
+    }
+
     public static void reCreateScheduledExecutorService() {
         if (Boolean.FALSE.equals(scheduler.isShutdown()))
             throw new IllegalStateException("Attempted to re-create ScheduledExecutorService but it was not shutdown beforehand!");

@@ -37,6 +37,14 @@ public class TimeoutScheduler {
         scheduler = Executors.unconfigurableScheduledExecutorService(Executors.newScheduledThreadPool(1));
     }
 
+    public static boolean forceQuitScheduledExecutorService() throws InterruptedException {
+        // Shutdown the ScheduledExecutorService immediately
+        scheduler.shutdownNow();
+
+        // Forcefully shutdown the executor
+        return scheduler.awaitTermination(5, TimeUnit.SECONDS);
+    }
+
     private TimeoutScheduler() {
     }
 }

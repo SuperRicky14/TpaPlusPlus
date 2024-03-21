@@ -58,8 +58,8 @@ public class SendTPA {
         // run the notify function and return if it false, to stop the player from sending the request.
         if (!LimitationManager.notifyAndCheckAllowedToTeleport(sender, receiver, false)) return;
 
-        if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            AsyncCooldownHelper.getCooldownSet().add(new CooldownData(sender.getUUID(), CommandType.SEND, Config.SEND_COOLDOWN.get()));
+        //if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(sender.getUUID(), CommandType.SEND, Config.SEND_COOLDOWN.get()));
 
         if (Config.SEND_WINDUP.get() == 0) {
             absoluteSendTeleportRequest(sender, receiver, isHereRequest);
@@ -83,8 +83,8 @@ public class SendTPA {
             receiver.sendSystemMessage(Component.literal(String.format(Messages.RECEIVER_GOT_TPA.get(), sender.getName().getString())));
         }
 
-        if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            AsyncCooldownHelper.getCooldownSet().add(new CooldownData(sender.getUUID(), CommandType.SEND, Config.SEND_COOLDOWN.get()));
+        //if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(sender.getUUID(), CommandType.SEND, Config.SEND_COOLDOWN.get()));
     }
 
     private SendTPA() {

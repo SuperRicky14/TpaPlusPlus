@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AsyncCooldown {
     private static final Logger LOGGER = LoggerFactory.getLogger(TPAPlusPlus.MOD_ID);
-    private static ScheduledExecutorService scheduler = Executors.unconfigurableScheduledExecutorService(Executors.newScheduledThreadPool(1));
+    private static ScheduledExecutorService scheduler = null;// Executors.unconfigurableScheduledExecutorService(Executors.newScheduledThreadPool(1));
 
     private static List<CooldownData> queriedRemoveList = new ArrayList<>();
 

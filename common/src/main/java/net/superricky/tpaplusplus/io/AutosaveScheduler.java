@@ -41,6 +41,14 @@ public class AutosaveScheduler {
         initialiseAutoSaveService(); // We have to re-initialise the autosave ScheduledExecutorService
     }
 
+    public static boolean forceQuitScheduledExecutorService() throws InterruptedException {
+        // Shutdown the ScheduledExecutorService immediately
+        scheduler.shutdownNow();
+
+        // Forcefully shutdown the executor
+        return scheduler.awaitTermination(5, TimeUnit.SECONDS);
+    }
+
     private AutosaveScheduler() {
     }
 }

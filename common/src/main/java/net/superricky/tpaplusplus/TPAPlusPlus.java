@@ -17,12 +17,10 @@ import net.superricky.tpaplusplus.commands.tpaplusplus.TPAPlusPlusCommand;
 import net.superricky.tpaplusplus.commands.unblock.TPUnBlockCommand;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.formatters.MessageParser;
-import net.superricky.tpaplusplus.io.AutosaveEventHandler;
+import net.superricky.tpaplusplus.io.ServerLifecycleHandler;
 import net.superricky.tpaplusplus.timeout.RequestTimeoutEvent;
 import net.superricky.tpaplusplus.timeout.TimeoutEventHandler;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldown;
-import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,9 +62,9 @@ public class TPAPlusPlus {
         CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPUnBlockCommand.onRegisterCommandEvent(dispatcher));
 
         LOGGER.info("REGISTERING \"LifecycleEvent.SERVER_STARTED\"...");
-        LifecycleEvent.SERVER_STARTED.register(state -> AutosaveEventHandler.onServerStart());
+        LifecycleEvent.SERVER_STARTED.register(state -> ServerLifecycleHandler.onServerStart());
         LOGGER.info("REGISTERING \"LifecycleEvent.SERVER_STOPPING\"...");
-        LifecycleEvent.SERVER_STOPPING.register(state -> AutosaveEventHandler.onServerStop());
+        LifecycleEvent.SERVER_STOPPING.register(state -> ServerLifecycleHandler.onServerStop());
         LOGGER.info("REGISTERING \"LifecycleEvent.LIVING_DEATH\"...");
         EntityEvent.LIVING_DEATH.register((deadEntity, source) -> DeathHelper.onDeath(deadEntity));
 
@@ -89,8 +87,8 @@ public class TPAPlusPlus {
             }
         }
 
-        LOGGER.info("LOADING COOLDOWN LOOP...");
-        AsyncCooldown.instantiateCooldownLoop();
+        //LOGGER.info("LOADING COOLDOWN LOOP...");
+        //AsyncCooldown.instantiateCooldownLoop();
 
         LOGGER.info("...INITIALIZATION COMPLETE");
     }

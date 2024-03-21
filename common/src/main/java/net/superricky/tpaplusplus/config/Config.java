@@ -221,6 +221,7 @@ public class Config {
         BUILDER.comment(" This section of the config controls the cooldown (how long the player must wait) after a command executes.");
         BUILDER.comment(" This is measured in seconds.");
         BUILDER.comment(" Set this to 0 if you wish to disable the cooldown");
+        BUILDER.comment("\n THIS FEATURE HAS NOT YET BEEN IMPLEMENTED! ALL OF THESE OPTIONS CURRENTLY DO NOTHING");
 
         BACK_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /back.")
                 .defineInRange("Back Cooldown", 0, 0, Integer.MAX_VALUE);

@@ -38,6 +38,22 @@ body:
       placeholder: e.x. 45.1.0
     validations:
       required: true
+  - type: input
+    id: arch-api-version
+    attributes:
+      label: Architectury API Version
+      description: The version of the Architectury API you are using
+      placeholder: e.x. 9.1.12
+    validations:
+      required: true
+  - type: input
+    id: mod-loader-version
+    attributes:
+      label: FCAPI Port (if present) Version
+      description: The version of the Forge Config API Port you are using (Only applicable to Fabric / Quilt).
+      placeholder: e.x. 8.0.0
+    validations:
+      required: false
   - type: textarea
     id: description
     attributes:
@@ -62,7 +78,7 @@ body:
     id: crash-reports-logs
     attributes:
       label: Crash Reports/Logs
-      description: Crash reports / logs hosted on pastebin, gist, etc.
+      description: Crash reports / logs hosted on [pastebin](https://pastebin.com), [mclogs](https://mclo.gs), [gist](https://gist.github.com), etc.
   - type: textarea
     id: screenshots
     attributes:
@@ -73,7 +89,7 @@ body:
     id: mod-list
     attributes:
       label: Mod List
-      description: If applicable, include the list of mods that were enabled when the bug occurred, or NONE if there were no extras
+      description: If applicable, include the list of mods that were enabled when the bug occurred, or NONE if there were no extras. We would prefer if you entered this on a paste site such as [pastebin](https://pastebin.com) or hastebin.
       placeholder: List of mods
     validations:
       required: true

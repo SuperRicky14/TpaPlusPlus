@@ -34,8 +34,8 @@ public class Back {
             return;
         }
 
-        //if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.BACK, Config.BACK_COOLDOWN.get()));
+        if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            AsyncCooldownHelper.postCooldown(executor.getUUID(), CommandType.BACK, Config.BACK_COOLDOWN.get());
 
         if (Config.BACK_WINDUP.get() == 0) {
             absoluteTeleportToLatestDeath(executor, deathPosition);
@@ -52,8 +52,8 @@ public class Back {
 
         executor.sendSystemMessage(Component.literal(Messages.DEATH_TELEPORTED.get()));
 
-        //if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(executor.getUUID(), CommandType.BACK, Config.BACK_COOLDOWN.get()));
+        if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            AsyncCooldownHelper.postCooldown(executor.getUUID(), CommandType.BACK, Config.BACK_COOLDOWN.get());
     }
 
     public static void teleportToLastPosition(ServerPlayer executor, LevelBoundVec3 deathPosition) {

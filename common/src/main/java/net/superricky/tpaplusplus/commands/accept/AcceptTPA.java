@@ -26,8 +26,8 @@ public class AcceptTPA {
             return;
         }
 
-        //if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(receiver.getUUID(), CommandType.ACCEPT, Config.ACCEPT_COOLDOWN.get()));
+        if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            AsyncCooldownHelper.postCooldown(receiver.getUUID(), CommandType.ACCEPT, Config.ACCEPT_COOLDOWN.get());
 
         if (Config.ACCEPT_WINDUP.get() == 0) {
             absoluteAcceptFunctionality(request, receiver);
@@ -44,8 +44,8 @@ public class AcceptTPA {
 
         RequestHelper.getRequestSet().remove(request);
 
-        //if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(receiver.getUUID(), CommandType.ACCEPT, Config.ACCEPT_COOLDOWN.get()));
+        if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            AsyncCooldownHelper.postCooldown(receiver.getUUID(), CommandType.ACCEPT, Config.ACCEPT_COOLDOWN.get());
     }
 
     public static void acceptTeleportRequest(ServerPlayer receiver) {

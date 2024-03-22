@@ -58,6 +58,7 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Integer> TOGGLE_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Integer> BLOCK_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Integer> UNBLOCK_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Integer> GLOBAL_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS;
 
     // Advanced Settings
@@ -224,28 +225,31 @@ public class Config {
         BUILDER.comment("\n THIS FEATURE HAS NOT YET BEEN IMPLEMENTED! ALL OF THESE OPTIONS CURRENTLY DO NOTHING");
 
         BACK_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /back.")
-                .defineInRange("Back Cooldown", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Back Cooldown", 5, 0, Integer.MAX_VALUE);
 
         ACCEPT_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpaaccept.")
-                .defineInRange("Accept Cooldown", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Accept Cooldown", 5, 0, Integer.MAX_VALUE);
 
         DENY_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpadeny.")
-                .defineInRange("Deny Cooldown", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Deny Cooldown", 5, 0, Integer.MAX_VALUE);
 
         CANCEL_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpacancel.")
-                .defineInRange("Cancel Cooldown", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Cancel Cooldown", 5, 0, Integer.MAX_VALUE);
 
         SEND_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpa or /tpahere.")
-                .defineInRange("Send Cooldown", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Send Cooldown", 5, 0, Integer.MAX_VALUE);
 
         TOGGLE_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tptoggle.")
-                .defineInRange("Toggle Cooldown", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Toggle Cooldown", 5, 0, Integer.MAX_VALUE);
 
         BLOCK_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpblock.")
-                .defineInRange("Block Cooldown", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Block Cooldown", 5, 0, Integer.MAX_VALUE);
 
         UNBLOCK_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpunblock.")
-                .defineInRange("Unblock Cooldown", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Unblock Cooldown", 5, 0, Integer.MAX_VALUE);
+
+        GLOBAL_COOLDOWN = BUILDER.comment("\n The delay after a command is executed, before another one can be run.")
+                .defineInRange("Global Cooldown", 3, 0, Integer.MAX_VALUE);
 
         ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS = BUILDER.comment("\n Whether to start the cooldown if the command executes successfully (e.g. at the end of a windup)")
                 .comment(" Setting this value to true will only start the cooldown if the command runs successfully.")

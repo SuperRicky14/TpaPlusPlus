@@ -6,18 +6,18 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CooldownData {
-    private final UUID affectedPlayer;
+    private final UUID playerOnCooldown;
     private final CommandType commandType;
     private final AtomicInteger delay;
 
-    public CooldownData(UUID affectedPlayer, CommandType commandType, int delay) {
-        this.affectedPlayer = affectedPlayer;
+    public CooldownData(UUID playerOnCooldown, CommandType commandType, int delay) {
+        this.playerOnCooldown = playerOnCooldown;
         this.commandType = commandType;
         this.delay = new AtomicInteger(delay);
     }
 
-    public UUID getAffectedPlayer() {
-        return affectedPlayer;
+    public UUID getPlayerOnCooldown() {
+        return playerOnCooldown;
     }
 
     public CommandType getCommandType() {

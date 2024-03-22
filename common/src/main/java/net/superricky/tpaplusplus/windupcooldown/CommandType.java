@@ -8,5 +8,6 @@ public enum CommandType {
     SEND,
     BLOCK,
     TOGGLE,
-    UNBLOCK
+    UNBLOCK,
+    GLOBAL
 }

@@ -26,8 +26,8 @@ public class CancelTPA {
             return;
         }
 
-        //if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(sender.getUUID(), CommandType.CANCEL, Config.CANCEL_COOLDOWN.get()));
+        if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            AsyncCooldownHelper.postCooldown(sender.getUUID(), CommandType.CANCEL, Config.CANCEL_COOLDOWN.get());
 
         if (Config.CANCEL_WINDUP.get() == 0) {
             absoluteCancel(request);
@@ -42,8 +42,8 @@ public class CancelTPA {
 
         RequestHelper.getRequestSet().remove(request);
 
-        //if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(request.getSender().getUUID(), CommandType.CANCEL, Config.CANCEL_COOLDOWN.get()));
+        if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            AsyncCooldownHelper.postCooldown(request.getSender().getUUID(), CommandType.CANCEL, Config.CANCEL_COOLDOWN.get());
     }
 
     public static void cancelTeleportRequest(ServerPlayer sender) {

@@ -26,8 +26,8 @@ public class DenyTPA {
             return;
         }
 
-        //if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(receiver.getUUID(), CommandType.DENY, Config.DENY_COOLDOWN.get()));
+        if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            AsyncCooldownHelper.postCooldown(receiver.getUUID(), CommandType.DENY, Config.DENY_COOLDOWN.get());
 
         if (Config.DENY_WINDUP.get() == 0) {
             absoluteDeny(request);
@@ -42,8 +42,8 @@ public class DenyTPA {
 
         RequestHelper.getRequestSet().remove(request);
 
-        //if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            //AsyncCooldownHelper.getCooldownSet().add(new CooldownData(request.getReceiver().getUUID(), CommandType.DENY, Config.DENY_COOLDOWN.get()));
+        if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
+            AsyncCooldownHelper.postCooldown(request.getReceiver().getUUID(), CommandType.DENY, Config.DENY_COOLDOWN.get());
 
     }
 

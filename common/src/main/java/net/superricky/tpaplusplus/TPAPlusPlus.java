@@ -21,6 +21,7 @@ import net.superricky.tpaplusplus.io.ServerLifecycleHandler;
 import net.superricky.tpaplusplus.timeout.RequestTimeoutEvent;
 import net.superricky.tpaplusplus.timeout.TimeoutEventHandler;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldown;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ import java.util.Map;
 
 public class TPAPlusPlus {
     public static final String MOD_ID = "tpaplusplus";
-    public static final String MOD_VERSION = "1.5.0-1.20.x-BETA";
+    public static final String MOD_VERSION = "1.5.1-1.20.x-BETA";
     private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static final String CONFIG_PATH = "tpaplusplus-config.toml";
@@ -87,8 +88,8 @@ public class TPAPlusPlus {
             }
         }
 
-        //LOGGER.info("LOADING COOLDOWN LOOP...");
-        //AsyncCooldown.instantiateCooldownLoop();
+        LOGGER.info("LOADING COOLDOWN LOOP...");
+        AsyncCooldown.instantiateCooldownLoop();
 
         LOGGER.info("...INITIALIZATION COMPLETE");
     }

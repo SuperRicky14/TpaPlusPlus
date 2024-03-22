@@ -94,6 +94,7 @@ public class Messages {
     public static final ForgeConfigSpec.ConfigValue<String> WINDUP_TIME_REMAINING;
     public static final ForgeConfigSpec.ConfigValue<String> PLAYER_MOVED_DURING_WINDUP;
     public static final ForgeConfigSpec.ConfigValue<String> ERR_COMMAND_ON_COOLDOWN_MESSAGE;
+    public static final ForgeConfigSpec.ConfigValue<String> ERR_PLAYER_ON_GLOBAL_COOLDOWN_MESSAGE;
 
     static {
         BUILDER.push("TPA++ Messages");
@@ -364,7 +365,11 @@ public class Messages {
         ERR_COMMAND_ON_COOLDOWN_MESSAGE = BUILDER.comment("\n The message displayed when a player tries to execute a command but it is currently on cooldown.")
                 .comment("Placeholders: \"${command_used}\": \"The command that was on cooldown. This placeholder respects the command names set in the config.\"")
                 .comment("              \"${time_remaining}\": \"How long is left on the cooldown (in seconds)\"")
-                .define("ERR_COMMAND_ON_COOLDOWN_MESSAGE", "§c\"/{command_used}\" is currently on cooldown, please wait {time_remaining}s!");
+                .define("ERR_COMMAND_ON_COOLDOWN_MESSAGE", "§c\"/${command_used}\" is currently on cooldown, please wait ${time_remaining}s!");
+
+        ERR_PLAYER_ON_GLOBAL_COOLDOWN_MESSAGE = BUILDER.comment("\n The message displayed when a player tries to execute a command, but they are currently on cooldown.")
+                .comment("Placeholders: \"${time_remaining}\": \"How long is left on the cooldown (in seconds)\"")
+                .define("ERR_PLAYER_ON_GLOBAL_COOLDOWN_MESSAGE", "§cYou are currently on cooldown, please wait ${time_remaining}s before running another command!");
 
         BUILDER.pop(2);
         SPEC = BUILDER.build();

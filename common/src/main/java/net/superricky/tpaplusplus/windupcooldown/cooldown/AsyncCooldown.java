@@ -1,16 +1,11 @@
 package net.superricky.tpaplusplus.windupcooldown.cooldown;
 
 import net.superricky.tpaplusplus.TPAPlusPlus;
-import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.config.formatters.MessageParser;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupHelper;
-import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AsyncCooldown {
     private static final Logger LOGGER = LoggerFactory.getLogger(TPAPlusPlus.MOD_ID);
-    private static ScheduledExecutorService scheduler = null;// Executors.unconfigurableScheduledExecutorService(Executors.newScheduledThreadPool(1));
+    private static ScheduledExecutorService scheduler = Executors.unconfigurableScheduledExecutorService(Executors.newScheduledThreadPool(1));
 
     private static List<CooldownData> queriedRemoveList = new ArrayList<>();
 
@@ -29,13 +24,14 @@ public class AsyncCooldown {
 
     public static void runCooldown() {
         for (CooldownData cooldownData : AsyncCooldownHelper.getCooldownSet()) {
+            LOGGER.info(String.format("Successfully Found Cooldown Data with delay of %s", cooldownData.getDelay()));
             try {
                 if (cooldownData.getDelay() < 0) {
                     // Delay is LOWER than OR EQUAL to zero, throw an error
                     throw new IllegalArgumentException("Delay for Scheduled Task must be greater than 0! Please report this issue to the TPA++ issue page immediately.");
                 }
 
-                if (Objects.isNull(cooldownData.getAffectedPlayer())) {
+                if (Objects.isNull(cooldownData.getPlayerOnCooldown())) {
                     // Delay is LOWER than OR EQUAL to zero, throw an error
                     throw new IllegalArgumentException("Affected Player UUID is null! Please report this issue to the TPA++ issue page immediately.");
                 }
@@ -47,8 +43,8 @@ public class AsyncCooldown {
                         throw new IllegalStateException("Scheduler is null!");
                     }
 
-                    LOGGER.info(String.format("Decrementing delay from %s by 1...", cooldownData.getDelay()));
                     cooldownData.setDelay(cooldownData.getDelay() - 1);
+                    continue;
                 }
             } catch (IllegalArgumentException | IllegalStateException e) {
                 LOGGER.error(e.getMessage());

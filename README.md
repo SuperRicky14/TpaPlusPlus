@@ -1,72 +1,43 @@
-# UPDATES
-* (**NEW**) Command Windups. You can now specify how long **every single command** in the mod takes to execute, and for **each command** you can specify the maximum distance the player can travel (Basically the /tpaaccept timer from the old version, except it now supports every command).
-* TPA++ Now runs much of it's heavy code asynchronously, allowing you to enable a tick loop that runs concurrently with the main thread. This means you can support a **huge amount** of players **without** lag.
-* TPA++ **NOW SUPPORTS 1.20.1 - 1.20.4** (inclusive)
-* TPA++ Supports all modloaders (NEOFORGE, FORGE, FABRIC AND QUILT).
+# TPA++ (Github)
+TPA++ is an async, open source and customisable TPA mod. While the mod still functions out of the box, there are many in-depth options to configure and change out of the box. Additionally, TPA++ has some features under the "/tpaplusplus" command that allows you to make mass changes to your configuration easily and quickly. Check out the [wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki) for more information.
+> **TPA++ is the first mod to run on Forge, NeoForge, Fabric and Quilt.** Additionally, TPA++ run's on every version from **1.20.1 - 1.20.5-SNAPSHOT** (*inclusive*).
 
-### Links: [Modrinth](https://modrinth.com/mod/pPuyOJU7) | [Curseforge](https://curseforge.com/minecraft/mc-mods/tpaplusplus) | [Wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki)
-
-### About this Github
-This is the place to [suggest features](https://github.com/SuperRicky14/TpaPlusPlus/issues), [contribute to the mod](https://github.com/SuperRicky14/TpaPlusPlus/pulls), or look at the "[wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki)". If you just want to download the mod, use either [Modrinth](https://modrinth.com/mod/tpa++) or [Curseforge](https://www.curseforge.com/minecraft/mc-mods/tpaplusplus)!
-
-## Dependancies
-TPA++ now has a few dependancies you must install depending on which modloader you are using.
-### NeoForge and Forge:
-* [Architectury API](https://www.curseforge.com/minecraft/mc-mods/architectury-api)
-### Fabric and Quilt
-* [Architectury API](https://www.curseforge.com/minecraft/mc-mods/architectury-api)
-* [Forge Config API Port](https://www.curseforge.com/minecraft/mc-mods/forge-config-api-port-fabric)
-
-# What's different about TPA++?
-I aim to make a fast, compatible, **customizable** TPA mod for forge. This **NOW INCLUDES** range checks:
-Range Checks are a feature that allows you to customize how close the players can be to teleport (in order to prevent players from teleporting too close, say if you would like players to explore the map more, rather than just teleporting around to each other). You can specify how far away players can be (if you would like to prevent players from teleporting across the map).
-
-The mod is by far one of the most customizable TPA mods out there. Want to change the names of the commands from /tpa, /tpahere, etc to whatever you want? You can do that in the "tpaplusplus-common.toml" config! Want to change every single message in the mod? You can also do that in the "tpaplusplus-messages.toml" config under the config folder!
-
-What I also like about this mod is the ability to instantly and easily customize the mod to your liking, without having to dig through hundreds of lines of configuration. Many instant, useful utilities are available under the /tpaplusplus command, check out the **below documentation on the /tpaplusplus command** for help!
-
-**The mod is fully server-side, and aims to be compatible with other mods.**
-
-**Unlike some other mods, the mod is 100% open source!** You are welcome to help out and contribute to the mod, help document the wiki or this description page you are reading right now! **I am open to suggestions and feedback and will try to get back to you as fast as possible!**
-
-**The mod is under an extremely permissive license ([The MIT License](https://github.com/SuperRicky14/TpaPlusPlus/blob/master/LICENSE))**
-
-## How do I use this mod?
+# What can TPA++ do?
 TPAPlusPlus currently features eight custom commands, here is a quick run-through over each of them (Command arguments marked with $ are optional!):
+* `/tpa [player]` • Sends a teleport request to any player.
+* `/tpahere [player]` • Sends a teleport here request to any player.
+* `/tpaaccept $[player]` • Accepts the latest teleport request. If a player is specified, accepts the teleport request from that player.
+* `/tpadeny $[player]` • Denies the latest teleport request. If a player is specified, denies the teleport request from that player.
+* `/tpacancel $[player]` • Cancels the last teleport request that you sent. If a player is specified, cancels the teleport request to that player.
+* `/tptoggle` • Toggles on/off teleport request's for the player running the command.
+* `/back` • After a player dies, running this command will teleport them to their latest death. This can be disabled in the config.
+* `/tpblock` • Prevents a player from sending teleport requests to you.
+* `/tpunblock` • Allows a blocked player to send teleport requests to you again.
+* `/tpaplusplus` • [This command has its own documentation on the wiki!](https://github.com/SuperRicky14/TpaPlusPlus/wiki/TPAPlusPlus-Server-Management-Command)
 
-`/tpa [player]` • Sends a teleport request to any player.
+TPA++ also features some unique and exclusive features, here is a run through over the main ones:
+* `Command Windups` • Controls how long any command takes to execute. For example you can make /tpa take 5 seconds, and /tpaaccept take 3 seconds.
+* `Command Windup Distance` • Controls how far away a player can move from their original starting point, after the command's "*windup countdown*" has started.
+* `Range Checks` • Controls the minimum / maximum distance a player can be from another player before sending / accepting a teleport request.
+* `Dimension Checks` • Prevents players from teleporting between dimensions, i.e. they must be in the same dimension to TPA to eachother.
+* `Message Control` • Lets you modify every message sent by TPA++. You can add color codes, emoji, rewrite any sentences to whatever you want (there's seriously no restrictions, go wild).
+* `Command Control` • Lets you modify all the commands (what players type in chat), so if you want you can change `/tpa` to `/<whatever>`
+* `and more!` • Keep in mind the mod is still in **beta**; You can request a new feature or report a bug quickly and easily on the [TPA++ issue page!](https://github.com/SuperRicky14/TpaPlusPlus/issues)
 
-`/tpahere [player]` • Sends a teleport here request to any player.
+# Additional Information / FAQ:
+* `Is TPA++ server-side only?`: Yes, TPA++ is server sided and always will remain. This means you can run a (*neoforge*/*forge*/*fabric*/*quilt*) server and let completely vanilla clients join, or add this mod to an existing modpack without having to add it to everyone's client.
+* `Does this mod work in singleplayer / open-to-LAN`: Yes, the mod functions perfectly in singleplayer / open-to-lan. The mod also runs perfectly fine on [e4mc] / [essential] / [world host], allowing your friends to connect to your worlds and still run fine with TPA++ (useful if you want to run TPA with your friends but don't want to setup a whole server for it).
+* `I found a bug / problem with the mod.`: You can report this to me on my [Github's issue page.](https://github.com/SuperRicky14/TpaPlusPlus/issues)
+* `I want to see feature [x] implemented!`: Again, you can fill out the feature request form on the [issue page!](https://github.com/SuperRicky14/TpaPlusPlus/issues)
+* `Can I modify / fork / contribute to TPA++?`: Yes, there is a [contributing guide](https://github.com/SuperRicky14/TpaPlusPlus/blob/master/CONTRIBUTING.md) on TPA++'s Github, you are free to do whatever you want with the mod under the [MIT License](https://github.com/SuperRicky14/TpaPlusPlus/blob/master/LICENSE)
 
-`/tpaaccept $[player]` • Accepts the latest teleport request. If a player is specified, accepts the teleport request from that player.
+## Dependancies:
+While I tried to minimize dependancies at first, in order to support all mod loaders, it is much quicker and faster for me to push out updates using these mods than if I wrote everything myself.
+### NeoForge and Forge:
+* [Architectury API](https://modrinth.com/mod/architectury-api)
+### Fabric and Quilt
+* [Architectury API](https://modrinth.com/mod/architectury-api)
+* [Forge Config API Port](https://modrinth.com/mod/forge-config-api-port)
 
-`/tpadeny $[player]` • Denies the latest teleport request. If a player is specified, denies the teleport request from that player.
-
-`/tpacancel $[player]` • Cancels the last teleport request that you sent. If a player is specified, cancels the teleport request to that player.
-
-`/tptoggle` • Toggles on/off teleport request's for the player running the command.
-
-`/tpblock [player]` • Prevents a player from sending teleport requests to you.
-
-`/tpunblock [player]` • Allows a blocked player to send teleport requests to you again.
-
-`/back` • After a player dies, running this command will teleport them to their latest death. This is optional and can be disabled in the config.
-
-`/tpaplusplus` • [This command has been moved to it's own section in the new TPAPlusPlus wiki!](https://github.com/SuperRicky14/TpaPlusPlus/wiki/TPAPlusPlus-Server-Management-Command)
-
-## Why did I make this?
-I made TPA++ due to the lack of TPA mods for forge (**and soon Fabric AND NeoForge**).
-
-## Frequently Asked Questions:
-* Will you port the mod to Fabric/Quilt/NeoForge?
-        **The mod now supports NeoForge, Forge, Fabric AND Quilt**
-* Can you port to version X?
-        If it is a new version, it is coming unless I explicitly say otherwise. If it's an old version, no.
-* Can you add feature X?
-        You are welcome to request features / enhancements, **I am always open to suggestions on the mods github!**
-* Does this mod work in multiplayer?
-        Yes, but it is only required on the server. Players **on vanilla minecraft** or **without the mod** will still have **100% functionality** with the mod. The mod also supports the *integrated server*, allowing you to fully utilize the mod in LAN networks or with your friends online via [e4mc](https://www.curseforge.com/minecraft/mc-mods/e4mc) **/** [essential](https://essential.gg) **/** [world host](https://modrinth.com/mod/world-host)
-* I found a bug / problem with the mod.
-        You can report this to me on my [Github Repo](https://github.com/SuperRicky14/TpaPlusPlus). Please make sure you follow the issue guidelines.
-* Can I modify / fork your mod?
-        Yes, you are welcome to. However, please make sure to credit me and link this original projects [Modrinth](https://modrinth.com/mod/pPuyOJU7), [Curseforge](https://curseforge.com/minecraft/mc-mods/tpaplusplus), and / or [Github Repo](https://github.com/SuperRicky14/TpaPlusPlus) somewhere in your project. This project is protected by the [MIT license](https://github.com/SuperRicky14/TpaPlusPlus/blob/master/LICENSE).- - ****
+## Support
+> Links: [CurseForge](https://www.curseforge.com/minecraft/mc-mods/tpaplusplus) / [Modrinth](https://modrinth.com/mod/pPuyOJU7) / [Wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki).

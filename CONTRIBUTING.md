@@ -1,6 +1,7 @@
 ## How to contribute to TPA++ (for developers)
 1. Just clone the repository (https://github.com/SuperRicky14/TpaPlusPlus.git) into anywhere on your computer.
 2. Open up Intellij (don't know about Eclipse) and open TPA++ as a gradle project.
+3. Happy Modding!
 
 ## How to open TPA++ as a Gradle Project
 1. In Intellij, click File -> Open...
@@ -15,5 +16,5 @@
    You can calculate this by doing: Megabytes of RAM = 1024 * (how many gigabytes you want to allocate to gradle).
 
 # Important Note:
-**Add <org.gradle.parallel=true> just underneath the <org.gradle.jvmargs=-Xmx6144M> line for greatly reduced build times.** This is because Architectury uses multiple project modules, but when building the whole project, gradle supports running these builds (along with many other operations) in parallel, using all your CPU cores. The reason why it isn't already added beforehand (anymore), is because importing the gradle project completely fails when this is enabled. After you initially import the project, you can add this line to speedup gradle.
+**Add <org.gradle.parallel=true> and <org.gradle.usecache=true> just underneath the <org.gradle.jvmargs=-Xmx6144M> line for greatly reduced build times.** This is because Architectury uses multiple project modules, but when building the whole project, gradle supports running these builds (along with many other operations) in parallel, using all your CPU cores. The reason why it isn't already added beforehand (anymore), is because importing the gradle project completely fails when this is enabled. After you initially import the project, you can add those lines to speedup gradle.
 PS: If anyone knows how to fix my build system please tell me

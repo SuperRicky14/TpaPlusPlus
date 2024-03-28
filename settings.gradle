@@ -16,7 +16,6 @@ plugins {
 include("common")
 include("fabric-like")
 include("fabric")
-include("quilt")
 include("forge")
 
 rootProject.name = "TPAPlusPlus-Architectury"

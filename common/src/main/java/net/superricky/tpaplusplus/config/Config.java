@@ -267,6 +267,13 @@ public class Config {
         AUTOSAVE_INTERVAL = BUILDER.comment("\n How long (in seconds) between autosaves, if you experience data loss, set this number lower.")
                 .defineInRange("AUTOSAVE_INTERVAL", 300, 1, Integer.MAX_VALUE);
 
+        CHECK_FOR_UPDATES_INTERVAL = BUILDER.comment("\n How often to automatically check for updates in the background.")
+                .comment(" This will send a network request to Modrinth's API based off this interval, and tell you if you are running a version of TPA++ that is out of date.")
+                .comment(" Alternatively, you can check for updates manually by running /tpaplusplus version (this setting does not affect manual update checking).")
+                .comment(" This value is measured in minutes, and setting it to 0 will disable update checking.")
+                .comment(" Modifying this value requires a restart of the game.")
+                .worldRestart().defineInRange("CHECK_FOR_UPDATES_INTERVAL", 60, 0, 153_722_867_280_911L);
+
         USE_NON_BLOCKING_ASYNC_TICK_LOOP = BUILDER.comment("\n Whether to use an async tick loop for TPA++, that runs alongside the main thread.")
                 .comment(" Operations that run synchronously with the main thread, are usually extremely inexpensive to run.")
                 .comment(" Only enable this if you have an insane amount of players, or you have noticed performance problems with running it synchronously.")

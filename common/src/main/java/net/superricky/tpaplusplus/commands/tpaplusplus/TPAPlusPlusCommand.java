@@ -113,6 +113,18 @@ public class TPAPlusPlusCommand {
 
     private static int version(CommandSourceStack source) {
         source.sendSystemMessage(Component.literal(String.format(Messages.TPAPLUSPLUS_VERSION.get(), TPAPlusPlus.MOD_VERSION))); // send the mod's version to the command executor
+        source.sendSystemMessage(Component.literal("§6Checking for updates..."));
+
+        final Entity executor = source.getEntity();
+
+        if (executor instanceof ServerPlayer serverPlayer) {
+            // User is running version check in-game
+            UpdateCheckKt.executeVersionCheck(serverPlayer);
+        } else if (Objects.isNull(executor)) {
+            // User is running version check from console
+            UpdateCheckKt.executeVersionCheckFromConsole();
+        }
+
         return 1;
     }
 

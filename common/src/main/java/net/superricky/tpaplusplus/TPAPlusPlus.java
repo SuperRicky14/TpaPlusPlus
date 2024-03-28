@@ -88,9 +88,7 @@ public class TPAPlusPlus {
             }
         }
 
-        LOGGER.info("LOADING COOLDOWN LOOP...");
-        AsyncCooldown.instantiateCooldownLoop();
-
+        UpdateCheckKt.initVersionCheckDaemon();
         LOGGER.info("...INITIALIZATION COMPLETE");
     }
 

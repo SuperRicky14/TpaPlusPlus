@@ -1,6 +1,6 @@
 modLoader = "javafml"
-loaderVersion = "[47,)"
-#issueTrackerURL = ""
+loaderVersion = ">=47"
+issueTrackerURL = "https://github.com/SuperRicky14/TpaPlusPlus/issues"
 license = "MIT"
 
 [[mods]]
@@ -9,7 +9,7 @@ version = "${version}"
 displayName = "TPA++"
 authors = "SuperRicky14"
 description = '''
-The most customizable TPA mod out there!
+Compatible, customisable, user friendly TPA mod for Forge, Fabric, NeoForge and Quilt.
 '''
 displayTest="IGNORE_ALL_VERSION"
 #logoFile = ""
@@ -33,4 +33,11 @@ modId = "architectury"
 mandatory = true
 versionRange = "[9.1.12,)"
 ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.tpaplusplus]]
+modId = "kotlinforforge"
+mandatory = true
+versionRange = "[4.6.2,)"
+ordering = "NONE"
 side = "BOTH"

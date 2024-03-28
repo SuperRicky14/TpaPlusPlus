@@ -16,3 +16,4 @@
 
 # Important Note:
 **Add <org.gradle.parallel=true> just underneath the <org.gradle.jvmargs=-Xmx6144M> line for greatly reduced build times.** This is because Architectury uses multiple project modules, but when building the whole project, gradle supports running these builds (along with many other operations) in parallel, using all your CPU cores. The reason why it isn't already added beforehand (anymore), is because importing the gradle project completely fails when this is enabled. After you initially import the project, you can add this line to speedup gradle.
+PS: If anyone knows how to fix my build system please tell me

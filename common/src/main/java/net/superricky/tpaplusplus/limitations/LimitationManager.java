@@ -26,7 +26,7 @@ public class LimitationManager {
     public static Limitation getLimitationType(ServerPlayer sender, ServerPlayer receiver) {
 
         // PLAYERS ARE NOT IN THE SAME DIMENSION
-        if (Boolean.FALSE.equals(sender.serverLevel().equals(receiver.serverLevel()))) {
+        if (Boolean.FALSE.equals(sender.serverLevel().dimension().location().getPath().equals(receiver.serverLevel().dimension().location().getPath()))) {
             // If the configuration prevents players from teleporting interdimensional
             if (Boolean.FALSE.equals(Config.ALLOW_INTER_DIMENSIONAL_TELEPORT.get()))
                 return new Limitation(LimitationType.DIFFERENT_DIMENSIONS, sender.serverLevel(), receiver.serverLevel());

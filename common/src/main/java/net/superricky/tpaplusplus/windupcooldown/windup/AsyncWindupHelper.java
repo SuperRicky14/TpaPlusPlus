@@ -42,9 +42,14 @@ public class AsyncWindupHelper {
                     throw new IllegalArgumentException("A TPA++ CANCEL task was scheduled, although there was no Request to accompany it?? Please report this issue to the TPA++ issue page immediately.");
                 }
             }
-            case SEND -> {
+            case TPA -> {
                 if (Objects.isNull(windupData.getHereRequest())) {
-                    throw new IllegalArgumentException("A TPA++ SEND task was scheduled, although there was no boolean \"isHereRequest\" to accompany it?? Please report this issue to the TPA++ issue page immediately.");
+                    throw new IllegalArgumentException("A TPA++ TPA task was scheduled, although there was no boolean \"isHereRequest\" to accompany it?? Please report this issue to the TPA++ issue page immediately.");
+                }
+            }
+            case TPAHERE -> {
+                if (Objects.isNull(windupData.getHereRequest())) {
+                    throw new IllegalArgumentException("A TPA++ TPAHERE task was scheduled, although there was no boolean \"isHereRequest\" to accompany it?? Please report this issue to the TPA++ issue page immediately.");
                 }
             }
             case BLOCK -> {

@@ -84,8 +84,11 @@ public class WindupWatcher {
             case CANCEL -> {
                 return Config.CANCEL_WINDUP_DISTANCE.get();
             }
-            case SEND -> {
-                return Config.SEND_WINDUP_DISTANCE.get();
+            case TPA -> {
+                return Config.TPA_WINDUP_DISTANCE.get();
+            }
+            case TPAHERE -> {
+                return Config.TPAHERE_WINDUP_DISTANCE.get();
             }
             case BLOCK -> {
                 return Config.BLOCK_WINDUP_DISTANCE.get();

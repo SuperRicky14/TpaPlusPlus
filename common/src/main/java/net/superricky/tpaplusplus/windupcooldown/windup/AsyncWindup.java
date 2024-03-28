@@ -10,6 +10,7 @@ import net.superricky.tpaplusplus.commands.deny.DenyTPA;
 import net.superricky.tpaplusplus.commands.send.SendTPA;
 import net.superricky.tpaplusplus.commands.toggle.TPToggle;
 import net.superricky.tpaplusplus.commands.unblock.UnBlockPlayer;
+import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.config.formatters.MessageParser;
 import org.slf4j.Logger;
@@ -31,13 +32,6 @@ public class AsyncWindup {
         if (Objects.isNull(scheduler)) {
             LOGGER.error("IllegalStateException: Scheduler is null!");
             throw new IllegalStateException("Scheduler is null!");
-        }
-
-        if (windupData.getDelay() <= 0) {
-            // Delay is LOWER than OR EQUAL to zero, throw an error
-            LOGGER.error("IllegalArgumentException: Delay for Scheduled Task must be greater than 0! Please report this issue to the TPA++ issue page immediately.");
-            AsyncWindupHelper.fastMSG("Delay for Scheduled Task must be greater than 0! Please report this issue to the TPA++ issue page immediately.", windupData.getPlayers());
-            throw new IllegalArgumentException("Delay for Scheduled Task must be greater than 0! Please report this issue to the TPA++ issue page immediately.");
         }
 
         if (AsyncWindupHelper.playersAreNull(windupData.getPlayers())) {
@@ -128,7 +122,7 @@ public class AsyncWindup {
                 case CANCEL -> CancelTPA.absoluteCancel(Objects.requireNonNull(windupData.getRequest()));
 
                 // Run the TPA method
-                case SEND ->
+                case TPA, TPAHERE ->
                         SendTPA.absoluteSendTeleportRequest(windupData.getPlayers()[0], windupData.getPlayers()[1], Objects.requireNonNull(windupData.getHereRequest()));
 
                 // Run the /tpblock method

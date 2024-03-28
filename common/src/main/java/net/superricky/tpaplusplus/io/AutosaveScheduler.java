@@ -2,7 +2,6 @@ package net.superricky.tpaplusplus.io;
 
 import net.superricky.tpaplusplus.config.Config;
 
-import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

@@ -18,10 +18,10 @@ import net.superricky.tpaplusplus.commands.unblock.TPUnBlockCommand;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.formatters.MessageParser;
 import net.superricky.tpaplusplus.io.ServerLifecycleHandler;
+import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.timeout.RequestTimeoutEvent;
 import net.superricky.tpaplusplus.timeout.TimeoutEventHandler;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldown;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ import java.util.Map;
 
 public class TPAPlusPlus {
     public static final String MOD_ID = "tpaplusplus";
-    public static final String MOD_VERSION = "1.5.1-1.20.x-BETA";
+    public static final String MOD_VERSION = "1.5.2-1.20.x-BETA";
     private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static final String CONFIG_PATH = "tpaplusplus-config.toml";
@@ -104,7 +104,7 @@ public class TPAPlusPlus {
                 Math.pow(z2 - z1, 2));
     }
 
-    public static String getCommandNameFromType(CommandType commandType, boolean isHereRequest) {
+    public static String getCommandNameFromType(CommandType commandType) {
         switch (commandType) {
             case BACK -> {
                 return Config.BACK_COMMAND_NAME.get();
@@ -118,14 +118,11 @@ public class TPAPlusPlus {
             case CANCEL -> {
                 return Config.TPACANCEL_COMMAND_NAME.get();
             }
-            case SEND -> {
-                if (Boolean.TRUE.equals(isHereRequest)) {
-                    // Sent request is a here-request
-                    return Config.TPAHERE_COMMAND_NAME.get();
-                } else {
-                    // Sent request is a normal request
-                    return Config.TPA_COMMAND_NAME.get();
-                }
+            case TPA -> {
+                return Config.TPA_COMMAND_NAME.get();
+            }
+            case TPAHERE -> {
+                return Config.TPAHERE_COMMAND_NAME.get();
             }
             case BLOCK -> {
                 return Config.TPBLOCK_COMMAND_NAME.get();
@@ -141,31 +138,7 @@ public class TPAPlusPlus {
         throw new IllegalStateException(SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE);
     }
 
-    public static String getCommandNameFromType(CommandType commandType) {
-        switch (commandType) {
-            case BACK -> {
-                return Config.BACK_COMMAND_NAME.get();
-            }
-            case ACCEPT -> {
-                return Config.TPAACCEPT_COMMAND_NAME.get();
-            }
-            case DENY -> {
-                return Config.TPADENY_COMMAND_NAME.get();
-            }
-            case CANCEL -> {
-                return Config.TPACANCEL_COMMAND_NAME.get();
-            }
-            case BLOCK -> {
-                return Config.TPBLOCK_COMMAND_NAME.get();
-            }
-            case TOGGLE -> {
-                return Config.TPTOGGLE_COMMAND_NAME.get();
-            }
-            case UNBLOCK -> {
-                return Config.TPUNBLOCK_COMMAND_NAME.get();
-            }
-        }
-        LOGGER.error(SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE);
-        throw new IllegalStateException(SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE);
+    public static double getDecimalNumber(double number) {
+        return number - Math.floor(number);
     }
 }

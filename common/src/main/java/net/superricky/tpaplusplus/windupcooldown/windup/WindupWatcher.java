@@ -63,7 +63,7 @@ public class WindupWatcher {
                 // Distance between the position which they started the countdown, and their current position is larger than the allowed distance set in the Config.
                 windupData.getCancelled().set(true);
 
-                windupData.getPlayers()[0].sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.PLAYER_MOVED_DURING_WINDUP.get(), Map.of("command_used", TPAPlusPlus.getCommandNameFromType(windupData.getType(), Boolean.TRUE.equals(windupData.getHereRequest()))))));
+                windupData.getPlayers()[0].sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.PLAYER_MOVED_DURING_WINDUP.get(), Map.of("command_used", TPAPlusPlus.getCommandNameFromType(windupData.getType())))));
 
                 trackedWindupData.remove(windupData);
             }

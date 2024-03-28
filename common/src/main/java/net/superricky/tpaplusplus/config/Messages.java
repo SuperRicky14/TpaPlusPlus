@@ -99,8 +99,8 @@ public class Messages {
     static {
         BUILDER.push("TPA++ Messages");
         BUILDER.comment(" Don't know how Minecrafts §<color code> formatting works? Check out: https://www.digminecraft.com/lists/color_list_pc.php");
-        BUILDER.comment("\n Due to the nature of now Strings are immutable in java, all values in this configuration require a restart to take affect!");
-        BUILDER.comment("\n ALL MESSAGES SUPPORT JAVA SYNTAX FORMATTING! If you say want to put a newline into the message, just enter \\n, or if you want to add double quotes into a message enter \\\"");
+        BUILDER.comment(" Due to the nature of now Strings are immutable in java, all values in this configuration require a restart to take affect!");
+        BUILDER.comment(" ALL MESSAGES SUPPORT JAVA SYNTAX FORMATTING! If you say want to put a newline into the message, just enter \\n, or if you want to add double quotes into a message enter \"\\\"");
 
         ERR_REQUEST_NOT_FOUND = BUILDER.comment("\n The message for when your teleport request could not be found.")
                         .define("ERR_REQUEST_NOT_FOUND", "§cCould not find your teleport request!");
@@ -321,7 +321,7 @@ public class Messages {
         TPAPLUSPLUS_FORCE_RELOADING_CONFIG = BUILDER.comment("\n The first message displayed when someone enters /tpaplusplus reload config -force")
                 .define("TPAPLUSPLUS_FORCE_RELOADING_CONFIG", "§6Reloading §cConfiguration§6 and wiping old data (TPA request's, death locations)...");
 
-        TPAPLUSPLUS_FORCE_RELOADED_CONFIG = BUILDER.comment(" The second message displayed when someone enters /tpaplusplus reload config -force")
+        TPAPLUSPLUS_FORCE_RELOADED_CONFIG = BUILDER.comment("\n The second message displayed when someone enters /tpaplusplus reload config -force")
                 .define("TPAPLUSPLUS_FORCE_RELOADED_CONFIG", "§6Finished Reloading Configuration and wiping data!");
 
         TPAPLUSPLUS_RELOADING_CONFIG = BUILDER.comment("\n The first message displayed when someone enters /tpaplusplus reload config")
@@ -335,13 +335,13 @@ public class Messages {
                 .define("ERR_TPAPLUSPLUS_COLORS_REQUIRE_SIX_COLORS", "§cIllegal Arguments! Required 6 colors, you entered: %s");
 
         ERR_TPAPLUSPLUS_COLORS_CANNOT_BE_THE_SAME = BUILDER.comment("\n The message displayed when someone runs \"/tpaplusplus refactor colors\" when the primary and secondary colours are the same")
-                .define("ERR_TPAPLUSPLUS_COLORS_CANNOT_BE_THE_SAME", "§cThe main and secondary colours cannot be the same!");
+                .define("ERR_TPAPLUSPLUS_COLORS_CANNOT_BE_THE_SAME", "§cThe primary and secondary colours cannot be the same!");
 
         ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS = BUILDER.comment("\n The message displayed when someone runs \"/tpaplusplus refactor colors\" with invalid colour codes")
                 .comment("Placeholders: \"%s\": \"The string the user entered instead of a valid colour code.\"")
                 .define("ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS", "§cIllegal Arguments! Requires a valid Minecraft chat colour code, you entered: %s");
 
-        ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS_EXAMPLES = BUILDER.comment(" The second message displayed when someone runs \"/tpaplusplus refactor colors\" with invalid colour codes")
+        ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS_EXAMPLES = BUILDER.comment("\n The second message displayed when someone runs \"/tpaplusplus refactor colors\" with invalid colour codes")
                 .comment("Placeholders: \"%s\": \"A random valid colour code\"")
                 .define("ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS_EXAMPLES", "§cExamples: %s, %s, %s, %s, %s, %s");
 

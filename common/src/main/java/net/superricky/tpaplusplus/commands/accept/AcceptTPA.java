@@ -7,10 +7,8 @@ import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.requests.Request;
 import net.superricky.tpaplusplus.requests.RequestGrabUtil;
 import net.superricky.tpaplusplus.requests.RequestHelper;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownData;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 
 import java.util.Objects;
@@ -18,16 +16,10 @@ import java.util.Objects;
 public class AcceptTPA {
     // Accept command is run by the sender, hence why it's in the sender's point of view.
     public static void acceptFunctionality(Request request, ServerPlayer receiver) {
-        // run the notify cooldown function and return if its false, to stop the player from accepting the request.
-        if (!AsyncCooldownHelper.notifyAndCheckCooldown(receiver, receiver.getUUID(), CommandType.ACCEPT)) return;
-
         if (Objects.isNull(request)) {
             receiver.sendSystemMessage(Component.literal(Messages.ERR_REQUEST_NOT_FOUND.get()));
             return;
         }
-
-        if (Boolean.FALSE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            AsyncCooldownHelper.postCooldown(receiver.getUUID(), CommandType.ACCEPT, Config.ACCEPT_COOLDOWN.get());
 
         if (Config.ACCEPT_WINDUP.get() == 0) {
             absoluteAcceptFunctionality(request, receiver);
@@ -43,9 +35,6 @@ public class AcceptTPA {
         RequestHelper.teleport(request);
 
         RequestHelper.getRequestSet().remove(request);
-
-        if (Boolean.TRUE.equals(Config.ONLY_START_COOLDOWN_ON_COMMAND_SUCCESS.get()))
-            AsyncCooldownHelper.postCooldown(receiver.getUUID(), CommandType.ACCEPT, Config.ACCEPT_COOLDOWN.get());
     }
 
     public static void acceptTeleportRequest(ServerPlayer receiver) {

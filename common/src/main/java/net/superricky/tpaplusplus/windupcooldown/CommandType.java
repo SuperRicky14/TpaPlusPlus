@@ -9,6 +9,5 @@ public enum CommandType {
     TPAHERE,
     BLOCK,
     TOGGLE,
-    UNBLOCK,
-    GLOBAL
+    UNBLOCK
 }

@@ -2,21 +2,28 @@ package net.superricky.tpaplusplus.commands.tpaplusplus;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.superricky.tpaplusplus.commands.back.DeathHelper;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.config.formatters.MessageReformatter;
 import net.superricky.tpaplusplus.io.AutosaveScheduler;
+import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.timeout.TimeoutScheduler;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -33,8 +40,20 @@ public class TPAPlusPlusCommand {
                         .requires(context -> context.hasPermission(Commands.LEVEL_OWNERS))
                         .then(literal("messages")
                                 .then(literal("color-set")
-                                        .then(argument("colors", StringArgumentType.string())
-                                                .executes(context -> refactorColorSet(context.getSource(), StringArgumentType.getString(context, "colors")))))))
+                                        .then(argument("old-primary-color", StringArgumentType.string())
+                                                .then(argument("old-secondary-color", StringArgumentType.string())
+                                                        .then(argument("old-error-color", StringArgumentType.string())
+                                                                .then(argument("new-primary-color", StringArgumentType.string())
+                                                                        .then(argument("new-secondary-color", StringArgumentType.string())
+                                                                                .then(argument("new-error-color", StringArgumentType.string())
+                                                                                        .executes(context -> refactorColorSet(context.getSource(),
+                                                                                                StringArgumentType.getString(context, "old-primary-color"),
+                                                                                                StringArgumentType.getString(context, "old-secondary-color"),
+                                                                                                StringArgumentType.getString(context, "old-error-color"),
+                                                                                                StringArgumentType.getString(context, "new-primary-color"),
+                                                                                                StringArgumentType.getString(context, "new-secondary-color"),
+                                                                                                StringArgumentType.getString(context, "new-error-color")
+                                                                                                )))))))))))
                 .then(literal("version")
                             .requires(context -> context.hasPermission(Commands.LEVEL_OWNERS))
                         .executes(context -> version(context.getSource())))
@@ -55,24 +74,11 @@ public class TPAPlusPlusCommand {
     }
 
     private static int printLicense(CommandSourceStack source) {
-        source.sendSystemMessage(Component.literal("""
-                §6The §cMIT §6License §c(MIT)
-
-                §cCopyright §6(c) §c2023 SuperRicky
-
-                §6Permission is §chereby granted§6, §cfree of charge§6, to §cany person obtaining a copy of this software §6and associated documentation files (the "Software"), to deal in the Software §cwithout restriction, §6including without limitation the rights to §cuse§6, §ccopy§6, §cmodify§6, §cmerge§6, §cpublish§6, §cdistribute§6, §csublicense§6, and/or §csell copies of the Software§6, and to permit persons to whom the Software is furnished to do so, §4§l§usubject to the following conditions§6:
-
-                §4§lThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-                §6§lTHE SOFTWARE IS PROVIDED "AS IS", §c§lWITHOUT WARRANTY OF ANY KIND§6§l, §c§lEXPRESS OR IMPLIED§6§l, INCLUDING BUT §c§lNOT LIMITED TO §6§lTHE §c§lWARRANTIES OF MERCHANTABILITY§6§l, §c§lFITNESS §6§lFOR A §c§lPARTICULAR PURPOSE §6§lAND §c§lNONINFRINGEMENT§6§l. IN §4§lNO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-                """));
+        source.sendSystemMessage(Component.literal("§6TPA++ License & Credits: §chttps://github.com/SuperRicky14/TpaPlusPlus/blob/master/LICENSE"));
         return 1;
     }
 
-    private static int refactorColorSet(CommandSourceStack source, String colors) {
-        colors = colors.replace(" ", "");
-        String[] colorList = colors.split(",");
-
+    private static int refactorColorSet(CommandSourceStack source, String... colorList) {
         if (colorList.length != 6) {
             source.sendFailure(Component.literal(String.format(Messages.ERR_TPAPLUSPLUS_COLORS_REQUIRE_SIX_COLORS.get(), colorList.length)));
             return 0;

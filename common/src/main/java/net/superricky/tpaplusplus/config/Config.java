@@ -30,21 +30,24 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Boolean> DISABLE_RANGE_CHECKS_INTER_DIMENSIONAL;
 
     // Windup
-    public static final ForgeConfigSpec.ConfigValue<Integer> BACK_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Integer> ACCEPT_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Integer> DENY_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Integer> CANCEL_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Integer> SEND_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Integer> TOGGLE_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Integer> BLOCK_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Integer> UNBLOCK_WINDUP;
+    public static final ForgeConfigSpec.ConfigValue<Double> BACK_WINDUP;
+    public static final ForgeConfigSpec.ConfigValue<Double> ACCEPT_WINDUP;
+    public static final ForgeConfigSpec.ConfigValue<Double> DENY_WINDUP;
+    public static final ForgeConfigSpec.ConfigValue<Double> CANCEL_WINDUP;
+    public static final ForgeConfigSpec.ConfigValue<Double> TPA_WINDUP;
+    public static final ForgeConfigSpec.ConfigValue<Double> TPAHERE_WINDUP;
+    public static final ForgeConfigSpec.ConfigValue<Double> TOGGLE_WINDUP;
+    public static final ForgeConfigSpec.ConfigValue<Double> BLOCK_WINDUP;
+    public static final ForgeConfigSpec.ConfigValue<Double> UNBLOCK_WINDUP;
+    public static final ForgeConfigSpec.ConfigValue<Double> WINDUP_DECIMAL_MESSAGE_THRESHOLD;
 
     // Windup Distance
     public static final ForgeConfigSpec.ConfigValue<Double> BACK_WINDUP_DISTANCE;
     public static final ForgeConfigSpec.ConfigValue<Double> ACCEPT_WINDUP_DISTANCE;
     public static final ForgeConfigSpec.ConfigValue<Double> DENY_WINDUP_DISTANCE;
     public static final ForgeConfigSpec.ConfigValue<Double> CANCEL_WINDUP_DISTANCE;
-    public static final ForgeConfigSpec.ConfigValue<Double> SEND_WINDUP_DISTANCE;
+    public static final ForgeConfigSpec.ConfigValue<Double> TPA_WINDUP_DISTANCE;
+    public static final ForgeConfigSpec.ConfigValue<Double> TPAHERE_WINDUP_DISTANCE;
     public static final ForgeConfigSpec.ConfigValue<Double> TOGGLE_WINDUP_DISTANCE;
     public static final ForgeConfigSpec.ConfigValue<Double> BLOCK_WINDUP_DISTANCE;
     public static final ForgeConfigSpec.ConfigValue<Double> UNBLOCK_WINDUP_DISTANCE;
@@ -54,7 +57,8 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Integer> ACCEPT_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Integer> DENY_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Integer> CANCEL_COOLDOWN;
-    public static final ForgeConfigSpec.ConfigValue<Integer> SEND_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Integer> TPA_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Integer> TPAHERE_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Integer> TOGGLE_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Integer> BLOCK_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Integer> UNBLOCK_COOLDOWN;
@@ -63,6 +67,7 @@ public class Config {
 
     // Advanced Settings
     public static final ForgeConfigSpec.ConfigValue<Integer> AUTOSAVE_INTERVAL;
+    public static final ForgeConfigSpec.ConfigValue<Long> CHECK_FOR_UPDATES_INTERVAL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> USE_NON_BLOCKING_ASYNC_TICK_LOOP;
     public static final ForgeConfigSpec.ConfigValue<Integer> ASYNC_TICK_LOOP_UPDATE_RATE;
 
@@ -96,7 +101,7 @@ public class Config {
         BUILDER.push("Commands");
         BUILDER.comment(" This section of the config allows you to change the commands to whatever you please!");
         BUILDER.comment(" For example, you can change the /tpa command to /teleport-request, which means instead of entering /tpa players will have to enter /teleport-request");
-        BUILDER.comment(" Command aliases (running the same command with one or more commands, for example you can make /tpa, /teleport-request and /tpasend all run the same commant ( /tpa )");
+        BUILDER.comment(" Command aliases (running the same command with one or more commands, for example you can make /tpa, /teleport-request and /tpasend all run the same command ( /tpa )");
         BUILDER.comment(" It is NOT recommended to use anything other than ASCII characters here!");
         BUILDER.comment(" Modifying any of these commands requires a restart to take effect.");
 
@@ -126,7 +131,7 @@ public class Config {
 
         BACK_COMMAND_NAME = BUILDER.comment("\n The name of the /back command")
                 .comment(" This has no affect if /back is not enabled in the configuration file.")
-                .define("BACK_COMMAND_NAME", "back");
+                .worldRestart().define("BACK_COMMAND_NAME", "back");
 
         BUILDER.pop();
         BUILDER.push("Limitations");
@@ -159,31 +164,43 @@ public class Config {
         BUILDER.push("Delay");
         BUILDER.comment(" This section of the config controls how long things like commands take to execute.");
         BUILDER.comment(" This is measured in seconds.");
+        BUILDER.comment(" These values support three decimal places of precision (For example, you can enter 1.5 or 10.375, but not 20.1234 (it will still work, just anything after the 3rd decimal place will be discarded)).");
         BUILDER.comment(" Set this to 0 if you wish to disable the countdown");
 
         BACK_WINDUP = BUILDER.comment("\n How long it takes for players to run /back.")
-                        .defineInRange("Back Windup", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Back Windup", 0, 0, 2_147_483_647d);
 
         ACCEPT_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpaaccept.")
-                .defineInRange("Accept Windup", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Accept Windup", 0, 0, 2_147_483_647d);
 
         DENY_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpadeny.")
-                .defineInRange("Deny Windup", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Deny Windup", 0, 0, 2_147_483_647d);
 
         CANCEL_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpacancel.")
-                .defineInRange("Cancel Windup", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Cancel Windup", 0, 0, 2_147_483_647d);
 
-        SEND_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpa or /tpahere.")
-                .defineInRange("Send Windup", 0, 0, Integer.MAX_VALUE);
+        TPA_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpa")
+                .defineInRange("TPA Windup", 0, 0, 2_147_483_647d);
+
+        TPAHERE_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpahere")
+                .defineInRange("TPAHere Windup", 0, 0, 2_147_483_647d);
 
         TOGGLE_WINDUP = BUILDER.comment("\n How long it takes for players to run /tptoggle.")
-                .defineInRange("Toggle Windup", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Toggle Windup", 0, 0, 2_147_483_647d);
 
         BLOCK_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpblock.")
-                .defineInRange("Block Windup", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Block Windup", 0, 0, 2_147_483_647d);
 
         UNBLOCK_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpunblock.")
-                .defineInRange("Unblock Windup", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("Unblock Windup", 0, 0, 2_147_483_647d);
+
+        WINDUP_DECIMAL_MESSAGE_THRESHOLD = BUILDER.comment("\n The threshold before a message is sent to the player with the delay, this value ranges from 0 - 1 because this represents the number after the decimal place.")
+                .comment(" Okay that probably made no sense, so here's an example:")
+                .comment(" Say you have the /tpa windup set to 3.75. Then you have this set to 0.5. Since 0.75 (/tpa windup without the whole number) is GREATER than 0.5, when the player first enters the command, a message will show up saying 3.75 seconds remaining.")
+                .comment(" But now lets say the /tpahere windup is set to 1.25. Since 0.25 (again the /tpahere windup without the whole number) is LESS than 0.5, no message will be sent to the player, and the countdown will just continue on with 3.. 2.. 1.. etc.")
+                .comment(" If this is set to 1, no messages will be displayed. If this is set to 0, ALL messages will be displayed.")
+                .comment(" This has no effect on the countdown after the initial command.")
+                .defineInRange("Windup Decimal Message Threshold", 0, 0, 1d);
 
         BUILDER.pop();
         BUILDER.push("Distance");
@@ -204,8 +221,11 @@ public class Config {
         CANCEL_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpacancel.")
                 .defineInRange("Cancel Windup Distance", 0, -1, Double.MAX_VALUE);
 
-        SEND_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpa or /tpahere.")
-                .defineInRange("Send Windup Distance", 0, -1, Double.MAX_VALUE);
+        TPA_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpa.")
+                .defineInRange("TPA Windup Distance", 0, -1, Double.MAX_VALUE);
+
+        TPAHERE_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpahere.")
+                .defineInRange("TPAHere Windup Distance", 0, -1, Double.MAX_VALUE);
 
         TOGGLE_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tptoggle.")
                 .defineInRange("Toggle Windup Distance", 0, -1, Double.MAX_VALUE);
@@ -236,8 +256,11 @@ public class Config {
         CANCEL_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpacancel.")
                 .defineInRange("Cancel Cooldown", 5, 0, Integer.MAX_VALUE);
 
-        SEND_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpa or /tpahere.")
-                .defineInRange("Send Cooldown", 5, 0, Integer.MAX_VALUE);
+        TPA_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpa or /tpahere.")
+                .defineInRange("TPA Cooldown", 5, 0, Integer.MAX_VALUE);
+
+        TPAHERE_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpa or /tpahere.")
+                .defineInRange("TPAHere Cooldown", 5, 0, Integer.MAX_VALUE);
 
         TOGGLE_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tptoggle.")
                 .defineInRange("Toggle Cooldown", 5, 0, Integer.MAX_VALUE);
@@ -258,12 +281,11 @@ public class Config {
 
         BUILDER.pop();
         BUILDER.push("Advanced Settings");
-        BUILDER.comment(" WARNING: These options are related to asynchronous operations. Modifying these from the defaults has a small chance to corrupt data.");
-        BUILDER.comment(" WARNING: It is only recommended to change these values from their defaults if you know how they work internally.");
+        BUILDER.comment("\n WARNING: These options are related to asynchronous operations and/or saving / loading datain . Modifying these from the defaults has a small chance to corrupt data.");
+        BUILDER.comment(" WARNING: It is only recommended to change these values from their defaults if you know how they work internally UNLESS explicitly said so in the option you are trying to modify.");
         BUILDER.comment(" Most options here have already been optimized for most systems, I doubt you will experience significant performance gains by changing the options below, unless you have an insane amount of players connected, in that case boosting the thread counts should help a bit.");
         BUILDER.comment(" Modifying these options may require a restart of the game.");
 
-        // AUTO-SAVE INTERVAL
         AUTOSAVE_INTERVAL = BUILDER.comment("\n How long (in seconds) between autosaves, if you experience data loss, set this number lower.")
                 .defineInRange("AUTOSAVE_INTERVAL", 300, 1, Integer.MAX_VALUE);
 
@@ -277,11 +299,13 @@ public class Config {
         USE_NON_BLOCKING_ASYNC_TICK_LOOP = BUILDER.comment("\n Whether to use an async tick loop for TPA++, that runs alongside the main thread.")
                 .comment(" Operations that run synchronously with the main thread, are usually extremely inexpensive to run.")
                 .comment(" Only enable this if you have an insane amount of players, or you have noticed performance problems with running it synchronously.")
-                .worldRestart().define("USE_NON_BLOCKING_ASYNC_TICK_LOOP", false);
+                .comment(" Modifying this value requires a restart of the game.")
+                .worldRestart().define("USE_NON_BLOCKING_ASYNC_TICK_LOOP", true);
 
         ASYNC_TICK_LOOP_UPDATE_RATE = BUILDER.comment("\n How often (per second) to update the tick loop. Changing this value will NOT make the game tick run faster, it will only make TPA++ more sensitive and responsive to things (since it will be updated faster).")
                 .comment(" For example, a value of 20 will cause TPA++ to update 20 times a second (this is also Minecraft's Tick Rate).")
-                .comment(" It is completely okay to lower this value, even to something low like 4 if you have alot of players.")
+                .comment(" It is completely okay to lower this value, even to something low like 4 if you have a lot of players.")
+                .comment(" Modifying this value requires a restart of the game.")
                 .worldRestart().defineInRange("ASYNC_TICK_LOOP_UPDATE_RATE", 20, 1, Integer.MAX_VALUE);
 
         BUILDER.pop(2);

@@ -60,6 +60,10 @@ public class AsyncWindupHelper {
         }
     }
 
+    public static long getMillisInt64FromDouble(double number) {
+        return (long)(number * 1000);
+    }
+
     private AsyncWindupHelper() {
     }
 }

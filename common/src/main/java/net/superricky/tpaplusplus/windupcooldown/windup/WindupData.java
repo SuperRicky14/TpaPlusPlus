@@ -25,6 +25,7 @@ public class WindupData {
     private final PlayerData playerData;
 
     private final AtomicInteger delay;
+    private final double originalDelay;
     private final AtomicBoolean isCancelled; // Whether the TPA request has been cancelled or not.
 
     private final double acceptX;
@@ -37,7 +38,7 @@ public class WindupData {
     @NotNull
     private final ServerPlayer[] players;
 
-    public WindupData(@Nullable Request request, int delay, double acceptX, double acceptY, double acceptZ, @NotNull CommandType type, @NotNull ServerPlayer[] players) {
+    public WindupData(@Nullable Request request, double delay, double acceptX, double acceptY, double acceptZ, @NotNull CommandType type, @NotNull ServerPlayer[] players) {
         this.request = request;
         this.acceptX = acceptX;
         this.acceptY = acceptY;
@@ -45,13 +46,14 @@ public class WindupData {
         this.isHereRequest = null;
         this.deathPosition = null;
         this.playerData = null;
-        this.delay = new AtomicInteger(delay);
+        this.delay = new AtomicInteger((int)delay);
         this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
+        this.originalDelay = delay;
     }
 
-    public WindupData(@Nullable PlayerData playerData, int delay, double acceptX, double acceptY, double acceptZ, @NotNull CommandType type, @NotNull ServerPlayer[] players) {
+    public WindupData(@Nullable PlayerData playerData, double delay, double acceptX, double acceptY, double acceptZ, @NotNull CommandType type, @NotNull ServerPlayer[] players) {
         this.acceptX = acceptX;
         this.acceptY = acceptY;
         this.acceptZ = acceptZ;
@@ -59,13 +61,14 @@ public class WindupData {
         this.isHereRequest = null;
         this.deathPosition = null;
         this.playerData = playerData;
-        this.delay = new AtomicInteger(delay);
+        this.delay = new AtomicInteger((int)delay);
         this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
+        this.originalDelay = delay;
     }
 
-    public WindupData(boolean isHereRequest, int delay, double acceptX, double acceptY, double acceptZ, @NotNull CommandType type, @NotNull ServerPlayer[] players) {
+    public WindupData(boolean isHereRequest, double delay, double acceptX, double acceptY, double acceptZ, @NotNull CommandType type, @NotNull ServerPlayer[] players) {
         this.acceptX = acceptX;
         this.acceptY = acceptY;
         this.acceptZ = acceptZ;
@@ -73,13 +76,14 @@ public class WindupData {
         this.isHereRequest = isHereRequest;
         this.deathPosition = null;
         this.playerData = null;
-        this.delay = new AtomicInteger(delay);
+        this.delay = new AtomicInteger((int)delay);
         this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
+        this.originalDelay = delay;
     }
 
-    public WindupData(int delay, double acceptX, double acceptY, double acceptZ, @NotNull CommandType type, @NotNull ServerPlayer[] players) {
+    public WindupData(double delay, double acceptX, double acceptY, double acceptZ, @NotNull CommandType type, @NotNull ServerPlayer[] players) {
         this.acceptX = acceptX;
         this.acceptY = acceptY;
         this.acceptZ = acceptZ;
@@ -87,13 +91,14 @@ public class WindupData {
         this.isHereRequest = null;
         this.deathPosition = null;
         this.playerData = null;
-        this.delay = new AtomicInteger(delay);
+        this.delay = new AtomicInteger((int)delay);
         this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
+        this.originalDelay = delay;
     }
 
-    public WindupData(@Nullable LevelBoundVec3 deathPosition, int delay, double acceptX, double acceptY, double acceptZ, @NotNull CommandType type, ServerPlayer[] players) {
+    public WindupData(@Nullable LevelBoundVec3 deathPosition, double delay, double acceptX, double acceptY, double acceptZ, @NotNull CommandType type, ServerPlayer[] players) {
         this.acceptX = acceptX;
         this.acceptY = acceptY;
         this.acceptZ = acceptZ;
@@ -101,10 +106,11 @@ public class WindupData {
         this.isHereRequest = null;
         this.deathPosition = deathPosition;
         this.playerData = null;
-        this.delay = new AtomicInteger(delay);
+        this.delay = new AtomicInteger((int)delay);
         this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
+        this.originalDelay = delay;
     }
 
     @Nullable
@@ -132,6 +138,9 @@ public class WindupData {
 
     public void setDelay(int delay) {
         this.delay.set(delay);
+    }
+    public double getOriginalDelay() {
+        return originalDelay;
     }
 
     @NotNull

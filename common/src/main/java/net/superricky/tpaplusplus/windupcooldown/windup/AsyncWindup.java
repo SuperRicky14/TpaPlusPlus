@@ -71,7 +71,15 @@ public class AsyncWindup {
 
         // Request is a valid request.
         WindupWatcher.getTrackedWindupData().add(windupData); // Add it to the tracked windupData.
-        scheduler.execute(() -> countdown(windupData));
+
+        // Decide whether to message the player.
+        if (TPAPlusPlus.getDecimalNumber(windupData.getOriginalDelay()) > Config.WINDUP_DECIMAL_MESSAGE_THRESHOLD.get()) {
+            // Decimal Number is greater than the threshold specified in the config, so we notify the player here.
+            // Message the player the configured WINDUP_TIME_REMAINING message, except since it isn't an integer, we have to round it here to 3 decimal places (which it should be anyway's)
+            AsyncWindupHelper.fastMSG(MessageParser.enhancedFormatter(Messages.WINDUP_TIME_REMAINING.get(), Map.of("time", Double.toString((double) Math.round(windupData.getOriginalDelay() * 1000) / 1000))), windupData.getPlayers());
+        }
+
+        scheduler.schedule(() -> countdown(windupData), AsyncWindupHelper.getMillisInt64FromDouble(TPAPlusPlus.getDecimalNumber(windupData.getOriginalDelay())), TimeUnit.MILLISECONDS); // Schedules the countdown to begin. If the user entered a decimal number, the countdowns delay will become the integer, but we will wait for the amount of time in the decimal number.
     }
 
     /**
@@ -79,12 +87,6 @@ public class AsyncWindup {
      * You might get a lot of warnings here about potential NullPointerException, but that should all be handled by the schedule method, which should prevent anything from being null in the first place.
      */
     private static void countdown(WindupData windupData) {
-        if (windupData.getDelay() < 0) {
-            // Delay is LOWER than zero, throw an error, also notify the player about unsafe usage of this method
-            LOGGER.error("IllegalArgumentException: Delay for Scheduled Task must be greater than 0, but somehow this was not caught by the caller??");
-            throw new IllegalArgumentException("Delay for Scheduled Task must be greater than 0, but somehow this was not caught by the caller??");
-        }
-
         if (windupData.getDelay() > 0) {
             // Delay is ABOVE zero, countdown not finished
             if (Objects.isNull(scheduler)) {

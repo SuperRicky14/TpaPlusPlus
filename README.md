@@ -1,5 +1,5 @@
 # TPA++
-TPA++ is an async, open source and customisable TPA mod. While the mod still functions out of the box, there are many in-depth options to configure and change out of the box. Additionally, TPA++ has some features under the "/tpaplusplus" command that allows you to make mass changes to your configuration easily and quickly. Check out the [wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki) for more information.
+TPA++ is an async, open source and customisable TPA mod. While the mod still functions out of the box, there are many in-depth options to configure and change to your liking. Additionally, TPA++ has some features under the "/tpaplusplus" command that allows you to make mass changes to your configuration easily and quickly. Check out the [wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki) for more information.
 > **TPA++ is the first mod to run on Forge, NeoForge, Fabric and Quilt.** Additionally, TPA++ run's on every version from **1.20.1 - 1.20.5-SNAPSHOT** (*inclusive*).
 
 # What can TPA++ do?
@@ -16,12 +16,13 @@ TPAPlusPlus currently features eight custom commands, here is a quick run-throug
 * `/tpaplusplus` • [This command has its own documentation on the wiki!](https://github.com/SuperRicky14/TpaPlusPlus/wiki/TPAPlusPlus-Server-Management-Command)
 
 TPA++ also features some unique and exclusive features, here is a run through over the main ones:
-* `Command Windups` • Controls how long any command takes to execute. For example you can make /tpa take 5 seconds, and /tpaaccept take 3 seconds.
+* `Command Windups` • Controls how long any command takes to execute. For example, you can make /tpa take 5 seconds, and /tpaaccept take 3 seconds. Since update 1.5.2 you can now use decimal numbers in your windups!
 * `Command Windup Distance` • Controls how far away a player can move from their original starting point, after the command's "*windup countdown*" has started.
 * `Range Checks` • Controls the minimum / maximum distance a player can be from another player before sending / accepting a teleport request.
 * `Dimension Checks` • Prevents players from teleporting between dimensions, i.e. they must be in the same dimension to TPA to eachother.
 * `Message Control` • Lets you modify every message sent by TPA++. You can add color codes, emoji, rewrite any sentences to whatever you want (there's seriously no restrictions, go wild).
 * `Command Control` • Lets you modify all the commands (what players type in chat), so if you want you can change `/tpa` to `/whatever`
+* `Automatic Update Checking` • Automatically check's for updates to TPA++ so you never miss out on the latest features!
 
 ## Upcoming / Planned Features
 * `Command Cooldowns` • Controls the interval before a player can execute the same command again (requested in [feature request #1](https://github.com/SuperRicky14/TpaPlusPlus/issues/1)).
@@ -41,13 +42,15 @@ TPA++ also features some unique and exclusive features, here is a run through ov
 * `Something I want to change can't be modified in the config!` • You can suggest what option you want to see added on the [issue page!](https://github.com/SuperRicky14/TpaPlusPlus/issues)
 * `Can I modify / fork / contribute to TPA++?` • Yes, there is a [contributing guide](https://github.com/SuperRicky14/TpaPlusPlus/blob/master/CONTRIBUTING.md) on TPA++'s Github, you are free to do whatever you want with the mod under the [MIT License](https://github.com/SuperRicky14/TpaPlusPlus/blob/master/LICENSE)
 
-## Dependancies:
-While I tried to minimize dependancies at first, in order to support all mod loaders, it is much quicker and faster for me to push out updates using these mods than if I wrote everything myself.
+## Dependencies:
+While I tried to minimize dependancies at first, in order to support all mod loaders, it is much quicker and faster for me to push out updates using these mods than if I wrote everything myself. Additionally, these are pretty common dependencies, so you likely already have these in your modpack.
 ### NeoForge and Forge:
 * [Architectury API](https://modrinth.com/mod/architectury-api)
+* [Kotlin for Forge](https://www.curseforge.com/minecraft/mc-mods/kotlin-for-forge)
 ### Fabric and Quilt
 * [Architectury API](https://modrinth.com/mod/architectury-api)
 * [Forge Config API Port](https://modrinth.com/mod/forge-config-api-port)
+* [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin)
 
 ## Support
 > Links: [CurseForge](https://www.curseforge.com/minecraft/mc-mods/tpaplusplus) / [Modrinth](https://modrinth.com/mod/pPuyOJU7) / [Wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki).

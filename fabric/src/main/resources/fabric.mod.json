@@ -22,9 +22,9 @@
   },
   "depends": {
     "fabric": "*",
-    "minecraft": ">=1.20.1",
+    "minecraft": ">=1.20",
     "architectury": ">=9.1.12",
     "fabric-language-kotlin": ">=1.10.19+kotlin.1.9.23",
-    "forgeconfigapiport": ">=8.0.0"
+    "forgeconfigapiport": ">=7.0.0"
   }
 }

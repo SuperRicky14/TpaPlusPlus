@@ -1,9 +1,9 @@
 package net.superricky.tpaplusplus;
 
-import dev.architectury.event.events.common.CommandRegistrationEvent;
-import dev.architectury.event.events.common.EntityEvent;
-import dev.architectury.event.events.common.LifecycleEvent;
-import dev.architectury.event.events.common.TickEvent;
+import dev.architectury.event.events.common.*;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.commands.accept.TPAAcceptCommand;
 import net.superricky.tpaplusplus.commands.back.BackCommand;
 import net.superricky.tpaplusplus.commands.back.DeathHelper;
@@ -19,6 +19,7 @@ import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.formatters.MessageParser;
 import net.superricky.tpaplusplus.io.ServerLifecycleHandler;
 import net.superricky.tpaplusplus.network.UpdateCheckKt;
+import net.superricky.tpaplusplus.player.PlayerRegistryManagerKt;
 import net.superricky.tpaplusplus.timeout.RequestTimeoutEvent;
 import net.superricky.tpaplusplus.timeout.TimeoutEventHandler;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
@@ -27,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class TPAPlusPlus {
     public static final String MOD_ID = "tpaplusplus";
@@ -44,21 +46,21 @@ public class TPAPlusPlus {
         LOGGER.info("REGISTERING BACK COMMAND...");
         CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> BackCommand.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPAACCEPT COMMAND...");
-        CommandRegistrationEvent.EVENT.register((dispatcher3, registry3, selection3) -> TPAAcceptCommand.onRegisterCommandEvent(dispatcher3));
+        CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPAAcceptCommand.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPACANCEL COMMAND...");
-        CommandRegistrationEvent.EVENT.register((dispatcher3, registry3, selection3) -> TPACancelCommand.onRegisterCommandEvent(dispatcher3));
+        CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPACancelCommand.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPA COMMAND...");
-        CommandRegistrationEvent.EVENT.register((dispatcher3, registry3, selection3) -> TPACommand.onRegisterCommandEvent(dispatcher3));
+        CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPACommand.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPADENY COMMAND...");
-        CommandRegistrationEvent.EVENT.register((dispatcher4, registry4, selection4) -> TPADenyCommand.onRegisterCommandEvent(dispatcher4));
+        CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPADenyCommand.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPAHERE COMMAND...");
-        CommandRegistrationEvent.EVENT.register((dispatcher3, registry3, selection3) -> TPAHereCommand.onRegisterCommandEvent(dispatcher3));
+        CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPAHereCommand.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPAPLUSPLUS COMMAND...");
-        CommandRegistrationEvent.EVENT.register((dispatcher2, registry2, selection2) -> TPAPlusPlusCommand.onRegisterCommandEvent(dispatcher2));
+        CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPAPlusPlusCommand.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPBLOCK COMMAND...");
-        CommandRegistrationEvent.EVENT.register((dispatcher1, registry1, selection1) -> TPBlockCommand.onRegisterCommandEvent(dispatcher1));
+        CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPBlockCommand.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPTOGGLE COMMAND...");
-        CommandRegistrationEvent.EVENT.register((dispatcher1, registry1, selection1) -> TPToggleCommand.onRegisterCommandEvent(dispatcher1));
+        CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPToggleCommand.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPUNBLOCK COMMAND...");
         CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPUnBlockCommand.onRegisterCommandEvent(dispatcher));
 
@@ -68,6 +70,12 @@ public class TPAPlusPlus {
         LifecycleEvent.SERVER_STOPPING.register(state -> ServerLifecycleHandler.onServerStop());
         LOGGER.info("REGISTERING \"LifecycleEvent.LIVING_DEATH\"...");
         EntityEvent.LIVING_DEATH.register((deadEntity, source) -> DeathHelper.onDeath(deadEntity));
+
+        LOGGER.info("REGISTERING \"PlayerEvent.PLAYER_JOIN\"...");
+        PlayerEvent.PLAYER_JOIN.register(PlayerRegistryManagerKt::onPlayerJoin);
+        LOGGER.info("REGISTERING \"PlayerEvent.PLAYER_LEAVE\"...");
+        PlayerEvent.PLAYER_QUIT.register(PlayerRegistryManagerKt::onPlayerQuit);
+
 
         LOGGER.info("REGISTERING \"RequestTimeoutEvent\"...");
         RequestTimeoutEvent.EVENT.register(TimeoutEventHandler::onTimeoutEvent);

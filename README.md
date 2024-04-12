@@ -29,12 +29,7 @@ TPA++ also features some unique and exclusive features, here is a run through ov
 ## Upcoming / Planned Features
 * `Command Cooldowns` • Controls the interval before a player can execute the same command again (requested in [feature request #1](https://github.com/SuperRicky14/TpaPlusPlus/issues/1)).
 * `Global Cooldown` • Controls the interval before a player can run any TPA++ command sequentially after another.
-* `Friend System` • Allows you to select players which their TPA request's will be automatically accepted. Good for competitive SMP's
-* `Boss Battle` • Disables TPA when near an entity specified in the config. The distance this will take effect will be configurable per-entity. This will support modded entities.
-* `Config Presets` • Allows you to save / load presets, so you can mass-change / customize your config. I will include some default presets that you can choose from to get a good grasp on what the options do.
-* `Item / EXP Requirements` • Allows you to customise how much EXP / what item's are taken from the player upon sending, cancelling or accepting a teleport request. If the other player denies your teleport request, said item's / EXP will be given back.
-* `and more!` • Keep in mind the mod is still in **beta**; You can request a new feature or report a bug quickly and easily on the [TPA++ issue page!](https://github.com/SuperRicky14/TpaPlusPlus/issues)
-
+  
 # Additional Information / FAQ:
 * `Is TPA++ server-side only?` • Yes, TPA++ is server sided and always will remain. This means you can run a (*neoforge*/*forge*/*fabric*/*quilt*) server and let completely vanilla clients join, or add this mod to an existing modpack without having to add it to everyone's client.
 * `Does this mod work in singleplayer / open-to-LAN` • Yes, the mod functions perfectly in singleplayer / open-to-lan. The mod also runs perfectly fine on [e4mc](https://www.curseforge.com/minecraft/mc-mods/e4mc) / [essential](https://essential.gg/) / [world host](https://modrinth.com/mod/world-host), allowing your friends to connect to your worlds and still run fine with TPA++ (useful if you want to run TPA with your friends but don't want to setup a whole server for it).

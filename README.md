@@ -33,7 +33,7 @@ TPA++ also features some unique and exclusive features, here is a run through ov
 # Additional Information / FAQ:
 * `Is TPA++ server-side only?` • Yes, TPA++ is server sided and always will remain. This means you can run a (*neoforge*/*forge*/*fabric*/*quilt*) server and let completely vanilla clients join, or add this mod to an existing modpack without having to add it to everyone's client.
 * `Does this mod work in singleplayer / open-to-LAN` • Yes, the mod functions perfectly in singleplayer / open-to-lan. The mod also runs perfectly fine on [e4mc](https://www.curseforge.com/minecraft/mc-mods/e4mc) / [essential](https://essential.gg/) / [world host](https://modrinth.com/mod/world-host), allowing your friends to connect to your worlds and still run fine with TPA++ (useful if you want to run TPA with your friends but don't want to setup a whole server for it).
-* `Will you backport TPA++?` • Back-ports are planned once the mod is mostly feature complete, although this is subject to change and will likely only be back-ported to major versions such as `1.16` or `1.18`.
+* `Will you backport TPA++?` • Backports are not planned.
 * `I found a bug / problem with the mod.` • You can report this to me on my [Github's issue page.](https://github.com/SuperRicky14/TpaPlusPlus/issues)
 * `I want to see feature [x] implemented!` • Again, you can fill out the feature request form on the [issue page!](https://github.com/SuperRicky14/TpaPlusPlus/issues)
 * `Something I want to change can't be modified in the config!` • You can suggest what option you want to see added on the [issue page!](https://github.com/SuperRicky14/TpaPlusPlus/issues)

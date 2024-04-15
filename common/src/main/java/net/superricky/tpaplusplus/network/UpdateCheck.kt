@@ -129,7 +129,7 @@ fun executeSilentVersionCheck() = scope.launch {
  * @return Pair<String response/error, Boolean failed>
  */
 suspend fun getVersionAsync(): Pair<String, Boolean> = coroutineScope {
-    val url = URL("https://api.modrinth.com/v2/project/pPuyOJU7/version")
+    val url = URL("https://api.modrinth.com/v2/project/QuPbmyCQ/version")
 
     withContext(dispatcher) {
         val conn = url.openConnection() as HttpURLConnection

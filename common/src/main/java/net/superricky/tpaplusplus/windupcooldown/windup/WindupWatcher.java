@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static net.superricky.tpaplusplus.TPAPlusPlus.distance3D;
+import static net.superricky.tpaplusplus.TPAPlusPlus.noSqrtDistance3D;
 
 public class WindupWatcher {
     private static ScheduledExecutorService scheduler = Executors.unconfigurableScheduledExecutorService(Executors.newScheduledThreadPool(1));
@@ -52,15 +52,15 @@ public class WindupWatcher {
 
             if (windupData.getCancelled().get()) continue;
 
-            if (distance3D(
+            if (noSqrtDistance3D(
                     windupData.getAcceptX(),
                     windupData.getAcceptY(),
                     windupData.getAcceptZ(),
                     windupData.getPlayers()[0].getX(),
                     windupData.getPlayers()[0].getY(),
                     windupData.getPlayers()[0].getZ()
-            ) > windupDistance) {
-                // Distance between the position which they started the countdown, and their current position is larger than the allowed distance set in the Config.
+            ) > Math.pow(windupDistance, 2)) {
+                // Squared distance between the position which they started the countdown, and their current position is larger than the allowed distance set in the Config.
                 windupData.getCancelled().set(true);
 
                 windupData.getPlayers()[0].sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.PLAYER_MOVED_DURING_WINDUP.get(), Map.of("command_used", TPAPlusPlus.getCommandNameFromType(windupData.getType())))));

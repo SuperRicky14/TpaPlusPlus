@@ -8,6 +8,8 @@ import net.superricky.tpaplusplus.requests.Request;
 import net.superricky.tpaplusplus.requests.RequestGrabUtil;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 
@@ -20,6 +22,12 @@ public class DenyTPA {
             receiver.sendSystemMessage(Component.literal(Messages.ERR_REQUEST_NOT_FOUND.get()));
             return;
         }
+
+        if (AsyncCooldownHelper.checkCommandCooldownAndNotify(receiver, receiver.getUUID(), CommandType.DENY))
+            return;
+
+        if (Config.DENY_COOLDOWN.get() > 0) // Check if cooldown is enabled
+            AsyncCooldownKt.scheduleCooldown(receiver.getUUID(), Config.DENY_COOLDOWN.get(), CommandType.DENY);
 
         if (Config.DENY_WINDUP.get() == 0) {
             absoluteDeny(request);

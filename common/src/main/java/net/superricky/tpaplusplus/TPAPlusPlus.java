@@ -1,9 +1,6 @@
 package net.superricky.tpaplusplus;
 
 import dev.architectury.event.events.common.*;
-import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.commands.accept.TPAAcceptCommand;
 import net.superricky.tpaplusplus.commands.back.BackCommand;
 import net.superricky.tpaplusplus.commands.back.DeathHelper;
@@ -28,11 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class TPAPlusPlus {
     public static final String MOD_ID = "tpaplusplus";
-    public static final String MOD_VERSION = "1.5.2-1.20.x-BETA";
+    public static final String MOD_VERSION = "1.6.0-1.20.x-RELEASE-CANDIDATE-1";
     private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static final String CONFIG_PATH = "tpaplusplus-config.toml";
@@ -110,6 +106,16 @@ public class TPAPlusPlus {
         return Math.sqrt(Math.pow(x2 - x1, 2) +
                 Math.pow(y2 - y1, 2) +
                 Math.pow(z2 - z1, 2));
+    }
+
+    /**
+     * We don't need to perform the expensive square root operation, instead we can square the input and compare the squared values.
+     * @return The squared euclidean distance between two points.
+     */
+    public static double noSqrtDistance3D(final double x1, final double y1, final double z1, final double x2, final double y2, final double z2) {
+        return Math.pow(x2 - x1, 2) +
+                Math.pow(y2 - y1, 2) +
+                Math.pow(z2 - z1, 2);
     }
 
     public static String getCommandNameFromType(CommandType commandType) {

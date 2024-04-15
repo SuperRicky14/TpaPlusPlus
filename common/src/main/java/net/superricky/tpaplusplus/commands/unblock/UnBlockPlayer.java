@@ -10,6 +10,8 @@ import net.superricky.tpaplusplus.io.PlayerData;
 import net.superricky.tpaplusplus.io.SaveDataManager;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 
@@ -31,6 +33,12 @@ public class UnBlockPlayer {
                     Map.of(PlayerBlockingHelper.BLOCKED_PLAYER_CONSTANT, blockedPlayer.getName().getString()))));
             return;
         }
+
+        if (AsyncCooldownHelper.checkCommandCooldownAndNotify(executor, executor.getUUID(), CommandType.UNBLOCK))
+            return;
+
+        if (Config.UNBLOCK_COOLDOWN.get() > 0) // Check if cooldown is enabled
+            AsyncCooldownKt.scheduleCooldown(executor.getUUID(), Config.UNBLOCK_COOLDOWN.get(), CommandType.UNBLOCK);
 
         if (Config.UNBLOCK_WINDUP.get() == 0) {
             absoluteUnBlockPlayer(executorData, executor, blockedPlayer);

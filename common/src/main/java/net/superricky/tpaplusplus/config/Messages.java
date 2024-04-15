@@ -93,8 +93,8 @@ public class Messages {
     // Countdown Messages
     public static final ForgeConfigSpec.ConfigValue<String> WINDUP_TIME_REMAINING;
     public static final ForgeConfigSpec.ConfigValue<String> PLAYER_MOVED_DURING_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<String> ERR_COMMAND_ON_COOLDOWN_MESSAGE;
-    public static final ForgeConfigSpec.ConfigValue<String> ERR_PLAYER_ON_GLOBAL_COOLDOWN_MESSAGE;
+    public static final ForgeConfigSpec.ConfigValue<String> COMMAND_ON_COOLDOWN_MESSAGE;
+    public static final ForgeConfigSpec.ConfigValue<String> PLAYER_ON_GLOBAL_COOLDOWN_MESSAGE;
 
     static {
         BUILDER.push("TPA++ Messages");
@@ -362,14 +362,14 @@ public class Messages {
         BUILDER.pop();
         BUILDER.push("Cooldowns");
 
-        ERR_COMMAND_ON_COOLDOWN_MESSAGE = BUILDER.comment("\n The message displayed when a player tries to execute a command but it is currently on cooldown.")
+        COMMAND_ON_COOLDOWN_MESSAGE = BUILDER.comment("\n The message displayed when a player tries to execute a command but it is currently on cooldown.")
                 .comment("Placeholders: \"${command_used}\": \"The command that was on cooldown. This placeholder respects the command names set in the config.\"")
                 .comment("              \"${time_remaining}\": \"How long is left on the cooldown (in seconds)\"")
-                .define("ERR_COMMAND_ON_COOLDOWN_MESSAGE", "§c\"/${command_used}\" is currently on cooldown, please wait ${time_remaining}s!");
+                .define("COMMAND_ON_COOLDOWN_MESSAGE", "§6\"§c/${command_used}§6\" §cis currently on §ccooldown§6, please wait §c${time_remaining}§6s!");
 
-        ERR_PLAYER_ON_GLOBAL_COOLDOWN_MESSAGE = BUILDER.comment("\n The message displayed when a player tries to execute a command, but they are currently on cooldown.")
+        PLAYER_ON_GLOBAL_COOLDOWN_MESSAGE = BUILDER.comment("\n The message displayed when a player tries to execute a command, but they are currently on cooldown.")
                 .comment("Placeholders: \"${time_remaining}\": \"How long is left on the cooldown (in seconds)\"")
-                .define("ERR_PLAYER_ON_GLOBAL_COOLDOWN_MESSAGE", "§cYou are currently on cooldown, please wait ${time_remaining}s before running another command!");
+                .define("PLAYER_ON_GLOBAL_COOLDOWN_MESSAGE", "§cYou §6are currently on §ccooldown§6, please wait §c${time_remaining}§6s before running another command!");
 
         BUILDER.pop(2);
         SPEC = BUILDER.build();

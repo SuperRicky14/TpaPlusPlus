@@ -5,23 +5,18 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.superricky.tpaplusplus.commands.back.DeathHelper;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.config.formatters.MessageReformatter;
 import net.superricky.tpaplusplus.io.AutosaveScheduler;
-import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.timeout.TimeoutScheduler;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Objects;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -117,6 +112,7 @@ public class TPAPlusPlusCommand {
 
     private static int version(CommandSourceStack source) {
         source.sendSystemMessage(Component.literal(String.format(Messages.TPAPLUSPLUS_VERSION.get(), TPAPlusPlus.MOD_VERSION))); // send the mod's version to the command executor
+        /*
         source.sendSystemMessage(Component.literal("§6Checking for updates..."));
 
         final Entity executor = source.getEntity();
@@ -128,7 +124,7 @@ public class TPAPlusPlusCommand {
             // User is running version check from console
             UpdateCheckKt.executeVersionCheckFromConsole();
         }
-
+        */ // Update checker is disabled as this is the Final Release!
         return 1;
     }
 

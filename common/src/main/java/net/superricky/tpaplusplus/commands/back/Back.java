@@ -5,6 +5,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +31,12 @@ public class Back {
             executor.sendSystemMessage(Component.literal(Messages.ERR_DEATH_LOC_NOT_FOUND.get()));
             return;
         }
+
+        if (AsyncCooldownHelper.checkCommandCooldownAndNotify(executor, executor.getUUID(), CommandType.BACK))
+            return;
+
+        if (Config.BACK_COOLDOWN.get() > 0) // Check if cooldown is enabled
+            AsyncCooldownKt.scheduleCooldown(executor.getUUID(), Config.BACK_COOLDOWN.get(), CommandType.BACK);
 
         if (Config.BACK_WINDUP.get() == 0) {
             absoluteTeleportToLatestDeath(executor, deathPosition);

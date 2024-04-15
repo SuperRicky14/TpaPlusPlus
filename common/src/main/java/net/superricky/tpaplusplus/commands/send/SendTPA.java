@@ -13,6 +13,8 @@ import net.superricky.tpaplusplus.requests.Request;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.timeout.TimeoutScheduler;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 
@@ -54,12 +56,24 @@ public class SendTPA {
         if (!LimitationManager.notifyAndCheckAllowedToTeleport(sender, receiver, false)) return;
 
         if (isHereRequest) {
+            if (AsyncCooldownHelper.checkCommandCooldownAndNotify(sender, sender.getUUID(), CommandType.TPAHERE))
+                return;
+
+            if (Config.TPAHERE_COOLDOWN.get() > 0) // Check if cooldown is enabled
+                AsyncCooldownKt.scheduleCooldown(sender.getUUID(), Config.TPAHERE_COOLDOWN.get(), CommandType.TPAHERE);
+
             if (Config.TPAHERE_WINDUP.get() == 0) {
                 absoluteSendTeleportRequest(sender, receiver, isHereRequest);
             } else {
                 AsyncWindup.schedule(new WindupData(true, Config.TPAHERE_WINDUP.get(), sender.getX(), sender.getY(), sender.getZ(), CommandType.TPAHERE, new ServerPlayer[]{sender, receiver}));
             }
         } else {
+            if (AsyncCooldownHelper.checkCommandCooldownAndNotify(sender, sender.getUUID(), CommandType.TPA))
+                return;
+
+            if (Config.TPA_COOLDOWN.get() > 0) // Check if cooldown is enabled
+                AsyncCooldownKt.scheduleCooldown(sender.getUUID(), Config.TPA_COOLDOWN.get(), CommandType.TPA);
+
             if (Config.TPA_WINDUP.get() == 0) {
                 absoluteSendTeleportRequest(sender, receiver, isHereRequest);
             } else {

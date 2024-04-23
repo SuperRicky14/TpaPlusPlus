@@ -25,9 +25,9 @@ TPA++ also features some unique and exclusive features, here is a run through ov
 * `Message Control` • Lets you modify every message sent by TPA++. You can add color codes, emoji, rewrite any sentences to whatever you want (there's seriously no restrictions, go wild).
 * `Command Control` • Lets you modify all the commands (what players type in chat), so if you want you can change `/tpa` to `/whatever`
 * `Automatic Update Checking` • Automatically check's for updates to TPA++ so you never miss out on the latest features!
+* `Command Cooldowns` • Controls the interval before a player can execute the same command again (requested in [feature request #1](https://github.com/SuperRicky14/TpaPlusPlus/issues/1)).
 
 ## Upcoming / Planned Features
-* `Command Cooldowns` • Controls the interval before a player can execute the same command again (requested in [feature request #1](https://github.com/SuperRicky14/TpaPlusPlus/issues/1)).
 * `Global Cooldown` • Controls the interval before a player can run any TPA++ command sequentially after another.
   
 # Additional Information / FAQ:

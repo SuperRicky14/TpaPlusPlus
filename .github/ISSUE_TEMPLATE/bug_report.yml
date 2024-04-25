@@ -11,6 +11,7 @@ body:
       label: Minecraft Version
       description: The version of Minecraft you are using
       options:
+        - "1.20.5 (UNTESTED WITH TPA++)"
         - "1.20.5-SNAPSHOT"
         - "1.20.4"
         - "1.20.3"

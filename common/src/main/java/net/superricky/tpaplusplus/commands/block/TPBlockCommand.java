@@ -20,7 +20,7 @@ public class TPBlockCommand {
     }
 
     public static void onRegisterCommandEvent(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(literal(Config.TPUNBLOCK_COMMAND_NAME.get())
+        dispatcher.register(literal(Config.TPBLOCK_COMMAND_NAME.get())
                 .then(argument("player", EntityArgument.player())
                         .executes(context -> blockPlayer(context.getSource(), EntityArgument.getPlayer(context, "player")))));
     }

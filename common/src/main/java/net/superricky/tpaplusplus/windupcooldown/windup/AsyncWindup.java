@@ -1,6 +1,7 @@
 package net.superricky.tpaplusplus.windupcooldown.windup;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.superricky.tpaplusplus.commands.accept.AcceptTPA;
 import net.superricky.tpaplusplus.commands.back.Back;
@@ -13,6 +14,9 @@ import net.superricky.tpaplusplus.commands.unblock.UnBlockPlayer;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.config.formatters.MessageParser;
+import net.superricky.tpaplusplus.requests.Request;
+import net.superricky.tpaplusplus.requests.RequestHelper;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,7 +117,7 @@ public class AsyncWindup {
 
                 // Run the /tpaaccept method
                 case ACCEPT ->
-                        AcceptTPA.absoluteAcceptFunctionality(Objects.requireNonNull(windupData.getRequest()), windupData.getPlayers()[1]);
+                        AcceptTPA.absoluteAcceptFunctionality(Objects.requireNonNull(windupData.getRequest()), windupData.getRequest().getReceiver());
 
                 // Run the /tpadeny method
                 case DENY -> DenyTPA.absoluteDeny(Objects.requireNonNull(windupData.getRequest()));
@@ -176,4 +180,3 @@ public class AsyncWindup {
     private AsyncWindup() {
     }
 }
-

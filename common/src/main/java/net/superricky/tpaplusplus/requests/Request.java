@@ -30,6 +30,10 @@ public class Request {
 
     @Override
     public String toString() {
-        return MessageParser.enhancedFormatter("SENDER: {sender}, RECEIVER: {receiver}, isHereRequest: {hereRequest}", Map.of("sender", sender.getName()), Map.of("receiver", receiver.getName()), hereRequest);
+        return "Request{" +
+                "sender=" + sender.getName() +
+                ", receiver=" + receiver.getName() +
+                ", hereRequest=" + hereRequest +
+                '}';
     }
 }

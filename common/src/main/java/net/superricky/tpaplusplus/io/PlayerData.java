@@ -17,6 +17,14 @@ public class PlayerData {
         this.tpToggle = tpToggle;
     }
 
+    public void addBlockedPlayer(UUID player) {
+        blockedPlayers.add(player);
+    }
+
+    public void removeBlockedPlayer(UUID player) {
+        blockedPlayers.remove(player);
+    }
+
     public List<UUID> getBlockedPlayers() {
         return List.copyOf(blockedPlayers);
     }

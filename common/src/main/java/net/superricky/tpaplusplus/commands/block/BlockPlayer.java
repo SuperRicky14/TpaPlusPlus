@@ -47,7 +47,7 @@ public class BlockPlayer {
     }
 
     public static void absoluteBlockPlayer(PlayerData executorData, ServerPlayer executor, ServerPlayer blockedPlayer) {
-        executorData.getBlockedPlayers().add(blockedPlayer.getUUID()); // Add the blocked player to the executors list.
+        executorData.addBlockedPlayer(blockedPlayer.getUUID()); // Add the blocked player to the executors list.
 
         executor.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.SENDER_BLOCKED_PLAYER.get(),
                 Map.of(PlayerBlockingHelper.BLOCKED_PLAYER_CONSTANT, blockedPlayer.getName().getString()))));

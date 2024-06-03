@@ -48,7 +48,7 @@ public class UnBlockPlayer {
     }
 
     public static void absoluteUnBlockPlayer(PlayerData executorData, ServerPlayer executor, ServerPlayer blockedPlayer) {
-        executorData.getBlockedPlayers().remove(blockedPlayer.getUUID()); // Remove the blocked player from the executors list.
+        executorData.removeBlockedPlayer(blockedPlayer.getUUID()); // Remove the blocked player from the executors list.
 
         executor.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.SENDER_UNBLOCKED_PLAYER.get(),
                 Map.of("unblocked_player", blockedPlayer.getName().getString()))));

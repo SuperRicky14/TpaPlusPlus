@@ -1,8 +1,6 @@
 # TPA++
 TPA++ is an async, open source and customisable TPA mod. While the mod still functions out of the box, there are many in-depth options to configure and change to your liking. Additionally, TPA++ has some features under the "/tpaplusplus" command that allows you to make mass changes to your configuration easily and quickly. Check out the [wiki](https://github.com/SuperRicky14/TpaPlusPlus/wiki) for more information.
-> **TPA++ is the first mod to run on Forge, NeoForge, Fabric and Quilt.** Additionally, TPA++ run's on every version from **1.20.1 - 1.20.5-SNAPSHOT** (*inclusive*).
-
-## TPA++ is unarchived as of 11 Apr 2024 and I intend to work on all the promised features.
+> **TPA++ is the first TPA mod to run on Forge, NeoForge, Fabric and Quilt.** Additionally, TPA++ run's on every version from **1.20.1 - 1.20.5-SNAPSHOT** (*inclusive*).
 
 # What can TPA++ do?
 TPAPlusPlus currently features eight custom commands, here is a quick run-through over each of them (Command arguments marked with $ are optional!):

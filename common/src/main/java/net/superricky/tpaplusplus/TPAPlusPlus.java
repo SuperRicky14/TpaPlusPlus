@@ -97,6 +97,7 @@ public class TPAPlusPlus {
 
     /**
      * We don't need to perform the expensive square root operation, instead we can square the input and compare the squared values.
+     *
      * @return The squared euclidean distance between two points.
      */
     public static double noSqrtDistance3D(final double x1, final double y1, final double z1, final double x2, final double y2, final double z2) {

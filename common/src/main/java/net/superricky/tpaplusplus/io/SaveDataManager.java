@@ -35,7 +35,8 @@ public class SaveDataManager {
     public static void savePlayerData() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        if (Boolean.FALSE.equals(checkForSaveDataExistence())) return; // Make sure the folder(s) exist and were automatically created successfully before writing to the file
+        if (Boolean.FALSE.equals(checkForSaveDataExistence()))
+            return; // Make sure the folder(s) exist and were automatically created successfully before writing to the file
         try (Writer writer = new FileWriter(MOD_SAVEDATA_FILE_PATH)) {
             gson.toJson(playerDataMap, writer);
         } catch (IOException e) {
@@ -47,9 +48,11 @@ public class SaveDataManager {
     public static void loadPlayerData() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        if (Boolean.FALSE.equals(checkForSaveDataExistenceForLoading())) return; // Make sure the folder(s) exist and were automatically created successfully before reading from the file
+        if (Boolean.FALSE.equals(checkForSaveDataExistenceForLoading()))
+            return; // Make sure the folder(s) exist and were automatically created successfully before reading from the file
         try (Reader reader = new FileReader(MOD_SAVEDATA_FILE_PATH)) {
-            playerDataMap = gson.fromJson(reader, new TypeToken<Map<UUID, PlayerData>>() {}.getType());
+            playerDataMap = gson.fromJson(reader, new TypeToken<Map<UUID, PlayerData>>() {
+            }.getType());
             LOGGER.info("Successfully loaded player data!");
         } catch (IOException e) {
             LOGGER.error("An IOException occurred when trying to load playerData.");

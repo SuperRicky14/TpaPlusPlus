@@ -48,8 +48,8 @@ public class Back {
     public static void absoluteTeleportToLatestDeath(ServerPlayer executor, LevelBoundVec3 deathPosition) {
         executor.sendSystemMessage(Component.literal(Messages.DEATH_BEING_TELEPORTED.get()));
 
-        teleportToLastPosition(executor, deathPosition); // Teleport the player to their last position!
-        DeathHelper.getPlayerDeathCoordinates().remove(executor.getUUID()); // Remove the player from the death coordinates afterward.
+        teleportToLastPosition(executor, deathPosition);
+        DeathHelper.removePlayerDeathCoordinates(executor.getUUID());
 
         executor.sendSystemMessage(Component.literal(Messages.DEATH_TELEPORTED.get()));
     }

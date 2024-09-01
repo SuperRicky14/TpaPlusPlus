@@ -48,20 +48,20 @@ fun executeVersionCheck(executor: ServerPlayer) = scope.launch {
                 executor.sendSystemMessage(Component.literal("§eWARNING§f: If you got this version officially from the CurseForge / Modrinth, please wait 24 hours to see if Modrinth's API catches up."))
                 executor.sendSystemMessage(Component.literal("§eWARNING§f: If waiting 24 hours does not resolve the issue, please open an issue report at \"https://github.com/SuperRicky14/TpaPlusPlus/issues\""))
             }
+
             versionData.component1() > 0 -> {
                 LOGGER.warn("You are running an outdated version of TPA++, latest version: " + versionData.component2() + ", your version: " + TPAPlusPlus.MOD_VERSION + "!")
                 LOGGER.warn("You are " + versionData.component1() + " version(s) out of date!")
                 executor.sendSystemMessage(Component.literal("§eWARNING§f: You are running an outdated version of TPA++, latest version: " + versionData.component2() + ", your version: " + TPAPlusPlus.MOD_VERSION + "!"))
                 executor.sendSystemMessage(Component.literal("§eWARNING§f: You are " + versionData.component1() + " version(s) out of date!"))
             }
+
             versionData.component1() == 0 -> {
                 LOGGER.info("You are running the latest version of TPA++")
                 executor.sendSystemMessage(Component.literal("§6You are running the latest version of TPA++"))
             }
         }
-    }
-
-    else {
+    } else {
         LOGGER.error("Failed to check for updates: ${versionResponse.first}")
         executor.sendSystemMessage(Component.literal("§cFailed to check for updates: ${versionResponse.first}"))
     }
@@ -82,17 +82,17 @@ fun executeVersionCheckFromConsole() = scope.launch {
                 LOGGER.warn("If you got this version officially from the CurseForge / Modrinth, please wait 24 hours to see if Modrinth's API catches up.")
                 LOGGER.warn("If waiting 24 hours does not resolve the issue, please open an issue report at \"https://github.com/SuperRicky14/TpaPlusPlus/issues\"")
             }
+
             versionData.component1() > 0 -> {
                 LOGGER.warn("You are running an outdated version of TPA++, latest version: " + versionData.component2() + ", your version: " + TPAPlusPlus.MOD_VERSION + "!")
                 LOGGER.warn("You are " + versionData.component1() + " version(s) out of date!")
             }
+
             versionData.component1() == 0 -> {
                 LOGGER.info("You are running the latest version of TPA++")
             }
         }
-    }
-
-    else {
+    } else {
         LOGGER.error("Failed to check for updates: ${versionResponse.first}")
     }
 }
@@ -112,14 +112,13 @@ fun executeSilentVersionCheck() = scope.launch {
                 LOGGER.warn("If you got this version officially from the CurseForge / Modrinth, please wait 24 hours to see if Modrinth's API catches up.")
                 LOGGER.warn("If waiting 24 hours does not resolve the issue, please open an issue report at \"https://github.com/SuperRicky14/TpaPlusPlus/issues\"")
             }
+
             versionData.component1() > 0 -> {
                 LOGGER.warn("You are running an outdated version of TPA++, latest version: " + versionData.component2() + ", your version: " + TPAPlusPlus.MOD_VERSION + "!")
                 LOGGER.warn("You are " + versionData.component1() + " version(s) out of date!")
             }
         }
-    }
-
-    else if (versionResponse.second == true) {
+    } else if (versionResponse.second == true) {
         LOGGER.error("Failed to check for updates: ${versionResponse.first}")
     }
 }
@@ -168,7 +167,8 @@ fun parseJSON(jsonResponse: String, currentVersion: String): Pair<Int, String> {
     val currentVersionIndex = versionNumbers.indexOf(currentVersion)
 
     // Find the latest version number
-    val latestVersion = versions.maxByOrNull { it["version_number"]?.split('-')?.getOrNull(0)?.toIntOrNull() ?: 0 }?.get("version_number") ?: ""
+    val latestVersion = versions.maxByOrNull { it["version_number"]?.split('-')?.getOrNull(0)?.toIntOrNull() ?: 0 }
+        ?.get("version_number") ?: ""
 
     return Pair(currentVersionIndex, latestVersion)
 }

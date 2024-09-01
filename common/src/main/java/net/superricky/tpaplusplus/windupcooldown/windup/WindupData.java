@@ -46,7 +46,7 @@ public class WindupData {
         this.isHereRequest = null;
         this.deathPosition = null;
         this.playerData = null;
-        this.delay = new AtomicInteger((int)delay);
+        this.delay = new AtomicInteger((int) delay);
         this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
@@ -61,7 +61,7 @@ public class WindupData {
         this.isHereRequest = null;
         this.deathPosition = null;
         this.playerData = playerData;
-        this.delay = new AtomicInteger((int)delay);
+        this.delay = new AtomicInteger((int) delay);
         this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
@@ -76,7 +76,7 @@ public class WindupData {
         this.isHereRequest = isHereRequest;
         this.deathPosition = null;
         this.playerData = null;
-        this.delay = new AtomicInteger((int)delay);
+        this.delay = new AtomicInteger((int) delay);
         this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
@@ -91,7 +91,7 @@ public class WindupData {
         this.isHereRequest = null;
         this.deathPosition = null;
         this.playerData = null;
-        this.delay = new AtomicInteger((int)delay);
+        this.delay = new AtomicInteger((int) delay);
         this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;
@@ -106,7 +106,7 @@ public class WindupData {
         this.isHereRequest = null;
         this.deathPosition = deathPosition;
         this.playerData = null;
-        this.delay = new AtomicInteger((int)delay);
+        this.delay = new AtomicInteger((int) delay);
         this.isCancelled = new AtomicBoolean(false);
         this.type = type;
         this.players = players;

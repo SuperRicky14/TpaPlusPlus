@@ -64,7 +64,7 @@ public class LimitationManager {
     /**
      * Notifies the executor and stops them from being able to send a teleport request
      *
-     * @param executor   The player sending the teleport request
+     * @param executor    The player sending the teleport request
      * @param otherPlayer The player receiving the teleport request
      * @return TRUE if the request passed all limitation checks | FALSE if the request failed any limitation checks
      */

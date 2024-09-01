@@ -103,10 +103,10 @@ public class Messages {
         BUILDER.comment(" ALL MESSAGES SUPPORT JAVA SYNTAX FORMATTING! If you say want to put a newline into the message, just enter \\n, or if you want to add double quotes into a message enter \"\\\"");
 
         ERR_REQUEST_NOT_FOUND = BUILDER.comment("\n The message for when your teleport request could not be found.")
-                        .define("ERR_REQUEST_NOT_FOUND", "§cCould not find your teleport request!");
+                .define("ERR_REQUEST_NOT_FOUND", "§cCould not find your teleport request!");
 
         ERR_NO_SELF_TELEPORT = BUILDER.comment("\n The message for when a player attempts to use /tpa or /tpahere on themselves")
-                        .define("ERR_NO_SELF_TELEPORT", "§cYou can't send a teleport request to yourself!");
+                .define("ERR_NO_SELF_TELEPORT", "§cYou can't send a teleport request to yourself!");
 
         ERR_ALREADY_SENT_TELEPORT_REQUEST = BUILDER.comment("\n The message that is sent to the sender of a TPA request, when they have already sent a teleport request to that player.")
                 .comment(" Placeholders: \"${receiver_name}\": \"The name of the receiver you tried to send a teleport request to\"")
@@ -131,38 +131,38 @@ public class Messages {
         BUILDER.push("/back");
 
         ERR_BACK_COMMAND_DISABLED = BUILDER.comment("\n The message for when /back has been disabled in the servers configuration file.")
-                        .define("ERR_BACK_COMMAND_DISABLED", "§cThis command has been disabled by a server administrator.");
+                .define("ERR_BACK_COMMAND_DISABLED", "§cThis command has been disabled by a server administrator.");
 
         ERR_DEATH_LOC_NOT_FOUND = BUILDER.comment("\n The message for when your latest death location could not be found.")
-                        .define("ERR_DEATH_LOC_NOT_FOUND", "§cCould not find your latest death position!");
+                .define("ERR_DEATH_LOC_NOT_FOUND", "§cCould not find your latest death position!");
 
         DEATH_BEING_TELEPORTED = BUILDER.comment("\n The message for when you are being teleported to your latest death")
-                        .define("DEATH_BEING_TELEPORTED", "§6Teleporting you to your §clatest death §6position...");
+                .define("DEATH_BEING_TELEPORTED", "§6Teleporting you to your §clatest death §6position...");
 
         DEATH_TELEPORTED = BUILDER.comment("\n The message for when you are teleported to your latest death")
-                        .define("DEATH_TELEPORTED", "§6You have been teleported!");
+                .define("DEATH_TELEPORTED", "§6You have been teleported!");
 
         BUILDER.pop();
         BUILDER.push("/tpadeny");
 
         RECEIVER_DENIES_TPA = BUILDER.comment("\n The message that is sent to the player who executes /tpadeny")
-                        .comment(" Placeholders: \"%s\": \"The senders name who got denied\"")
-                        .define("RECEIVER_DENIES_TPA", "§6Denied teleport request from §c%s");
+                .comment(" Placeholders: \"%s\": \"The senders name who got denied\"")
+                .define("RECEIVER_DENIES_TPA", "§6Denied teleport request from §c%s");
 
         SENDER_GOT_DENIED_TPA = BUILDER.comment("\n The message that is sent to the sender when the receiver of their request executes /tpadeny")
-                        .comment(" Placeholders: \"%s\": \"The receiver's name who denied the TPA\"")
-                        .define("SENDER_GOT_DENIED_TPA", "§6Your teleport request for §c%s §6was denied!");
+                .comment(" Placeholders: \"%s\": \"The receiver's name who denied the TPA\"")
+                .define("SENDER_GOT_DENIED_TPA", "§6Your teleport request for §c%s §6was denied!");
 
         BUILDER.pop();
         BUILDER.push("/tpacancel");
 
         SENDER_CANCELS_TPA = BUILDER.comment("\n The message that is sent to the player who executes /tpacancel")
-                        .comment(" Placeholders: \"%s\": \"The receiver's name who the sender cancelled the TPA request for\"")
-                        .define("SENDER_CANCELS_TPA", "§6Cancelled teleport request for §c%s");
+                .comment(" Placeholders: \"%s\": \"The receiver's name who the sender cancelled the TPA request for\"")
+                .define("SENDER_CANCELS_TPA", "§6Cancelled teleport request for §c%s");
 
         RECEIVER_GOT_CANCELLED_TPA = BUILDER.comment("\n The message that is sent to the receiver when the sender executs /tpacancel")
-                        .comment(" Placeholders: \"%s\": \"The sender's name who cancelled the request\"")
-                        .define("RECEIVER_GOT_CANCELLED_TPA", "§6Your teleport request from §c%s §6was cancelled!");
+                .comment(" Placeholders: \"%s\": \"The sender's name who cancelled the request\"")
+                .define("RECEIVER_GOT_CANCELLED_TPA", "§6Your teleport request from §c%s §6was cancelled!");
 
         BUILDER.pop();
         BUILDER.push("/tpaaccept");
@@ -190,12 +190,12 @@ public class Messages {
         BUILDER.push("/tpahere");
 
         SENDER_SENT_TPAHERE = BUILDER.comment("\n The message that is sent to the player that executes /tpahere")
-                        .comment(" Placeholders: \"%s\": \"The receiver's name who got sent the TPAHERE request\"")
-                        .define("SENDER_SENT_TPAHERE", "§6Successfully sent teleport §chere §6request to §c%s");
+                .comment(" Placeholders: \"%s\": \"The receiver's name who got sent the TPAHERE request\"")
+                .define("SENDER_SENT_TPAHERE", "§6Successfully sent teleport §chere §6request to §c%s");
 
         RECEIVER_GOT_TPAHERE = BUILDER.comment("\n The message that is sent to the receiver of a TPAHERE request")
-                        .comment(" Placeholders: \"%s\": \"The sender's name who sent the TPAHERE request\"")
-                        .define("RECEIVER_GOT_TPAHERE", "§c%s §6wants §cyou §6to teleport to §cthem!");
+                .comment(" Placeholders: \"%s\": \"The sender's name who sent the TPAHERE request\"")
+                .define("RECEIVER_GOT_TPAHERE", "§c%s §6wants §cyou §6to teleport to §cthem!");
 
         BUILDER.pop();
         BUILDER.push("/tptoggle");
@@ -248,20 +248,20 @@ public class Messages {
         BUILDER.push("TPA Request Timeout");
 
         SENDER_TPA_TIMEOUT = BUILDER.comment("\n The message that is sent to the sender of a TPA request, when their TPA request expires")
-                        .comment(" Placeholders: \"%s\": \"The receiver's name who was sent the TPA request\"")
-                        .define("SENDER_TPA_TIMEOUT", "§6Your teleport request to §c%s §6timed out!");
+                .comment(" Placeholders: \"%s\": \"The receiver's name who was sent the TPA request\"")
+                .define("SENDER_TPA_TIMEOUT", "§6Your teleport request to §c%s §6timed out!");
 
         RECEIVER_TPA_TIMEOUT = BUILDER.comment("\n The message that is sent to the receiver of a TPA request, when their TPA request expires")
-                        .comment(" Placeholders: \"%s\": \"The sender's name who sent the receiver the TPA request\"")
-                        .define("RECEIVER_TPA_TIMEOUT", "§6Your teleport request from §c%s §6timed out!");
+                .comment(" Placeholders: \"%s\": \"The sender's name who sent the receiver the TPA request\"")
+                .define("RECEIVER_TPA_TIMEOUT", "§6Your teleport request from §c%s §6timed out!");
 
         SENDER_TPAHERE_TIMEOUT = BUILDER.comment("\n The message that is sent to the sender of a TPAHERE request, when their TPAHERE request expires")
-                        .comment(" Placeholders: \"%s\": \"The receiver's name who was sent the TPAHERE request\"")
-                        .define("SENDER_TPA_TIMEOUT", "§6Your teleport §chere §6request to §c%s §6timed out!");
+                .comment(" Placeholders: \"%s\": \"The receiver's name who was sent the TPAHERE request\"")
+                .define("SENDER_TPA_TIMEOUT", "§6Your teleport §chere §6request to §c%s §6timed out!");
 
         RECEIVER_TPAHERE_TIMEOUT = BUILDER.comment("\n The message that is sent to the receiver of a TPAHERE request, when their TPAHERE request expires")
-                        .comment(" Placeholders: \"%s\": \"The sender's name who sent the receiver the TPAHERE request\"")
-                        .define("RECEIVER_TPA_TIMEOUT", "§6Your teleport §chere §6request from §c%s §6timed out!");
+                .comment(" Placeholders: \"%s\": \"The sender's name who sent the receiver the TPAHERE request\"")
+                .define("RECEIVER_TPA_TIMEOUT", "§6Your teleport §chere §6request from §c%s §6timed out!");
 
         BUILDER.pop();
         BUILDER.push("Limitations");
@@ -270,46 +270,46 @@ public class Messages {
                 .comment(DISTANCE_PLACEHOLDER_COMMENT)
                 .comment("     \"${expectedDistance}\": \"The maximum distance players can be from eachother to teleport\"")
                 .define("ERR_TOO_FAR_EXECUTOR", """
-                            §cYou are too far! You are ${distance} blocks apart!
-                            §cYou must be a maximum of ${expectedDistance} blocks apart!""");
+                        §cYou are too far! You are ${distance} blocks apart!
+                        §cYou must be a maximum of ${expectedDistance} blocks apart!""");
 
         ERR_TOO_FAR_OTHER_PLAYER = BUILDER.comment("\n The message displayed to the other player, when the TPA request is too far away")
                 .comment(DISTANCE_PLACEHOLDER_COMMENT)
                 .comment("     \"${expectedDistance}\": \"The maximum distance players can be from eachother to teleport\"")
                 .comment("     \"${otherPlayerName}\": \"The name of the executor.\"")
                 .define("ERR_TOO_FAR_OTHER_PLAYER", """
-                                §c${otherPlayerName} failed to teleport: You are too far! You are ${distance} blocks apart!
-                                §cYou must be a maximum of ${expectedDistance} blocks apart!""");
+                        §c${otherPlayerName} failed to teleport: You are too far! You are ${distance} blocks apart!
+                        §cYou must be a maximum of ${expectedDistance} blocks apart!""");
 
         ERR_TOO_CLOSE_EXECUTOR = BUILDER.comment("\n The message displayed when the player accepting or sending a TPA request, is too close.")
                 .comment(DISTANCE_PLACEHOLDER_COMMENT)
                 .comment("     \"${expectedDistance}\": \"The minimum distance players can be from eachother to teleport\"")
                 .define("ERR_TOO_CLOSE_EXECUTOR", """
-                            §cYou are too close! You are ${distance} blocks apart!
-                            §cYou must be a minimum of ${expectedDistance} blocks apart!""");
+                        §cYou are too close! You are ${distance} blocks apart!
+                        §cYou must be a minimum of ${expectedDistance} blocks apart!""");
 
         ERR_TOO_CLOSE_OTHER_PLAYER = BUILDER.comment("\n The message displayed to the other player, when the TPA request is too close.")
                 .comment(DISTANCE_PLACEHOLDER_COMMENT)
                 .comment("     \"${expectedDistance}\": \"The minimum distance players can be from eachother to teleport\"")
                 .define("ERR_TOO_CLOSE_OTHER_PLAYER", """
-                                §c${otherPlayerName} failed to teleport: You are too close! You are ${distance} blocks apart!
-                                §cYou must be a minimum of ${expectedDistance} blocks apart!""");
+                        §c${otherPlayerName} failed to teleport: You are too close! You are ${distance} blocks apart!
+                        §cYou must be a minimum of ${expectedDistance} blocks apart!""");
 
         ERR_DIFFERENT_DIMENSIONS_EXECUTOR = BUILDER.comment("\n The message displayed when the player accepting or sending a TPA request, is in another dimension")
                 .comment(" Placeholders: \"${executorDimension}\": \"The name of the dimension the executor is in\"")
                 .comment("     \"${otherPlayerDimension\": \"The name of the dimension the other player is in\"")
                 .define("ERR_DIFFERENT_DIMENSIONS_EXECUTOR", """
-                            §cYou must be in the same dimension!
-                            §cYou are in: ${executorDimension}
-                            §cThey are in: ${otherPlayerDimension}""");
+                        §cYou must be in the same dimension!
+                        §cYou are in: ${executorDimension}
+                        §cThey are in: ${otherPlayerDimension}""");
 
         ERR_DIFFERENT_DIMENSIONS_OTHER_PLAYER = BUILDER.comment("\n The message displayed to the other player, when the TPA request is from another dimension.")
                 .comment(" Placeholders: \"${executorDimension}\": \"The name of the dimension the executor is in\"")
                 .comment("     \"${otherPlayerDimension\": \"The name of the dimension the other player is in\"")
                 .define("ERR_DIFFERENT_DIMENSIONS_EXECUTOR", """
-                            §cYou must be in the same dimension!
-                            §cYou are in: ${otherPlayerDimension}
-                            §cThey are in: ${executorDimension}""");
+                        §cYou must be in the same dimension!
+                        §cYou are in: ${otherPlayerDimension}
+                        §cThey are in: ${executorDimension}""");
 
         BUILDER.pop();
         BUILDER.push("/tpaplusplus");

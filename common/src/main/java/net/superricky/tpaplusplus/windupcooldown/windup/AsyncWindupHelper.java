@@ -9,6 +9,7 @@ public class AsyncWindupHelper {
 
     /**
      * A method for checking whether a method using the schedule function actually passed in a proper set of players.
+     *
      * @return true if the list of players is null, false if it isn't
      */
     static boolean playersAreNull(ServerPlayer... players) {
@@ -66,7 +67,7 @@ public class AsyncWindupHelper {
     }
 
     public static long getLongMillisFromDoubleSeconds(double number) {
-        return (long)(number * 1000);
+        return (long) (number * 1000);
     }
 
     public static double extractDecimalPart(double number) {

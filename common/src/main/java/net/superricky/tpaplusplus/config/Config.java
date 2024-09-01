@@ -96,7 +96,7 @@ public class Config {
 
         // SEND MESSAGE TO THE PERSON BEING BLOCKED / UNBLOCKED
         SEND_BLOCKED_MESSAGES_TO_BOTH_PLAYERS = BUILDER.comment("\n Whether to send a message to the person being blocked / unblocked, when the sender blocks them.")
-                        .define("Send Blocked Messages To Both Players", true);
+                .define("Send Blocked Messages To Both Players", true);
 
         BUILDER.push("Commands");
         BUILDER.comment(" This section of the config allows you to change the commands to whatever you please!");

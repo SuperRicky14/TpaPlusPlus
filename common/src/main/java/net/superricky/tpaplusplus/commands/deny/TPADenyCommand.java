@@ -15,7 +15,7 @@ public class TPADenyCommand {
         dispatcher.register(literal(Config.TPADENY_COMMAND_NAME.get())
                 .executes(context -> denyMostRecentTPA(context.getSource()))
                 .then(argument("player", EntityArgument.player())
-                        .executes(context -> denyTPASpecified(context.getSource() ,EntityArgument.getPlayer(context, "player")))));
+                        .executes(context -> denyTPASpecified(context.getSource(), EntityArgument.getPlayer(context, "player")))));
     }
 
     private static int denyMostRecentTPA(CommandSourceStack source) throws CommandSyntaxException {

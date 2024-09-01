@@ -33,7 +33,8 @@ public class SendTPA {
             return;
         }
 
-        if (PlayerBlockingHelper.isPlayerBlocked(sender, receiver)) return; // Return if one of the players has blocked the other player.
+        if (PlayerBlockingHelper.isPlayerBlocked(sender, receiver))
+            return; // Return if one of the players has blocked the other player.
 
         PlayerData receiverData = SaveDataManager.getPlayerData(receiver);
 

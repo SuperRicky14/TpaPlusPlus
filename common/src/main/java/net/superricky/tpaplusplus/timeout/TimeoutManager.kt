@@ -26,17 +26,45 @@ fun onTimeoutEvent(request: Request): EventResult {
     val sender = request.sender
 
     if (request.isHereRequest) {
-        sender.sendSystemMessage(Component.literal(String.format(Messages.SENDER_TPAHERE_TIMEOUT.get(), receiver.displayName.string)))
+        sender.sendSystemMessage(
+            Component.literal(
+                String.format(
+                    Messages.SENDER_TPAHERE_TIMEOUT.get(),
+                    receiver.displayName.string
+                )
+            )
+        )
 
-        receiver.sendSystemMessage(Component.literal(String.format(Messages.RECEIVER_TPAHERE_TIMEOUT.get(), sender.displayName.string)))
+        receiver.sendSystemMessage(
+            Component.literal(
+                String.format(
+                    Messages.RECEIVER_TPAHERE_TIMEOUT.get(),
+                    sender.displayName.string
+                )
+            )
+        )
 
         RequestHelper.getRequestSet().remove(request)
         return EventResult.pass()
     }
 
-    sender.sendSystemMessage(Component.literal(String.format(Messages.SENDER_TPA_TIMEOUT.get(), receiver.displayName.string)))
+    sender.sendSystemMessage(
+        Component.literal(
+            String.format(
+                Messages.SENDER_TPA_TIMEOUT.get(),
+                receiver.displayName.string
+            )
+        )
+    )
 
-    receiver.sendSystemMessage(Component.literal(String.format(Messages.RECEIVER_TPA_TIMEOUT.get(), sender.displayName.string)))
+    receiver.sendSystemMessage(
+        Component.literal(
+            String.format(
+                Messages.RECEIVER_TPA_TIMEOUT.get(),
+                sender.displayName.string
+            )
+        )
+    )
 
     RequestHelper.getRequestSet().remove(request)
     return EventResult.pass()

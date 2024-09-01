@@ -44,12 +44,12 @@ public class TPAPlusPlusCommand {
                                                                                                 StringArgumentType.getString(context, "new-primary-color"),
                                                                                                 StringArgumentType.getString(context, "new-secondary-color"),
                                                                                                 StringArgumentType.getString(context, "new-error-color")
-                                                                                                )))))))))))
+                                                                                        )))))))))))
                 .then(literal("version")
-                            .requires(context -> context.hasPermission(Commands.LEVEL_OWNERS))
+                        .requires(context -> context.hasPermission(Commands.LEVEL_OWNERS))
                         .executes(context -> version(context.getSource())))
                 .then(literal("reload")
-                            .requires(context -> context.hasPermission(Commands.LEVEL_OWNERS))
+                        .requires(context -> context.hasPermission(Commands.LEVEL_OWNERS))
                         .executes(context -> reloadConfig(context.getSource(), false))
                         .then(literal(FORCE_FLAG_NAME)
                                 .executes(context -> reloadConfig(context.getSource(), true)))
@@ -128,8 +128,9 @@ public class TPAPlusPlusCommand {
     /**
      * Reloads everything, and optionally clears all data related to the mod.
      * We also "restart" our ScheduledExecutorService here to prevent ConcurrentModificationExceptions with Forge's Config System, which I don't believe is Thread Safe
-     * @param force whether to clear all TPA++ related memory (requests, deaths, windup data) or just soft reload without deleting teleport requests and death locations.
      * Warnings for "SameReturnValue" are suppressed since this command always succeeds and returning 1 both times is intended behaviour.
+     *
+     * @param force whether to clear all TPA++ related memory (requests, deaths, windup data) or just soft reload without deleting teleport requests and death locations.
      */
     @SuppressWarnings("SameReturnValue")
     private static int reloadConfig(CommandSourceStack source, boolean force) {

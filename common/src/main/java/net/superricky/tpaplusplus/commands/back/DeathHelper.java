@@ -11,8 +11,12 @@ import java.util.UUID;
 public class DeathHelper {
     private static final Map<UUID, LevelBoundVec3> playerDeathCoordinates = new HashMap<>();
 
-    public static Map<UUID, LevelBoundVec3> getPlayerDeathCoordinates(){
+    public static Map<UUID, LevelBoundVec3> getPlayerDeathCoordinates() {
         return playerDeathCoordinates;
+    }
+
+    public static void removePlayerDeathCoordinates(UUID executorUUID) {
+        playerDeathCoordinates.remove(executorUUID);
     }
 
     /**

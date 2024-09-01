@@ -54,9 +54,12 @@ fun schedule(windupData: WindupData) {
     if (AsyncWindupHelper.extractDecimalPart(windupData.originalDelay) > Config.WINDUP_DECIMAL_MESSAGE_THRESHOLD.get()) {
         // Decimal Number is greater than the threshold specified in the config, so we notify the player here.
         // Message the player the configured WINDUP_TIME_REMAINING message, except since it isn't an integer, we have to round it here to 3 decimal places (which it should be anyway's)
-        AsyncWindupHelper.fastMSG(MessageParser.enhancedFormatter(Messages.WINDUP_TIME_REMAINING.get(),
-                java.util.Map.of("time", (Math.round(windupData.originalDelay * 1000).toDouble() / 1000).toString())),
-                *windupData.players
+        AsyncWindupHelper.fastMSG(
+            MessageParser.enhancedFormatter(
+                Messages.WINDUP_TIME_REMAINING.get(),
+                java.util.Map.of("time", (Math.round(windupData.originalDelay * 1000).toDouble() / 1000).toString())
+            ),
+            *windupData.players
         )
     }
 
@@ -82,7 +85,12 @@ private fun countdownIteratively(windupData: WindupData): Boolean {
             return false
         }
 
-        AsyncWindupHelper.fastMSG(MessageParser.enhancedFormatter(Messages.WINDUP_TIME_REMAINING.get(), java.util.Map.of("time", windupData.delay.toString())), *windupData.players)
+        AsyncWindupHelper.fastMSG(
+            MessageParser.enhancedFormatter(
+                Messages.WINDUP_TIME_REMAINING.get(),
+                java.util.Map.of("time", windupData.delay.toString())
+            ), *windupData.players
+        )
 
         windupData.delay.decrementAndGet()
         return true

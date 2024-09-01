@@ -10,7 +10,7 @@ import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 
 import java.util.Objects;
@@ -32,7 +32,7 @@ public class CancelTPA {
         if (Config.CANCEL_WINDUP.get() == 0) {
             absoluteCancel(request);
         } else {
-            AsyncWindup.schedule(new WindupData(request, Config.CANCEL_WINDUP.get(), sender.getX(), sender.getY(), sender.getZ(), CommandType.DENY, new ServerPlayer[]{sender}));
+            AsyncWindupKt.schedule(new WindupData(request, Config.CANCEL_WINDUP.get(), sender.getX(), sender.getY(), sender.getZ(), CommandType.DENY, new ServerPlayer[]{sender}));
         }
     }
 

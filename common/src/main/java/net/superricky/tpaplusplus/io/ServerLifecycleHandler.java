@@ -2,7 +2,6 @@ package net.superricky.tpaplusplus.io;
 
 import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.superricky.tpaplusplus.config.Config;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,13 +14,6 @@ public class ServerLifecycleHandler {
 
     public static void onServerStop() {
         SaveDataManager.savePlayerData();
-
-        try {
-            LOGGER.info("Shutting down ScheduledExecutorService for AsyncWindup...");
-            AsyncWindup.forceQuitScheduledExecutorService();
-        } catch (InterruptedException e) {
-            printServerStopError(e);
-        }
     }
 
     private static void printServerStopError(InterruptedException e) {

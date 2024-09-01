@@ -11,7 +11,7 @@ import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class AcceptTPA {
         if (Config.ACCEPT_WINDUP.get() == 0) {
             absoluteAcceptFunctionality(request, receiver);
         } else {
-            AsyncWindup.schedule(new WindupData(request, Config.ACCEPT_WINDUP.get(), receiver.getX(), receiver.getY(), receiver.getZ(), CommandType.ACCEPT, new ServerPlayer[]{receiver}));
+            AsyncWindupKt.schedule(new WindupData(request, Config.ACCEPT_WINDUP.get(), receiver.getX(), receiver.getY(), receiver.getZ(), CommandType.ACCEPT, new ServerPlayer[]{receiver}));
         }
     }
 

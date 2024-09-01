@@ -11,7 +11,7 @@ import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.config.formatters.MessageReformatter;
 import net.superricky.tpaplusplus.requests.RequestHelper;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcherKt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,42 +139,23 @@ public class TPAPlusPlusCommand {
      * @param force whether to clear EVERYTHING currently loaded into RAM, or just soft reload without deleting teleport requests and death locations.
      */
     private static int reloadConfig(CommandSourceStack source, boolean force) {
-        try {
-            logAndWarnTerminatedScheduledExecutorService(source, AsyncWindup.stopScheduledExecutorService());
-        }
-        catch (IllegalStateException | InterruptedException e) {
-            LOGGER.error(e.getMessage());
-            source.sendFailure(Component.literal(SCHEDULED_EXECUTOR_SERVICE_EXCEPTION_MESSAGE));
-            return 0;
-        }
         if (force) {
             source.sendSystemMessage(Component.literal(Messages.TPAPLUSPLUS_FORCE_RELOADING_CONFIG.get()));
+
             Config.SPEC.afterReload();
+
             RequestHelper.clearRequestSet();
             DeathHelper.clearDeathCoordinates();
             WindupWatcherKt.clearTrackedWindupData();
+
             source.sendSystemMessage(Component.literal(Messages.TPAPLUSPLUS_FORCE_RELOADED_CONFIG.get()));
-            try {
-                AsyncWindup.reCreateScheduledExecutorService();
-            }
-            catch (IllegalStateException e) {
-                LOGGER.error(e.getMessage());
-                source.sendFailure(Component.literal(SCHEDULED_EXECUTOR_SERVICE_EXCEPTION_MESSAGE));
-                return 0;
-            }
             return 1;
         }
         source.sendSystemMessage(Component.literal(Messages.TPAPLUSPLUS_RELOADING_CONFIG.get()));
+
         Config.SPEC.afterReload();
+
         source.sendSystemMessage(Component.literal(Messages.TPAPLUSPLUS_RELOADED_CONFIG.get()));
-        try {
-            AsyncWindup.reCreateScheduledExecutorService();
-        }
-        catch (IllegalStateException e) {
-            LOGGER.error(e.getMessage());
-            source.sendFailure(Component.literal(SCHEDULED_EXECUTOR_SERVICE_EXCEPTION_MESSAGE));
-            return 0;
-        }
         return 1;
     }
 }

@@ -2,7 +2,6 @@ package net.superricky.tpaplusplus;
 
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.EntityEvent;
-import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.event.events.common.TickEvent;
 import net.superricky.tpaplusplus.commands.accept.TPAAcceptCommand;
 import net.superricky.tpaplusplus.commands.back.BackCommand;
@@ -138,9 +137,5 @@ public class TPAPlusPlus {
         }
         LOGGER.error(SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE);
         throw new IllegalStateException(SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE);
-    }
-
-    public static double getDecimalNumber(double number) {
-        return number - Math.floor(number);
     }
 }

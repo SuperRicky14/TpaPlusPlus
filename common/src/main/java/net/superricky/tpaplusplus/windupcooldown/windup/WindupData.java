@@ -132,13 +132,10 @@ public class WindupData {
         return playerData;
     }
 
-    public int getDelay() {
-        return delay.get();
+    public AtomicInteger getDelay() {
+        return delay;
     }
 
-    public void setDelay(int delay) {
-        this.delay.set(delay);
-    }
     public double getOriginalDelay() {
         return originalDelay;
     }

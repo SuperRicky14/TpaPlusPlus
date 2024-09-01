@@ -25,7 +25,7 @@ public class AsyncWindupHelper {
             player.sendSystemMessage(Component.literal(message));
     }
 
-    static void getErrorMessage(WindupData windupData) {
+    static void validateTypeSpecificWindupData(WindupData windupData) {
         switch (windupData.getType()) {
             case BACK -> {
                 if (Objects.isNull(windupData.getDeathPosition())) {
@@ -65,8 +65,12 @@ public class AsyncWindupHelper {
         }
     }
 
-    public static long getMillisInt64FromDouble(double number) {
+    public static long getLongMillisFromDoubleSeconds(double number) {
         return (long)(number * 1000);
+    }
+
+    public static double extractDecimalPart(double number) {
+        return number - Math.floor(number);
     }
 
     private AsyncWindupHelper() {

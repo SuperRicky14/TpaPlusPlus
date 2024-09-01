@@ -15,7 +15,7 @@ import net.superricky.tpaplusplus.timeout.TimeoutManagerKt;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 
 import java.util.Map;
@@ -65,7 +65,7 @@ public class SendTPA {
             if (Config.TPAHERE_WINDUP.get() == 0) {
                 absoluteSendTeleportRequest(sender, receiver, isHereRequest);
             } else {
-                AsyncWindup.schedule(new WindupData(true, Config.TPAHERE_WINDUP.get(), sender.getX(), sender.getY(), sender.getZ(), CommandType.TPAHERE, new ServerPlayer[]{sender, receiver}));
+                AsyncWindupKt.schedule(new WindupData(true, Config.TPAHERE_WINDUP.get(), sender.getX(), sender.getY(), sender.getZ(), CommandType.TPAHERE, new ServerPlayer[]{sender, receiver}));
             }
         } else {
             if (AsyncCooldownHelper.checkCommandCooldownAndNotify(sender, sender.getUUID(), CommandType.TPA))
@@ -77,7 +77,7 @@ public class SendTPA {
             if (Config.TPA_WINDUP.get() == 0) {
                 absoluteSendTeleportRequest(sender, receiver, isHereRequest);
             } else {
-                AsyncWindup.schedule(new WindupData(false, Config.TPA_WINDUP.get(), sender.getX(), sender.getY(), sender.getZ(), CommandType.TPA, new ServerPlayer[]{sender, receiver}));
+                AsyncWindupKt.schedule(new WindupData(false, Config.TPA_WINDUP.get(), sender.getX(), sender.getY(), sender.getZ(), CommandType.TPA, new ServerPlayer[]{sender, receiver}));
             }
         }
     }

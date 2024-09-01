@@ -26,6 +26,14 @@ fun getTrackedWindupData(): Set<WindupData> {
     return trackedWindupData
 }
 
+fun removeWindupData(windupData: WindupData) {
+    trackedWindupData.remove(windupData)
+}
+
+fun addWindupData(windupData: WindupData) {
+    trackedWindupData.add(windupData)
+}
+
 fun startAsyncTickLoop(tickRate: Long) {
     scope.launch {
         while (ticking) {

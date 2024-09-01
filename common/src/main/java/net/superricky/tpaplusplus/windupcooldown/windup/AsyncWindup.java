@@ -1,7 +1,6 @@
 package net.superricky.tpaplusplus.windupcooldown.windup;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.superricky.tpaplusplus.commands.accept.AcceptTPA;
 import net.superricky.tpaplusplus.commands.back.Back;
@@ -14,9 +13,6 @@ import net.superricky.tpaplusplus.commands.unblock.UnBlockPlayer;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.config.formatters.MessageParser;
-import net.superricky.tpaplusplus.requests.Request;
-import net.superricky.tpaplusplus.requests.RequestHelper;
-import org.apache.logging.log4j.core.jmx.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +64,7 @@ public class AsyncWindup {
         }
 
         // Request is a valid request.
-        WindupWatcher.getTrackedWindupData().add(windupData); // Add it to the tracked windupData.
+        WindupWatcherKt.getTrackedWindupData().add(windupData); // Add it to the tracked windupData.
 
         // Decide whether to message the player.
         if (TPAPlusPlus.getDecimalNumber(windupData.getOriginalDelay()) > Config.WINDUP_DECIMAL_MESSAGE_THRESHOLD.get()) {
@@ -93,7 +89,7 @@ public class AsyncWindup {
             }
 
             if (windupData.getCancelled().get()) {
-                WindupWatcher.getTrackedWindupData().remove(windupData);
+                WindupWatcherKt.getTrackedWindupData().remove(windupData);
                 return;
             }
 
@@ -104,7 +100,7 @@ public class AsyncWindup {
         }
 
         if (windupData.getCancelled().get()) {
-            WindupWatcher.getTrackedWindupData().remove(windupData);
+            WindupWatcherKt.getTrackedWindupData().remove(windupData);
             return;
         }
 
@@ -147,7 +143,7 @@ public class AsyncWindup {
             LOGGER.warn("If you notice any unexpected behaviour shutdown your server immediately and create a backup of your world before turning it back on.");
         }
 
-        WindupWatcher.getTrackedWindupData().remove(windupData);
+        WindupWatcherKt.getTrackedWindupData().remove(windupData);
     }
 
     public static boolean stopScheduledExecutorService() throws InterruptedException {

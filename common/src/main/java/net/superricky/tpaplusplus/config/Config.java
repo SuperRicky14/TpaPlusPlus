@@ -7,7 +7,8 @@ public class Config {
     public static final ForgeConfigSpec SPEC;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> BACK_COMMAND_ENABLED;
-    public static final ForgeConfigSpec.ConfigValue<Integer> TPA_TIMEOUT_IN_SECONDS;
+    public static final ForgeConfigSpec.ConfigValue<Long> TPA_TIMEOUT_IN_SECONDS;
+    public static final Long TPA_TIMEOUT_DISABLED = 0L;
     public static final ForgeConfigSpec.ConfigValue<Integer> TPA_ACCEPT_TIME_IN_SECONDS;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ALLOW_TPTOGGLED_PLAYERS_TO_SEND_REQUESTS;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SEND_BLOCKED_MESSAGES_TO_BOTH_PLAYERS;
@@ -65,10 +66,10 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Integer> GLOBAL_COOLDOWN;
 
     // Advanced Settings
-    public static final ForgeConfigSpec.ConfigValue<Integer> AUTOSAVE_INTERVAL;
-    public static final ForgeConfigSpec.ConfigValue<Long> CHECK_FOR_UPDATES_INTERVAL;
+    public static final ForgeConfigSpec.ConfigValue<Integer> AUTOSAVE_INTERVAL_SECONDS;
+    public static final ForgeConfigSpec.ConfigValue<Long> CHECK_FOR_UPDATES_INTERVAL_MINUTES;
     public static final ForgeConfigSpec.ConfigValue<Boolean> USE_NON_BLOCKING_ASYNC_TICK_LOOP;
-    public static final ForgeConfigSpec.ConfigValue<Integer> ASYNC_TICK_LOOP_UPDATE_RATE;
+    public static final ForgeConfigSpec.ConfigValue<Long> ASYNC_TICK_LOOP_UPDATE_RATE;
 
     static {
         BUILDER.push("TPA++ Configuration");
@@ -77,7 +78,7 @@ public class Config {
         // TPA TIMEOUT
         TPA_TIMEOUT_IN_SECONDS = BUILDER.comment(" How long until teleport requests expire (in seconds)")
                 .comment(" The default is 60 seconds ( 1 minute ), if you wish to disable this set this to 0")
-                .defineInRange("TPA Timeout", 60, 0, Integer.MAX_VALUE);
+                .defineInRange("TPA Timeout", 60L, 0L, Long.MAX_VALUE);
 
         // TPA ACCEPT TIME
         TPA_ACCEPT_TIME_IN_SECONDS = BUILDER.comment("\n How long it takes until a player is teleported via /tpaaccept")
@@ -279,10 +280,10 @@ public class Config {
         BUILDER.comment(" Most options here have already been optimized for most systems, I doubt you will experience significant performance gains by changing the options below, unless you have an insane amount of players connected, in that case boosting the thread counts should help a bit.");
         BUILDER.comment(" Modifying these options may require a restart of the game.");
 
-        AUTOSAVE_INTERVAL = BUILDER.comment("\n How long (in seconds) between autosaves, if you experience data loss, set this number lower.")
+        AUTOSAVE_INTERVAL_SECONDS = BUILDER.comment("\n How long (in seconds) between autosaves, if you experience data loss, set this number lower.")
                 .defineInRange("AUTOSAVE_INTERVAL", 300, 1, Integer.MAX_VALUE);
 
-        CHECK_FOR_UPDATES_INTERVAL = BUILDER.comment("\n How often to automatically check for updates in the background.")
+        CHECK_FOR_UPDATES_INTERVAL_MINUTES = BUILDER.comment("\n How often to automatically check for updates in the background.")
                 .comment(" This will send a network request to Modrinth's API based off this interval, and tell you if you are running a version of TPA++ that is out of date.")
                 .comment(" Alternatively, you can check for updates manually by running /tpaplusplus version (this setting does not affect manual update checking).")
                 .comment(" This value is measured in minutes, and setting it to 0 will disable update checking.")
@@ -299,7 +300,7 @@ public class Config {
                 .comment(" For example, a value of 20 will cause TPA++ to update 20 times a second (this is also Minecraft's Tick Rate).")
                 .comment(" It is completely okay to lower this value, even to something low like 4 if you have a lot of players.")
                 .comment(" Modifying this value requires a restart of the game.")
-                .worldRestart().defineInRange("ASYNC_TICK_LOOP_UPDATE_RATE", 20, 1, Integer.MAX_VALUE);
+                .worldRestart().defineInRange("ASYNC_TICK_LOOP_UPDATE_RATE", 20L, 1L, Long.MAX_VALUE);
 
         BUILDER.pop(2);
         SPEC = BUILDER.build();

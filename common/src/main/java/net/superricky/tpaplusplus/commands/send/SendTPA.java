@@ -11,7 +11,7 @@ import net.superricky.tpaplusplus.io.SaveDataManager;
 import net.superricky.tpaplusplus.limitations.LimitationManager;
 import net.superricky.tpaplusplus.requests.Request;
 import net.superricky.tpaplusplus.requests.RequestHelper;
-import net.superricky.tpaplusplus.timeout.TimeoutScheduler;
+import net.superricky.tpaplusplus.timeout.TimeoutManagerKt;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
@@ -87,7 +87,10 @@ public class SendTPA {
 
         RequestHelper.getRequestSet().add(request);
 
-        TimeoutScheduler.scheduleTeleportTimeout(request);
+        if (!Objects.equals(Config.TPA_TIMEOUT_IN_SECONDS.get(), Config.TPA_TIMEOUT_DISABLED)) {
+            TimeoutManagerKt.scheduleTeleportTimeout(request, Config.TPA_TIMEOUT_IN_SECONDS.get());
+        }
+
 
         if (isHereRequest) {
             sender.sendSystemMessage(Component.literal(String.format(Messages.SENDER_SENT_TPAHERE.get(), receiver.getName().getString())));

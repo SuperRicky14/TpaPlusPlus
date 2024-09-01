@@ -18,8 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
-import static fuzs.forgeconfigapiport.impl.ForgeConfigAPIPort.LOGGER;
-
 public class AcceptTPA {
     private final static Logger LOGGER = LoggerFactory.getLogger(TPAPlusPlus.MOD_ID);
     // Accept command is run by the sender, hence why it's in the sender's point of view.

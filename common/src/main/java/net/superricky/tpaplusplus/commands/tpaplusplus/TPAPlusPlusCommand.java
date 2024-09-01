@@ -10,11 +10,9 @@ import net.superricky.tpaplusplus.commands.back.DeathHelper;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.config.formatters.MessageReformatter;
-import net.superricky.tpaplusplus.io.AutosaveScheduler;
 import net.superricky.tpaplusplus.requests.RequestHelper;
-import net.superricky.tpaplusplus.timeout.TimeoutScheduler;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
-import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
+import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcherKt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,9 +141,6 @@ public class TPAPlusPlusCommand {
     private static int reloadConfig(CommandSourceStack source, boolean force) {
         try {
             logAndWarnTerminatedScheduledExecutorService(source, AsyncWindup.stopScheduledExecutorService());
-            logAndWarnTerminatedScheduledExecutorService(source, AutosaveScheduler.stopScheduledExecutorService());
-            logAndWarnTerminatedScheduledExecutorService(source, TimeoutScheduler.stopScheduledExecutorService());
-            logAndWarnTerminatedScheduledExecutorService(source, WindupWatcher.stopScheduledExecutorService());
         }
         catch (IllegalStateException | InterruptedException e) {
             LOGGER.error(e.getMessage());
@@ -157,13 +152,10 @@ public class TPAPlusPlusCommand {
             Config.SPEC.afterReload();
             RequestHelper.clearRequestSet();
             DeathHelper.clearDeathCoordinates();
-            WindupWatcher.clearTrackedWindupData();
+            WindupWatcherKt.clearTrackedWindupData();
             source.sendSystemMessage(Component.literal(Messages.TPAPLUSPLUS_FORCE_RELOADED_CONFIG.get()));
             try {
                 AsyncWindup.reCreateScheduledExecutorService();
-                AutosaveScheduler.reCreateScheduledExecutorService();
-                TimeoutScheduler.reCreateScheduledExecutorService();
-                WindupWatcher.reCreateScheduledExecutorService();
             }
             catch (IllegalStateException e) {
                 LOGGER.error(e.getMessage());
@@ -177,9 +169,6 @@ public class TPAPlusPlusCommand {
         source.sendSystemMessage(Component.literal(Messages.TPAPLUSPLUS_RELOADED_CONFIG.get()));
         try {
             AsyncWindup.reCreateScheduledExecutorService();
-            AutosaveScheduler.reCreateScheduledExecutorService();
-            TimeoutScheduler.reCreateScheduledExecutorService();
-            WindupWatcher.reCreateScheduledExecutorService();
         }
         catch (IllegalStateException e) {
             LOGGER.error(e.getMessage());

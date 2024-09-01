@@ -21,10 +21,10 @@ private val scope: CoroutineScope = CoroutineScope(dispatcher)
  */
 @OptIn(DelicateCoroutinesApi::class)
 fun initVersionCheckDaemon() = GlobalScope.launch {
-    if (Config.CHECK_FOR_UPDATES_INTERVAL.get() != 0L) {
+    if (Config.CHECK_FOR_UPDATES_INTERVAL_MINUTES.get() != 0L) {
         while (true) {
             executeSilentVersionCheck()
-            delay(Config.CHECK_FOR_UPDATES_INTERVAL.get() * 1000L * 60L) // How often to check for updates. Change the first value to configure how often ( in minutes ) that version checking should take.
+            delay(Config.CHECK_FOR_UPDATES_INTERVAL_MINUTES.get() * 1000L * 60L) // How often to check for updates. Change the first value to configure how often ( in minutes ) that version checking should take.
         }
     }
 }

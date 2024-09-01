@@ -1,6 +1,9 @@
 package net.superricky.tpaplusplus;
 
-import dev.architectury.event.events.common.*;
+import dev.architectury.event.events.common.CommandRegistrationEvent;
+import dev.architectury.event.events.common.EntityEvent;
+import dev.architectury.event.events.common.PlayerEvent;
+import dev.architectury.event.events.common.TickEvent;
 import net.superricky.tpaplusplus.commands.accept.TPAAcceptCommand;
 import net.superricky.tpaplusplus.commands.back.BackCommand;
 import net.superricky.tpaplusplus.commands.back.DeathHelper;
@@ -16,11 +19,10 @@ import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.formatters.MessageParser;
 import net.superricky.tpaplusplus.io.ServerLifecycleHandler;
 import net.superricky.tpaplusplus.network.UpdateCheckKt;
-import net.superricky.tpaplusplus.player.PlayerRegistryManagerKt;
 import net.superricky.tpaplusplus.timeout.RequestTimeoutEvent;
-import net.superricky.tpaplusplus.timeout.TimeoutEventHandler;
+import net.superricky.tpaplusplus.timeout.TimeoutManagerKt;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
-import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
+import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcherKt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,29 +65,17 @@ public class TPAPlusPlus {
         LOGGER.info("REGISTERING \"LifecycleEvent.LIVING_DEATH\"...");
         EntityEvent.LIVING_DEATH.register((deadEntity, source) -> DeathHelper.onDeath(deadEntity));
 
-        LOGGER.info("REGISTERING \"PlayerEvent.PLAYER_JOIN\"...");
-        PlayerEvent.PLAYER_JOIN.register(PlayerRegistryManagerKt::onPlayerJoin);
-        LOGGER.info("REGISTERING \"PlayerEvent.PLAYER_LEAVE\"...");
-        PlayerEvent.PLAYER_QUIT.register(PlayerRegistryManagerKt::onPlayerQuit);
-
-
         LOGGER.info("REGISTERING \"RequestTimeoutEvent\"...");
-        RequestTimeoutEvent.EVENT.register(TimeoutEventHandler::onTimeoutEvent);
+        RequestTimeoutEvent.EVENT.register(TimeoutManagerKt::onTimeoutEvent);
 
         if (Config.USE_NON_BLOCKING_ASYNC_TICK_LOOP.get()) {
             LOGGER.warn("USING EXPERIMENTAL NON BLOCKING TICK LOOP");
             LOGGER.info(MessageParser.enhancedFormatter("INITIALIZING TICK LOOP WITH RATE OF ${tick_rate}...", Map.of("tick_rate", Config.ASYNC_TICK_LOOP_UPDATE_RATE.get())));
-            WindupWatcher.startAsyncTickLoop(Config.ASYNC_TICK_LOOP_UPDATE_RATE.get());
+            WindupWatcherKt.startAsyncTickLoop(Config.ASYNC_TICK_LOOP_UPDATE_RATE.get());
         } else {
             LOGGER.info("USING SYNCHRONOUS TICK LOOP");
             LOGGER.info("REGISTERING \"TickEvent.SERVER_POST\"...");
-            TickEvent.SERVER_POST.register(server -> WindupWatcher.watchWindupDataPosition());
-
-            try {
-                logAndWarnTerminatedScheduledExecutorService(WindupWatcher.deInstantiateScheduledExecutorService());
-            } catch (InterruptedException e) {
-                LOGGER.error("Failed to deInstantiate the ScheduledExecutorService for the Non-Blocking Async Tick Loop. You can keep playing, it will just stay loaded into RAM.");
-            }
+            TickEvent.SERVER_POST.register(server -> WindupWatcherKt.runTick());
         }
 
         LOGGER.info("INITIALIZING VERSION CHECKING...");
@@ -98,12 +88,6 @@ public class TPAPlusPlus {
         Runtime.getRuntime().addShutdownHook(new Thread(ServerLifecycleHandler::onServerStop));
 
         LOGGER.info("...INITIALIZATION COMPLETE");
-    }
-
-    private static void logAndWarnTerminatedScheduledExecutorService(boolean executorServiceResult) {
-        if (Boolean.FALSE.equals(executorServiceResult)) {
-            LOGGER.warn("The Non-Blocking tick loop's ScheduledExecutorService timed out, so it was terminated!");
-        }
     }
 
     public static double distance3D(double x1, double y1, double z1, double x2, double y2, double z2) {

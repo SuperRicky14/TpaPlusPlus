@@ -1,9 +1,6 @@
 package net.superricky.tpaplusplus.requests;
 
 import net.minecraft.server.level.ServerPlayer;
-import net.superricky.tpaplusplus.config.formatters.MessageParser;
-
-import java.util.Map;
 
 public class Request {
     private final ServerPlayer sender;

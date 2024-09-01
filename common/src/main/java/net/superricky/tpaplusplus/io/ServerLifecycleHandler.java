@@ -1,9 +1,8 @@
 package net.superricky.tpaplusplus.io;
 
 import net.superricky.tpaplusplus.TPAPlusPlus;
-import net.superricky.tpaplusplus.timeout.TimeoutScheduler;
+import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
-import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,8 +10,7 @@ public class ServerLifecycleHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(TPAPlusPlus.MOD_ID);
 
     public static void onServerStart() {
-        SaveDataManager.loadPlayerData(); // load data that was saved before
-        AutosaveScheduler.initialiseAutoSaveService(); // start auto-saving
+        AutosaveSchedulerKt.initialiseAutoSaveService(Config.AUTOSAVE_INTERVAL_SECONDS.get());
     }
 
     public static void onServerStop() {
@@ -21,27 +19,6 @@ public class ServerLifecycleHandler {
         try {
             LOGGER.info("Shutting down ScheduledExecutorService for AsyncWindup...");
             AsyncWindup.forceQuitScheduledExecutorService();
-        } catch (InterruptedException e) {
-            printServerStopError(e);
-        }
-
-        try {
-            LOGGER.info("Shutting down ScheduledExecutorService for WindupWatcher...");
-            WindupWatcher.forceQuitScheduledExecutorService();
-        } catch (InterruptedException e) {
-            printServerStopError(e);
-        }
-
-        try {
-            LOGGER.info("Shutting down ScheduledExecutorService for TimeoutScheduler...");
-            TimeoutScheduler.forceQuitScheduledExecutorService();
-        } catch (InterruptedException e) {
-            printServerStopError(e);
-        }
-
-        try {
-            LOGGER.info("Shutting down ScheduledExecutorService for AutosaveScheduler...");
-            AutosaveScheduler.forceQuitScheduledExecutorService();
         } catch (InterruptedException e) {
             printServerStopError(e);
         }

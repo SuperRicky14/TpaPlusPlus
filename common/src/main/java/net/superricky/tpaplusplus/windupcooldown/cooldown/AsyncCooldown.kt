@@ -1,10 +1,7 @@
 package net.superricky.tpaplusplus.windupcooldown.cooldown
 
 import kotlinx.coroutines.*
-import net.minecraft.network.chat.Component
 import net.superricky.tpaplusplus.TPAPlusPlus
-import net.superricky.tpaplusplus.config.Config
-import net.superricky.tpaplusplus.player.getPlayerByUUID
 import net.superricky.tpaplusplus.windupcooldown.CommandType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

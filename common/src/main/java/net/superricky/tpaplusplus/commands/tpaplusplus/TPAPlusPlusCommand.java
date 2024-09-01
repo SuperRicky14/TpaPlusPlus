@@ -22,7 +22,7 @@ import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
 public class TPAPlusPlusCommand {
-    private static final String FORCE_PARAMETER = "-force";
+    private static final String FORCE_FLAG_NAME = "-force";
 
     public static void onRegisterCommandEvent(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(literal("tpaplusplus")
@@ -51,11 +51,11 @@ public class TPAPlusPlusCommand {
                 .then(literal("reload")
                             .requires(context -> context.hasPermission(Commands.LEVEL_OWNERS))
                         .executes(context -> reloadConfig(context.getSource(), false))
-                        .then(literal(FORCE_PARAMETER)
+                        .then(literal(FORCE_FLAG_NAME)
                                 .executes(context -> reloadConfig(context.getSource(), true)))
                         .then(literal("config")
                                 .executes(context -> reloadConfig(context.getSource(), false))
-                                .then(literal(FORCE_PARAMETER)
+                                .then(literal(FORCE_FLAG_NAME)
                                         .executes(context -> reloadConfig(context.getSource(), true)))))
                 .then(literal("license")
                         .executes(context -> printLicense(context.getSource()))));

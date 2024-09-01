@@ -60,10 +60,6 @@ public class TPAPlusPlus {
         LOGGER.info("REGISTERING TPUNBLOCK COMMAND...");
         CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPUnBlockCommand.onRegisterCommandEvent(dispatcher));
 
-        LOGGER.info("REGISTERING \"LifecycleEvent.SERVER_STARTED\"...");
-        LifecycleEvent.SERVER_STARTED.register(state -> ServerLifecycleHandler.onServerStart());
-        LOGGER.info("REGISTERING \"LifecycleEvent.SERVER_STOPPING\"...");
-        LifecycleEvent.SERVER_STOPPING.register(state -> ServerLifecycleHandler.onServerStop());
         LOGGER.info("REGISTERING \"LifecycleEvent.LIVING_DEATH\"...");
         EntityEvent.LIVING_DEATH.register((deadEntity, source) -> DeathHelper.onDeath(deadEntity));
 
@@ -92,7 +88,15 @@ public class TPAPlusPlus {
             }
         }
 
+        LOGGER.info("INITIALIZING VERSION CHECKING...");
         UpdateCheckKt.initVersionCheckDaemon();
+
+        LOGGER.info("FINAL SETUP...");
+        ServerLifecycleHandler.onServerStart();
+
+        LOGGER.info("INITIALIZING SHUTDOWN HOOK FOR CLEANUP...");
+        Runtime.getRuntime().addShutdownHook(new Thread(ServerLifecycleHandler::onServerStop));
+
         LOGGER.info("...INITIALIZATION COMPLETE");
     }
 

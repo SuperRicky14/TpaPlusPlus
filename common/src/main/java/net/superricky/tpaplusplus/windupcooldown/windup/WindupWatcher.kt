@@ -22,10 +22,6 @@ fun clearTrackedWindupData() {
     trackedWindupData.clear()
 }
 
-fun getTrackedWindupData(): Set<WindupData> {
-    return trackedWindupData
-}
-
 fun removeWindupData(windupData: WindupData) {
     trackedWindupData.remove(windupData)
 }

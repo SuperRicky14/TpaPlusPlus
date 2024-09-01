@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TPToggle {
-    private static Logger LOGGER = LoggerFactory.getLogger(TPAPlusPlus.MOD_ID);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TPAPlusPlus.MOD_ID);
 
     public static void toggleTPOrWait(ServerPlayer executor) {
         try {

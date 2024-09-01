@@ -2,7 +2,6 @@ package net.superricky.tpaplusplus.commands.accept;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.requests.Request;
@@ -13,13 +12,10 @@ import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 public class AcceptTPA {
-    private final static Logger LOGGER = LoggerFactory.getLogger(TPAPlusPlus.MOD_ID);
     // Accept command is run by the sender, hence why it's in the sender's point of view.
     public static void acceptFunctionality(Request request, ServerPlayer receiver) {
         if (Objects.isNull(request)) {

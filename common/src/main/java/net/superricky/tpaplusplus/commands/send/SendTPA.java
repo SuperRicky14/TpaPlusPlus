@@ -18,6 +18,7 @@ import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -53,8 +54,14 @@ public class SendTPA {
             }
         }
 
-        // run the notify function and return if it false, to stop the player from sending the request.
-        if (!LimitationManager.notifyAndCheckAllowedToTeleport(sender, receiver, false)) return;
+        LimitationManager limitationManager = new LimitationManager();
+        if (!limitationManager.canTeleport(sender, receiver)) {
+            List<String> violationMessages = limitationManager.getViolationMessages(sender, receiver);
+            for (String message : violationMessages) {
+                sender.sendSystemMessage(Component.literal(message));
+            }
+            return;
+        }
 
         if (isHereRequest) {
             if (AsyncCooldownHelper.checkCommandCooldownAndNotify(sender, sender.getUUID(), CommandType.TPAHERE))

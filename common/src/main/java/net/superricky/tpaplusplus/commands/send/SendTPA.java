@@ -18,7 +18,6 @@ import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -54,9 +53,8 @@ public class SendTPA {
             }
         }
 
-        LimitationManager limitationManager = new LimitationManager();
-        if (!limitationManager.canTeleport(sender, receiver)) {
-            List<String> violationMessages = limitationManager.getViolationMessages(sender, receiver);
+        if (!LimitationManager.canTeleport(sender, receiver)) {
+            String[] violationMessages = LimitationManager.getViolationMessages(sender, receiver);
             for (String message : violationMessages) {
                 sender.sendSystemMessage(Component.literal(message));
             }

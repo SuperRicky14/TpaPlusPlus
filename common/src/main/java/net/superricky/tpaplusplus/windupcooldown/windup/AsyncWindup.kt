@@ -57,7 +57,7 @@ fun schedule(windupData: WindupData) {
         AsyncWindupHelper.fastMSG(
             MessageParser.enhancedFormatter(
                 Messages.WINDUP_TIME_REMAINING.get(),
-                java.util.Map.of("time", (Math.round(windupData.originalDelay * 1000).toDouble() / 1000).toString())
+                java.util.Map.of("time", (Math.round(windupData.originalDelay * 1000).toDouble() / 1000).toString()) as Map<String, Any>?
             ),
             *windupData.players
         )
@@ -88,7 +88,7 @@ private fun countdownIteratively(windupData: WindupData): Boolean {
         AsyncWindupHelper.fastMSG(
             MessageParser.enhancedFormatter(
                 Messages.WINDUP_TIME_REMAINING.get(),
-                java.util.Map.of("time", windupData.delay.toString())
+                java.util.Map.of("time", windupData.delay.toString()) as Map<String, Any>?
             ), *windupData.players
         )
 

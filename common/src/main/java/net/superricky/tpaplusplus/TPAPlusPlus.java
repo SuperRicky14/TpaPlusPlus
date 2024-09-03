@@ -90,20 +90,11 @@ public class TPAPlusPlus {
     }
 
     public static double distance3D(double x1, double y1, double z1, double x2, double y2, double z2) {
-        return Math.sqrt(Math.pow(x2 - x1, 2) +
-                Math.pow(y2 - y1, 2) +
-                Math.pow(z2 - z1, 2));
-    }
+        double diffX = x2 - x1;
+        double diffY = y2 - y1;
+        double diffZ = z2 - z1;
 
-    /**
-     * We don't need to perform the expensive square root operation, instead we can square the input and compare the squared values.
-     *
-     * @return The squared euclidean distance between two points.
-     */
-    public static double noSqrtDistance3D(final double x1, final double y1, final double z1, final double x2, final double y2, final double z2) {
-        return Math.pow(x2 - x1, 2) +
-                Math.pow(y2 - y1, 2) +
-                Math.pow(z2 - z1, 2);
+        return Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
     }
 
     public static String getCommandNameFromType(CommandType commandType) {

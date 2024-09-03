@@ -8,7 +8,6 @@ import net.superricky.tpaplusplus.config.Messages
 import net.superricky.tpaplusplus.config.formatters.MessageParser
 import net.superricky.tpaplusplus.windupcooldown.CommandType
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.math.pow
 
 private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 private val scope: CoroutineScope = CoroutineScope(dispatcher)
@@ -47,14 +46,14 @@ fun runTick() {
 
         if (windupData.cancelled.get()) continue
 
-        if (TPAPlusPlus.noSqrtDistance3D(
+        if (TPAPlusPlus.distance3D(
                 windupData.acceptX,
                 windupData.acceptY,
                 windupData.acceptZ,
                 windupData.players[0].x,
                 windupData.players[0].y,
                 windupData.players[0].z
-            ) > windupDistance.pow(2.0)
+            ) > windupDistance
         ) {
             // Squared distance between the position which they started the countdown, and their current position is larger than the allowed distance set in the Config.
             windupData.cancelled.set(true)

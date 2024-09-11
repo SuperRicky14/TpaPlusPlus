@@ -5,7 +5,7 @@ import net.minecraft.network.chat.Component
 import net.superricky.tpaplusplus.TPAPlusPlus
 import net.superricky.tpaplusplus.config.Config
 import net.superricky.tpaplusplus.config.Messages
-import net.superricky.tpaplusplus.config.formatters.MessageParser
+import net.superricky.tpaplusplus.util.MsgFmt
 import net.superricky.tpaplusplus.windupcooldown.CommandType
 import java.util.concurrent.ConcurrentHashMap
 
@@ -60,7 +60,7 @@ fun runTick() {
 
             windupData.players[0].sendSystemMessage(
                 Component.literal(
-                    MessageParser.enhancedFormatter(
+                    MsgFmt.fmt(
                         Messages.PLAYER_MOVED_DURING_WINDUP.get(),
                         mapOf("command_used" to TPAPlusPlus.getCommandNameFromType(windupData.type))
                     )

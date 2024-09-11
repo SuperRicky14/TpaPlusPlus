@@ -146,56 +146,56 @@ public class Messages {
         BUILDER.push("/tpadeny");
 
         RECEIVER_DENIES_TPA = BUILDER.comment("\n The message that is sent to the player who executes /tpadeny")
-                .comment(" Placeholders: \"%s\": \"The senders name who got denied\"")
-                .define("RECEIVER_DENIES_TPA", "§6Denied teleport request from §c%s");
+                .comment(" Placeholders: \"${denied_sender_name}\": \"The senders name who got denied\"")
+                .define("RECEIVER_DENIES_TPA", "§6Denied teleport request from §c${denied_sender_name}");
 
         SENDER_GOT_DENIED_TPA = BUILDER.comment("\n The message that is sent to the sender when the receiver of their request executes /tpadeny")
-                .comment(" Placeholders: \"%s\": \"The receiver's name who denied the TPA\"")
-                .define("SENDER_GOT_DENIED_TPA", "§6Your teleport request for §c%s §6was denied!");
+                .comment(" Placeholders: \"${receiver_who_denied}\": \"The receiver's name who denied the TPA\"")
+                .define("SENDER_GOT_DENIED_TPA", "§6Your teleport request for §c${receiver_who_denied} §6was denied!");
 
         BUILDER.pop();
         BUILDER.push("/tpacancel");
 
         SENDER_CANCELS_TPA = BUILDER.comment("\n The message that is sent to the player who executes /tpacancel")
-                .comment(" Placeholders: \"%s\": \"The receiver's name who the sender cancelled the TPA request for\"")
-                .define("SENDER_CANCELS_TPA", "§6Cancelled teleport request for §c%s");
+                .comment(" Placeholders: \"${cancelled_tpa_recipient}\": \"The receiver's name who the sender cancelled the TPA request for\"")
+                .define("SENDER_CANCELS_TPA", "§6Cancelled teleport request for §c${cancelled_tpa_recipient}");
 
         RECEIVER_GOT_CANCELLED_TPA = BUILDER.comment("\n The message that is sent to the receiver when the sender executs /tpacancel")
-                .comment(" Placeholders: \"%s\": \"The sender's name who cancelled the request\"")
-                .define("RECEIVER_GOT_CANCELLED_TPA", "§6Your teleport request from §c%s §6was cancelled!");
+                .comment(" Placeholders: \"${cancelling_sender_of_tpa}\": \"The sender's name who cancelled the request\"")
+                .define("RECEIVER_GOT_CANCELLED_TPA", "§6Your teleport request from §c${cancelling_sender_of_tpa} §6was cancelled!");
 
         BUILDER.pop();
         BUILDER.push("/tpaaccept");
 
         RECEIVER_ACCEPTS_TPA = BUILDER.comment("\n The message that is sent to the player who executes /tpaaccept")
-                .comment(" Placeholders: \"%s\": \"The sender's name who sent the request\"")
-                .define("RECEIVER_ACCEPTS_TPA", "§6Accepted teleport request from §c%s");
+                .comment(" Placeholders: \"${senders_name}\": \"The sender's name who sent the request\"")
+                .define("RECEIVER_ACCEPTS_TPA", "§6Accepted teleport request from §c${senders_name}");
 
         SENDER_GOT_ACCEPTED_TPA = BUILDER.comment("\n The message that is sent to the sender of the TPA request, when their TPA request is accepted")
-                .comment(" Placeholders: \"%s\": \"The receiver's name who accepted the request\"")
-                .define("SENDER_GOT_ACCEPTED_TPA", "§6Your teleport request for §c%s §6was accepted!");
+                .comment(" Placeholders: \"${receivers_name}\": \"The receiver's name who accepted the request\"")
+                .define("SENDER_GOT_ACCEPTED_TPA", "§6Your teleport request for §c${receivers_name} §6was accepted!");
 
         BUILDER.pop();
         BUILDER.push("/tpa");
 
         SENDER_SENT_TPA = BUILDER.comment("\n The message that is sent to the player that executes /tpa")
-                .comment(" Placeholders: \"%s\": \"The receiver's name who got sent the TPA request\"")
-                .define("SENDER_SENT_TPA", "§6Successfully sent teleport request to §c%s");
+                .comment(" Placeholders: \"${receivers_name}\": \"The receiver's name who got sent the TPA request\"")
+                .define("SENDER_SENT_TPA", "§6Successfully sent teleport request to §c${receivers_name}");
 
         RECEIVER_GOT_TPA = BUILDER.comment("\n The message that is sent to the receiver of a TPA request")
-                .comment(" Placeholders: \"%s\": \"The sender's name who sent the TPA request\"")
-                .define("RECEIVER_GOT_TPA", "§c%s §6wants to teleport to you!");
+                .comment(" Placeholders: \"${senders_name}\": \"The sender's name who sent the TPA request\"")
+                .define("RECEIVER_GOT_TPA", "§c${senders_name} §6wants to teleport to you!");
 
         BUILDER.pop();
         BUILDER.push("/tpahere");
 
         SENDER_SENT_TPAHERE = BUILDER.comment("\n The message that is sent to the player that executes /tpahere")
-                .comment(" Placeholders: \"%s\": \"The receiver's name who got sent the TPAHERE request\"")
-                .define("SENDER_SENT_TPAHERE", "§6Successfully sent teleport §chere §6request to §c%s");
+                .comment(" Placeholders: \"${receivers_name}\": \"The receiver's name who got sent the TPAHERE request\"")
+                .define("SENDER_SENT_TPAHERE", "§6Successfully sent teleport §chere §6request to §c${receivers_name}");
 
         RECEIVER_GOT_TPAHERE = BUILDER.comment("\n The message that is sent to the receiver of a TPAHERE request")
-                .comment(" Placeholders: \"%s\": \"The sender's name who sent the TPAHERE request\"")
-                .define("RECEIVER_GOT_TPAHERE", "§c%s §6wants §cyou §6to teleport to §cthem!");
+                .comment(" Placeholders: \"${senders_name}\": \"The sender's name who sent the TPAHERE request\"")
+                .define("RECEIVER_GOT_TPAHERE", "§c${senders_name} §6wants §cyou §6to teleport to §cthem!");
 
         BUILDER.pop();
         BUILDER.push("/tptoggle");
@@ -248,20 +248,20 @@ public class Messages {
         BUILDER.push("TPA Request Timeout");
 
         SENDER_TPA_TIMEOUT = BUILDER.comment("\n The message that is sent to the sender of a TPA request, when their TPA request expires")
-                .comment(" Placeholders: \"%s\": \"The receiver's name who was sent the TPA request\"")
-                .define("SENDER_TPA_TIMEOUT", "§6Your teleport request to §c%s §6timed out!");
+                .comment(" Placeholders: \"${receivers_name}\": \"The receiver's name who was sent the TPA request\"")
+                .define("SENDER_TPA_TIMEOUT", "§6Your teleport request to §c${receivers_name} §6timed out!");
 
         RECEIVER_TPA_TIMEOUT = BUILDER.comment("\n The message that is sent to the receiver of a TPA request, when their TPA request expires")
-                .comment(" Placeholders: \"%s\": \"The sender's name who sent the receiver the TPA request\"")
-                .define("RECEIVER_TPA_TIMEOUT", "§6Your teleport request from §c%s §6timed out!");
+                .comment(" Placeholders: \"${senders_name}\": \"The sender's name who sent the receiver the TPA request\"")
+                .define("RECEIVER_TPA_TIMEOUT", "§6Your teleport request from §c${senders_name} §6timed out!");
 
         SENDER_TPAHERE_TIMEOUT = BUILDER.comment("\n The message that is sent to the sender of a TPAHERE request, when their TPAHERE request expires")
-                .comment(" Placeholders: \"%s\": \"The receiver's name who was sent the TPAHERE request\"")
-                .define("SENDER_TPA_TIMEOUT", "§6Your teleport §chere §6request to §c%s §6timed out!");
+                .comment(" Placeholders: \"${receivers_name}\": \"The receiver's name who was sent the TPAHERE request\"")
+                .define("SENDER_TPA_TIMEOUT", "§6Your teleport §chere §6request to §c${receivers_name} §6timed out!");
 
         RECEIVER_TPAHERE_TIMEOUT = BUILDER.comment("\n The message that is sent to the receiver of a TPAHERE request, when their TPAHERE request expires")
-                .comment(" Placeholders: \"%s\": \"The sender's name who sent the receiver the TPAHERE request\"")
-                .define("RECEIVER_TPA_TIMEOUT", "§6Your teleport §chere §6request from §c%s §6timed out!");
+                .comment(" Placeholders: \"${senders_name}\": \"The sender's name who sent the receiver the TPAHERE request\"")
+                .define("RECEIVER_TPA_TIMEOUT", "§6Your teleport §chere §6request from §c${senders_name} §6timed out!");
 
         BUILDER.pop();
         BUILDER.push("Limitations");
@@ -315,8 +315,8 @@ public class Messages {
         BUILDER.push("/tpaplusplus");
 
         TPAPLUSPLUS_VERSION = BUILDER.comment("\n The message displayed when someone enters /tpaplusplus version")
-                .comment(" Placeholders: \"%s\": \"The version the mod is running\"")
-                .define("TPAPLUSPLUS_VERSION", "§6You are running TPAPlusPlus version §c%s");
+                .comment(" Placeholders: \"${mod_version}\": \"The version the mod is running\"")
+                .define("TPAPLUSPLUS_VERSION", "§6You are running TPAPlusPlus version §c${mod_version}");
 
         TPAPLUSPLUS_FORCE_RELOADING_CONFIG = BUILDER.comment("\n The first message displayed when someone enters /tpaplusplus reload config -force")
                 .define("TPAPLUSPLUS_FORCE_RELOADING_CONFIG", "§6Reloading §cConfiguration§6 and wiping old data (TPA request's, death locations)...");
@@ -331,19 +331,19 @@ public class Messages {
                 .define("TPAPLUSPLUS_RELOADED_CONFIG", "§6Finished Reloading Configuration!");
 
         ERR_TPAPLUSPLUS_COLORS_REQUIRE_SIX_COLORS = BUILDER.comment("\n The message displayed when someone runs \"/tpaplusplus refactor colors\" with not enough colors specified")
-                .comment("Placeholders: \"%s\": \"The amount of colours that the player entered.\"")
-                .define("ERR_TPAPLUSPLUS_COLORS_REQUIRE_SIX_COLORS", "§cIllegal Arguments! Required 6 colors, you entered: %s");
+                .comment("Placeholders: \"${amount_of_colours_entered}\": \"The amount of colours that the player entered.\"")
+                .define("ERR_TPAPLUSPLUS_COLORS_REQUIRE_SIX_COLORS", "§cIllegal Arguments! Required 6 colors, you entered: ${amount_of_colours_entered}");
 
         ERR_TPAPLUSPLUS_COLORS_CANNOT_BE_THE_SAME = BUILDER.comment("\n The message displayed when someone runs \"/tpaplusplus refactor colors\" when the primary and secondary colours are the same")
                 .define("ERR_TPAPLUSPLUS_COLORS_CANNOT_BE_THE_SAME", "§cThe primary and secondary colours cannot be the same!");
 
         ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS = BUILDER.comment("\n The message displayed when someone runs \"/tpaplusplus refactor colors\" with invalid colour codes")
-                .comment("Placeholders: \"%s\": \"The string the user entered instead of a valid colour code.\"")
-                .define("ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS", "§cIllegal Arguments! Requires a valid Minecraft chat colour code, you entered: %s");
+                .comment("Placeholders: \"${invalid_color_code}\": \"The string the user entered instead of a valid colour code.\"")
+                .define("ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS", "§cIllegal Arguments! Requires a valid Minecraft chat colour code, you entered: ${invalid_color_code}");
 
         ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS_EXAMPLES = BUILDER.comment("\n The second message displayed when someone runs \"/tpaplusplus refactor colors\" with invalid colour codes")
-                .comment("Placeholders: \"%s\": \"A random valid colour code\"")
-                .define("ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS_EXAMPLES", "§cExamples: %s, %s, %s, %s, %s, %s");
+                .comment("Placeholders: \"${random_color_code}\": \"A random valid colour code\"")
+                .define("ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS_EXAMPLES", "§cExamples: ${random_color_code}, ${random_color_code}, ${random_color_code}, ${random_color_code}, ${random_color_code}, ${random_color_code}");
 
         TPAPLUSPLUS_COLORS_SUCCESS = BUILDER.comment("\n The message displayed when someone runs \"/tpaplusplus refactor colors\" successfully!")
                 .define("TPAPLUSPLUS_COLORS_SUCCESS", "§6Successfully §creformatted §6your messages! Your §ccolor-set §6has been §cmodified§6!");

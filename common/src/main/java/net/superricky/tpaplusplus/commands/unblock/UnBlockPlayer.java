@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.commands.block.PlayerBlockingHelper;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.config.formatters.MessageParser;
+import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.io.PlayerData;
 import net.superricky.tpaplusplus.io.SaveDataManager;
 import net.superricky.tpaplusplus.requests.RequestHelper;
@@ -29,7 +29,7 @@ public class UnBlockPlayer {
 
         if (Boolean.FALSE.equals(executorData.getBlockedPlayers().contains(blockedPlayer.getUUID()))) {
             // Executor has not blocked the other player
-            executor.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.HAVENT_BLOCKED_PLAYER.get(),
+            executor.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.HAVENT_BLOCKED_PLAYER.get(),
                     Map.of(PlayerBlockingHelper.BLOCKED_PLAYER_CONSTANT, blockedPlayer.getName().getString()))));
             return;
         }
@@ -50,12 +50,12 @@ public class UnBlockPlayer {
     public static void absoluteUnBlockPlayer(PlayerData executorData, ServerPlayer executor, ServerPlayer blockedPlayer) {
         executorData.removeBlockedPlayer(blockedPlayer.getUUID()); // Remove the blocked player from the executors list.
 
-        executor.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.SENDER_UNBLOCKED_PLAYER.get(),
+        executor.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_UNBLOCKED_PLAYER.get(),
                 Map.of("unblocked_player", blockedPlayer.getName().getString()))));
 
         if (Boolean.TRUE.equals(Config.SEND_BLOCKED_MESSAGES_TO_BOTH_PLAYERS.get())) {
             // Sending Blocked / Unblocked Messages has been enabled in the config
-            blockedPlayer.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.PLAYER_UNBLOCKED_BY_SENDER.get(),
+            blockedPlayer.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.PLAYER_UNBLOCKED_BY_SENDER.get(),
                     Map.of("sender_name", executor.getName().getString()))));
         }
     }

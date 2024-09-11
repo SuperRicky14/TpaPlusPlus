@@ -4,7 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.config.formatters.MessageParser;
+import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +36,7 @@ public class AsyncCooldownHelper {
         }
 
         if (commandCooldownDelay > 0) {
-            currentPlayer.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.COMMAND_ON_COOLDOWN_MESSAGE.get(), Map.of("command_used", TPAPlusPlus.getCommandNameFromType(type), "time_remaining", String.valueOf(commandCooldownDelay)))));
+            currentPlayer.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.COMMAND_ON_COOLDOWN_MESSAGE.get(), Map.of("command_used", TPAPlusPlus.getCommandNameFromType(type), "time_remaining", String.valueOf(commandCooldownDelay)))));
             return true;
         }
 

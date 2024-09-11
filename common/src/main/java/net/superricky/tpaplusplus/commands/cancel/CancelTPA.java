@@ -4,6 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
+import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.requests.Request;
 import net.superricky.tpaplusplus.requests.RequestGrabUtil;
 import net.superricky.tpaplusplus.requests.RequestHelper;
@@ -13,6 +14,7 @@ import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class CancelTPA {
@@ -37,8 +39,8 @@ public class CancelTPA {
     }
 
     public static void absoluteCancel(Request request) {
-        request.getSender().sendSystemMessage(Component.literal(String.format(Messages.SENDER_CANCELS_TPA.get(), request.getReceiver().getName().getString())));
-        request.getReceiver().sendSystemMessage(Component.literal(String.format(Messages.RECEIVER_GOT_CANCELLED_TPA.get(), request.getSender().getName().getString())));
+        request.getSender().sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_CANCELS_TPA.get(), Map.of("cancelled_tpa_recipient", request.getReceiver().getName().getString()))));
+        request.getReceiver().sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.RECEIVER_GOT_CANCELLED_TPA.get(), Map.of("cancelling_sender_of_tpa", request.getSender().getName().getString()))));
 
         RequestHelper.getRequestSet().remove(request);
     }

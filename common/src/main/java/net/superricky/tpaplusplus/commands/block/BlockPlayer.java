@@ -4,7 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.config.formatters.MessageParser;
+import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.io.PlayerData;
 import net.superricky.tpaplusplus.io.SaveDataManager;
 import net.superricky.tpaplusplus.requests.RequestHelper;
@@ -28,7 +28,7 @@ public class BlockPlayer {
 
         if (executorData.getBlockedPlayers().contains(blockedPlayer.getUUID())) {
             // Executor has already blocked the other player
-            executor.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.ALREADY_BLOCKED_PLAYER.get(),
+            executor.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.ALREADY_BLOCKED_PLAYER.get(),
                     Map.of(PlayerBlockingHelper.BLOCKED_PLAYER_CONSTANT, blockedPlayer.getName().getString()))));
             return;
         }
@@ -49,12 +49,12 @@ public class BlockPlayer {
     public static void absoluteBlockPlayer(PlayerData executorData, ServerPlayer executor, ServerPlayer blockedPlayer) {
         executorData.addBlockedPlayer(blockedPlayer.getUUID()); // Add the blocked player to the executors list.
 
-        executor.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.SENDER_BLOCKED_PLAYER.get(),
+        executor.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_BLOCKED_PLAYER.get(),
                 Map.of(PlayerBlockingHelper.BLOCKED_PLAYER_CONSTANT, blockedPlayer.getName().getString()))));
 
         if (Boolean.TRUE.equals(Config.SEND_BLOCKED_MESSAGES_TO_BOTH_PLAYERS.get())) {
             // Sending Blocked / Unblocked Messages has been enabled in the config
-            blockedPlayer.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.PLAYER_BLOCKED_BY_SENDER.get(),
+            blockedPlayer.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.PLAYER_BLOCKED_BY_SENDER.get(),
                     Map.of("sender_name", executor.getName().getString()))));
         }
     }

@@ -1,4 +1,4 @@
-package net.superricky.tpaplusplus.config.formatters;
+package net.superricky.tpaplusplus.commands.tpaplusplus;
 
 import com.mojang.logging.LogUtils;
 import net.superricky.tpaplusplus.TPAPlusPlus;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MessageReformatter {
+class ConfigReformatter {
     private static final Random RANDOM = new Random();
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -18,10 +18,10 @@ public class MessageReformatter {
             "&1", "&9", "&d", "&5", "&f", "&7", "&8", "&0"
     );
 
-    private MessageReformatter() {
+    private ConfigReformatter() {
     }
 
-    public static void updateColorsAndSave(List<String> configLines, String oldMainColor, String newMainColor, String oldSecondaryColor, String newSecondaryColor, String oldErrorColor, String newErrorColor) {
+    static void updateColorsAndSave(List<String> configLines, String oldMainColor, String newMainColor, String oldSecondaryColor, String newSecondaryColor, String oldErrorColor, String newErrorColor) {
         List<String> updatedConfig = configLines.stream()
                 .map(line -> updateLine(line, oldMainColor, newMainColor, oldSecondaryColor, newSecondaryColor, oldErrorColor, newErrorColor))
                 .toList();
@@ -43,7 +43,7 @@ public class MessageReformatter {
         return line.replace(oldMainColor, newMainColor).replace(oldSecondaryColor, newSecondaryColor);
     }
 
-    public static List<String> loadRawConfig() {
+    static List<String> loadRawConfig() {
         List<String> configLines = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader("config" + File.separator + "tpaplusplus-messages.toml"))) {
@@ -58,15 +58,15 @@ public class MessageReformatter {
         return configLines;
     }
 
-    public static String getRandomColorCode() {
+    static String getRandomColorCode() {
         return List.copyOf(LEGAL_COLORS).get(RANDOM.nextInt(LEGAL_COLORS.size()));
     }
 
-    public static boolean isValidColor(String color) {
+    static boolean isValidColor(String color) {
         return LEGAL_COLORS.contains(color);
     }
 
-    public static void writeUpdatedConfig(List<String> updatedConfigLines) {
+    static void writeUpdatedConfig(List<String> updatedConfigLines) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("config" + File.separator + TPAPlusPlus.CONFIG_PATH))) {
             for (String line : updatedConfigLines) {
                 writer.write(line);

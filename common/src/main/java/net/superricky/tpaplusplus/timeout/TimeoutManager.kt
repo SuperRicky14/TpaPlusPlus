@@ -4,6 +4,7 @@ import dev.architectury.event.EventResult
 import kotlinx.coroutines.*
 import net.minecraft.network.chat.Component
 import net.superricky.tpaplusplus.config.Messages
+import net.superricky.tpaplusplus.util.MsgFmt
 import net.superricky.tpaplusplus.requests.Request
 import net.superricky.tpaplusplus.requests.RequestHelper
 
@@ -28,18 +29,18 @@ fun onTimeoutEvent(request: Request): EventResult {
     if (request.isHereRequest) {
         sender.sendSystemMessage(
             Component.literal(
-                String.format(
+                MsgFmt.fmt(
                     Messages.SENDER_TPAHERE_TIMEOUT.get(),
-                    receiver.displayName.string
+                    mapOf("receivers_name" to receiver.displayName.string)
                 )
             )
         )
 
         receiver.sendSystemMessage(
             Component.literal(
-                String.format(
+                MsgFmt.fmt(
                     Messages.RECEIVER_TPAHERE_TIMEOUT.get(),
-                    sender.displayName.string
+                    mapOf("senders_name" to sender.displayName.string)
                 )
             )
         )
@@ -50,18 +51,18 @@ fun onTimeoutEvent(request: Request): EventResult {
 
     sender.sendSystemMessage(
         Component.literal(
-            String.format(
+            MsgFmt.fmt(
                 Messages.SENDER_TPA_TIMEOUT.get(),
-                receiver.displayName.string
+                mapOf("receivers_name" to receiver.displayName.string)
             )
         )
     )
 
     receiver.sendSystemMessage(
         Component.literal(
-            String.format(
+            MsgFmt.fmt(
                 Messages.RECEIVER_TPA_TIMEOUT.get(),
-                sender.displayName.string
+                mapOf("senders_name" to sender.displayName.string)
             )
         )
     )

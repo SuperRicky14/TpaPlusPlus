@@ -1,7 +1,7 @@
 package net.superricky.tpaplusplus.limitations.impl;
 
 import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.config.formatters.MessageParser;
+import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.limitations.Limitation;
 
 import net.minecraft.server.level.ServerPlayer;
@@ -31,11 +31,11 @@ public class DistanceLimitation implements Limitation {
                 receiver.getX(), receiver.getY(), receiver.getZ());
 
         if (distance > Config.FURTHEST_ALLOWED_DISTANCE.get()) {
-            return MessageParser.enhancedFormatter(Messages.ERR_TOO_FAR_EXECUTOR.get(),
+            return MsgFmt.fmt(Messages.ERR_TOO_FAR_EXECUTOR.get(),
                     Map.of(DISTANCE_IDENTIFIER, Math.round(distance),
                             EXPECTED_DISTANCE_IDENTIFIER, Math.round(Config.FURTHEST_ALLOWED_DISTANCE.get())));
         } else {
-            return MessageParser.enhancedFormatter(Messages.ERR_TOO_CLOSE_EXECUTOR.get(),
+            return MsgFmt.fmt(Messages.ERR_TOO_CLOSE_EXECUTOR.get(),
                     Map.of(DISTANCE_IDENTIFIER, Math.round(distance),
                             EXPECTED_DISTANCE_IDENTIFIER, Math.round(Config.CLOSEST_ALLOWED_DISTANCE.get())));
         }

@@ -13,11 +13,11 @@ import net.superricky.tpaplusplus.commands.toggle.TPToggle
 import net.superricky.tpaplusplus.commands.unblock.UnBlockPlayer
 import net.superricky.tpaplusplus.config.Config
 import net.superricky.tpaplusplus.config.Messages
-import net.superricky.tpaplusplus.config.formatters.MessageParser
+import net.superricky.tpaplusplus.util.MsgFmt
 import net.superricky.tpaplusplus.windupcooldown.CommandType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.*
+import java.util.Objects
 
 private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 private val scope: CoroutineScope = CoroutineScope(dispatcher)
@@ -55,9 +55,9 @@ fun schedule(windupData: WindupData) {
         // Decimal Number is greater than the threshold specified in the config, so we notify the player here.
         // Message the player the configured WINDUP_TIME_REMAINING message, except since it isn't an integer, we have to round it here to 3 decimal places (which it should be anyway's)
         AsyncWindupHelper.fastMSG(
-            MessageParser.enhancedFormatter(
+            MsgFmt.fmt(
                 Messages.WINDUP_TIME_REMAINING.get(),
-                java.util.Map.of("time", (Math.round(windupData.originalDelay * 1000).toDouble() / 1000).toString()) as Map<String, Any>?
+                mapOf("time" to (Math.round(windupData.originalDelay * 1000).toDouble() / 1000).toString())
             ),
             *windupData.players
         )
@@ -86,9 +86,9 @@ private fun countdownIteratively(windupData: WindupData): Boolean {
         }
 
         AsyncWindupHelper.fastMSG(
-            MessageParser.enhancedFormatter(
+            MsgFmt.fmt(
                 Messages.WINDUP_TIME_REMAINING.get(),
-                java.util.Map.of("time", windupData.delay.toString()) as Map<String, Any>?
+                mapOf("time" to windupData.delay.toString())
             ), *windupData.players
         )
 

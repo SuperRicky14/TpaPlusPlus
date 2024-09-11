@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.commands.block.PlayerBlockingHelper;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.config.formatters.MessageParser;
+import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.io.PlayerData;
 import net.superricky.tpaplusplus.io.SaveDataManager;
 import net.superricky.tpaplusplus.limitations.LimitationManager;
@@ -29,7 +29,7 @@ public class SendTPA {
         }
 
         if (RequestHelper.alreadySentTeleportRequest(sender, receiver)) {
-            sender.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.ERR_ALREADY_SENT_TELEPORT_REQUEST.get(), Map.of("receiver_name", receiver.getName().getString()))));
+            sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.ERR_ALREADY_SENT_TELEPORT_REQUEST.get(), Map.of("receiver_name", receiver.getName().getString()))));
             return;
         }
 
@@ -39,7 +39,7 @@ public class SendTPA {
         PlayerData receiverData = SaveDataManager.getPlayerData(receiver);
 
         if (Boolean.FALSE.equals(Objects.isNull(receiverData)) && receiverData.getTPToggle()) { // receiverData is not null && receiver TP toggle is enabled.
-            sender.sendSystemMessage(Component.literal(MessageParser.enhancedFormatter(Messages.ERR_RECEIVER_TP_DISABLED.get(),
+            sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.ERR_RECEIVER_TP_DISABLED.get(),
                     Map.of("receiverName", receiver.getName().getString()))));
             return;
         }
@@ -99,11 +99,11 @@ public class SendTPA {
 
 
         if (isHereRequest) {
-            sender.sendSystemMessage(Component.literal(String.format(Messages.SENDER_SENT_TPAHERE.get(), receiver.getName().getString())));
-            receiver.sendSystemMessage(Component.literal(String.format(Messages.RECEIVER_GOT_TPAHERE.get(), sender.getName().getString())));
+            sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_SENT_TPAHERE.get(), Map.of("receivers_name", receiver.getName().getString()))));
+            receiver.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.RECEIVER_GOT_TPAHERE.get(), Map.of("senders_name", sender.getName().getString()))));
         } else {
-            sender.sendSystemMessage(Component.literal(String.format(Messages.SENDER_SENT_TPA.get(), receiver.getName().getString())));
-            receiver.sendSystemMessage(Component.literal(String.format(Messages.RECEIVER_GOT_TPA.get(), sender.getName().getString())));
+            sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_SENT_TPA.get(), Map.of("receivers_name", receiver.getName().getString()))));
+            receiver.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.RECEIVER_GOT_TPA.get(), Map.of("senders_name", sender.getName().getString()))));
         }
     }
 

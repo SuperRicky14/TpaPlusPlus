@@ -15,7 +15,7 @@ import net.superricky.tpaplusplus.commands.toggle.TPToggleCommand;
 import net.superricky.tpaplusplus.commands.tpaplusplus.TPAPlusPlusCommand;
 import net.superricky.tpaplusplus.commands.unblock.TPUnBlockCommand;
 import net.superricky.tpaplusplus.config.Config;
-import net.superricky.tpaplusplus.config.formatters.MessageParser;
+import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.io.ServerLifecycleHandler;
 import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.timeout.RequestTimeoutEvent;
@@ -69,7 +69,7 @@ public class TPAPlusPlus {
 
         if (Config.USE_NON_BLOCKING_ASYNC_TICK_LOOP.get()) {
             LOGGER.warn("USING EXPERIMENTAL NON BLOCKING TICK LOOP");
-            LOGGER.info(MessageParser.enhancedFormatter("INITIALIZING TICK LOOP WITH RATE OF ${tick_rate}...", Map.of("tick_rate", Config.ASYNC_TICK_LOOP_UPDATE_RATE.get())));
+            LOGGER.info(MsgFmt.fmt("INITIALIZING TICK LOOP WITH RATE OF ${tick_rate}...", Map.of("tick_rate", Config.ASYNC_TICK_LOOP_UPDATE_RATE.get())));
             WindupWatcherKt.startAsyncTickLoop(Config.ASYNC_TICK_LOOP_UPDATE_RATE.get());
         } else {
             LOGGER.info("USING SYNCHRONOUS TICK LOOP");

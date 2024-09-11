@@ -11,12 +11,14 @@ import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.superricky.tpaplusplus.commands.back.DeathHelper;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.config.formatters.MessageReformatter;
+import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcherKt;
 
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -71,14 +73,14 @@ public class TPAPlusPlusCommand {
 
     private static int refactorColorSet(CommandSourceStack source, String... colorList) {
         if (colorList.length != 6) {
-            source.sendFailure(Component.literal(String.format(Messages.ERR_TPAPLUSPLUS_COLORS_REQUIRE_SIX_COLORS.get(), colorList.length)));
+            source.sendFailure(Component.literal(String.format(Messages.ERR_TPAPLUSPLUS_COLORS_REQUIRE_SIX_COLORS.get(), Map.of("amount_of_colours_entered", colorList.length))));
             return 0;
         }
 
         for (String color : colorList) {
-            if (!MessageReformatter.isValidColor(color)) {
-                source.sendFailure(Component.literal(String.format(Messages.ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS.get(), color)));
-                source.sendFailure(Component.literal(String.format(Messages.ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS_EXAMPLES.get(), MessageReformatter.getRandomColorCode())));
+            if (!ConfigReformatter.isValidColor(color)) {
+                source.sendFailure(Component.literal(MsgFmt.fmt(Messages.ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS.get(), Map.of("invalid_color_code", color))));
+                source.sendFailure(Component.literal(MsgFmt.fmt(Messages.ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS_EXAMPLES.get(), Map.of("random_color_code", (Supplier<String>) ConfigReformatter::getRandomColorCode))));
                 return 0;
             }
         }
@@ -95,7 +97,7 @@ public class TPAPlusPlusCommand {
             return 0;
         }
 
-        MessageReformatter.updateColorsAndSave(MessageReformatter.loadRawConfig(),
+        ConfigReformatter.updateColorsAndSave(ConfigReformatter.loadRawConfig(),
                 oldMainColor,
                 newMainColor,
                 oldSecondaryColor,
@@ -109,7 +111,7 @@ public class TPAPlusPlusCommand {
     }
 
     private static int version(CommandSourceStack source) {
-        source.sendSystemMessage(Component.literal(String.format(Messages.TPAPLUSPLUS_VERSION.get(), TPAPlusPlus.MOD_VERSION))); // send the mod's version to the command executor
+        source.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.TPAPLUSPLUS_VERSION.get(), Map.of("mod_version", TPAPlusPlus.MOD_VERSION)))); // send the mod's version to the command executor
         source.sendSystemMessage(Component.literal("§6Checking for updates..."));
 
         final Entity executor = source.getEntity();

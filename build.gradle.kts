@@ -26,6 +26,7 @@ group = mavenGroup
 
 repositories {
     maven("https://maven.architectury.dev/")
+    maven("https://maven.nucleoid.xyz")
     mavenCentral()
     mavenLocal()
 }
@@ -36,6 +37,7 @@ dependencies {
     mappings(variantOf(libs.yarn.mappings) { classifier("v2") })
     modImplementation(libs.bundles.fabric)
     modImplementation(libs.architectury)
+    modImplementation(libs.translations)
     modImplementation(libs.bundles.konf)
     shadow(libs.bundles.konf)
 }

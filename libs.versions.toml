@@ -1,0 +1,32 @@
+[versions]
+minecraft = "1.21.1"
+kotlin = "2.0.20"
+architectury = "13.0.6"
+fabric-kotlin = "1.12.1+kotlin.2.0.20"
+fabric-api = "0.104.0+1.21.1"
+fabric-loader = "0.16.5"
+yarn-mappings = "1.21.1+build.3"
+detekt = "1.23.7"
+konf = "1.1.2"
+
+[libraries]
+minecraft = { module = "net.minecraft:minecraft", version.ref = "minecraft" }
+yarn-mappings = { module = "net.fabricmc:yarn", version.ref = "yarn-mappings" }
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+fabric-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-kotlin" }
+architectury = { module = "dev.architectury:architectury-fabric", version.ref = "architectury" }
+detekt = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+konf-core = { module = "com.uchuhimo:konf-core", version.ref = "konf"}
+konf-toml = { module = "com.uchuhimo:konf-toml", version.ref = "konf"}
+
+[bundles]
+fabric = ["fabric-api", "fabric-kotlin", "fabric-loader"]
+konf = ["konf-core", "konf-toml"]
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+loom = { id = "fabric-loom", version = "1.7.+" }
+git-hooks = { id = "com.github.jakemarsden.git-hooks", version = "0.0.2" }
+shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }

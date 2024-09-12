@@ -1,0 +1,25 @@
+{
+    "schemaVersion": 1,
+    "id": "tpaplusplus",
+    "version": "${version}",
+    "name": "TPA++",
+    "description": "Compatible, customisable, user friendly TPA mod for Forge, Fabric, NeoForge and Quilt.",
+    "authors": [
+        "SuperRicky14",
+        "Half_nothing"
+    ],
+    "license": "LGPL-3.0",
+    "icon": "assets/tpaplusplus/icon.png",
+    "environment": "server",
+    "entrypoints": {
+        "main": [
+            "TpaPlusPlus"
+        ]
+    },
+    "depends": {
+        "fabricloader": ">=${loader_version}",
+        "fabric-language-kotlin": ">=${kotlin_loader_version}",
+        "fabric": "*",
+        "minecraft": "${minecraft_version}"
+    }
+}

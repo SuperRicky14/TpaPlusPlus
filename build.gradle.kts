@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.text.SimpleDateFormat
+import java.util.*
 
 plugins {
     alias(libs.plugins.kotlin)
@@ -92,6 +94,18 @@ tasks {
 
     jar {
         from("LICENSE")
+        manifest {
+            attributes(
+                "Build-By" to System.getProperty("user.name"),
+                "Build-TimeStamp" to SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(Date()),
+                "Build-Version" to version,
+                "Created-By" to "Gradle ${gradle.gradleVersion}",
+                "Build-Jdk" to "${System.getProperty("java.version")} " +
+                        "(${System.getProperty("java.vendor")} ${System.getProperty("java.vm.version")})",
+                "Build-OS" to "${System.getProperty("os.name")} " +
+                        "${System.getProperty("os.arch")} ${System.getProperty("os.version")}"
+            )
+        }
     }
 
     shadowJar {

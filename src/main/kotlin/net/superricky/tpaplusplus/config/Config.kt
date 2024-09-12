@@ -9,6 +9,7 @@ import net.superricky.tpaplusplus.config.command.*
 object Config {
     private val config: Config = Config {
         addSpec(CommonSpec)
+        addSpec(ColorSpec)
         addSpec(AdvancedSpec)
         addSpec(CommandEnableSpec)
         addSpec(CommandNameSpec)
@@ -20,7 +21,6 @@ object Config {
     .from.toml.resource(Const.CONFIG_FILE_NAME)
     .from.toml.watchFile(FabricLoader.getInstance().configDir.resolve(Const.CONFIG_FILE_PATH).toFile())
     .from.env()
-    .from.systemProperties()
 
     /**
      * @return Config instance

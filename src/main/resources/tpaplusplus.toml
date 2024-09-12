@@ -18,6 +18,14 @@ tpaTimeout = 60
 # Range: > 0
 waitTimeBeforeTp = 5
 
+[common.color]
+# Colors in hex format
+primary = "#009688"
+primaryVariant = "#52c7b8"
+secondary = "#1e88e5"
+secondaryVariant = "#6ab7ff"
+light = "#c5d6f0"
+
 [advanced]
 # WARNING: These options are related to asynchronous operations and/or saving / loading datain.
 # Modifying these from the defaults has a small chance to corrupt data.
@@ -57,117 +65,114 @@ autoSaveInterval = 300
 # Range: 0 ~ 153722867280911
 updateCheckInterval = 60
 
-[command]
-# The following configuration is used to define the commands and the behavior of this mod
-    [command.enable]
-    # This section of the config controls whether each command is enabled
-    # Modifying any of these commands requires a restart to take effect.
-    backEnable = true
-    tpacancelEnable = true
-    tpaunblockEnable = true
-    tpablockEnable = true
-    tpatoggleEnable = true
-    tpahereEnable = true
-    tpaacceptEnable = true
-    tpadenyEnable = true
-    tpaEnable = true
+[command.enable]
+# This section of the config controls whether each command is enabled
+# Modifying any of these commands requires a restart to take effect.
+backEnable = true
+tpacancelEnable = true
+tpaunblockEnable = true
+tpablockEnable = true
+tpatoggleEnable = true
+tpahereEnable = true
+tpaacceptEnable = true
+tpadenyEnable = true
+tpaEnable = true
 
-    [command.name]
-    # This section of the config allows you to change the commands to whatever you please!
-    # For example, you can change the /tpa command to /teleport-request,
-    # which means instead of entering /tpa players will have to enter /teleport-request
-    # Command aliases running the same command with one or more commands
-    # For example you can make /tpa, /teleport-request and /tpasend all run the same command ( /tpa )
-    # It is NOT recommended to use anything other than ASCII characters here!
-    # Of course, if this command is not enabled, it will have no effect
-    # Modifying any of these commands requires a restart to take effect.
-    backCommand = "/back"
-    tpacancelCommand = "/tpacancel"
-    tpaunblockCommand = "/tpaunblock"
-    tpablockCommand = "/tpablock"
-    tpatoggleCommand = "/tpatoggle"
-    tpahereCommand = "/tpahere"
-    tpaacceptCommand = "/tpaaccept"
-    tpadenyCommand = "/tpadeny"
-    tpaCommand = "/tpa"
+[command.name]
+# This section of the config allows you to change the commands to whatever you please!
+# For example, you can change the /tpa command to /teleport-request,
+# which means instead of entering /tpa players will have to enter /teleport-request
+# Command aliases running the same command with one or more commands
+# For example you can make /tpa, /teleport-request and /tpasend all run the same command ( /tpa )
+# It is NOT recommended to use anything other than ASCII characters here!
+# Of course, if this command is not enabled, it will have no effect
+# Modifying any of these commands requires a restart to take effect.
+backCommand = "/back"
+tpacancelCommand = "/tpacancel"
+tpaunblockCommand = "/tpaunblock"
+tpablockCommand = "/tpablock"
+tpatoggleCommand = "/tpatoggle"
+tpahereCommand = "/tpahere"
+tpaacceptCommand = "/tpaaccept"
+tpadenyCommand = "/tpadeny"
+tpaCommand = "/tpa"
 
-    [command.delay]
-    # This section of the config controls how long things like commands take to execute.
-    # This is measured in seconds.
-    # These values support three decimal places of precision
-    # For example, you can enter 1.5 or 10.375, but not 20.1234
-    # It will still work, just anything after the 3rd decimal place will be discarded.
-    # Set this to 0 if you wish to disable the delay
-    # Modifying any of these commands can take effect without a restart.
-    denyDelay = 0.0
-    cancelDelay = 0.0
-    acceptDelay = 0.0
-    tpahereDelay = 0.0
-    backDelay = 0.0
-    blockDelay = 0.0
-    toggleDelay = 0.0
-    unblockDelay = 0.0
-    tpaDelay = 0.0
+[command.delay]
+# This section of the config controls how long things like commands take to execute.
+# This is measured in seconds.
+# These values support three decimal places of precision
+# For example, you can enter 1.5 or 10.375, but not 20.1234
+# It will still work, just anything after the 3rd decimal place will be discarded.
+# Set this to 0 if you wish to disable the delay
+# Modifying any of these commands can take effect without a restart.
+denyDelay = 0.0
+cancelDelay = 0.0
+acceptDelay = 0.0
+tpahereDelay = 0.0
+backDelay = 0.0
+blockDelay = 0.0
+toggleDelay = 0.0
+unblockDelay = 0.0
+tpaDelay = 0.0
 
-    [command.cooldown]
-    # This section of the config controls the cooldown
-    # how long the player must wait after a command executes.
-    # This is measured in seconds.
-    # Set this to 0 if you wish to disable the cooldown
-    # Modifying any of these commands can take effect without a restart.
-    globalCooldown = 0.0
-    denyCooldown = 0.0
-    cancelCooldown = 0.0
-    acceptCooldown = 0.0
-    tpahereCooldown = 0.0
-    backCooldown = 0.0
-    blockCooldown = 0.0
-    toggleCooldown = 0.0
-    unblockCooldown = 0.0
-    tpaCooldown = 0.0
+[command.cooldown]
+# This section of the config controls the cooldown
+# how long the player must wait after a command executes.
+# This is measured in seconds.
+# Set this to 0 if you wish to disable the cooldown
+# Modifying any of these commands can take effect without a restart.
+globalCooldown = 0.0
+denyCooldown = 0.0
+cancelCooldown = 0.0
+acceptCooldown = 0.0
+tpahereCooldown = 0.0
+backCooldown = 0.0
+blockCooldown = 0.0
+toggleCooldown = 0.0
+unblockCooldown = 0.0
+tpaCooldown = 0.0
 
-    [command.distance]
-    # This section of the config controls how far away people can be
-    # from the position that they executed each command.
-    # This is measured in blocks.
-    # Set this to 0 if you want players to not be able to move at all during a countdown
-    # or to -1 to completely disable this feature and allow them to move around freely during a windup.
-    # WARNING: SETTING THESE VALUES IN-BETWEEN 0 AND -1 WILL CAUSE THEIR RESPECTIVE COMMAND TO BE UNUSABLE.
-    # Modifying any of these commands can take effect without a restart.
-    denyDistance = 0.0
-    cancelDistance = 0.0
-    acceptDistance = 0.0
-    tpahereDistance = 0.0
-    backDistance = 0.0
-    blockDistance = 0.0
-    toggleDistance = 0.0
-    unblockDistance = 0.0
-    tpaDistance = 0.0
+[command.distance]
+# This section of the config controls how far away people can be
+# from the position that they executed each command.
+# This is measured in blocks.
+# Set this to 0 if you want players to not be able to move at all during a countdown
+# or to -1 to completely disable this feature and allow them to move around freely during a windup.
+# WARNING: SETTING THESE VALUES IN-BETWEEN 0 AND -1 WILL CAUSE THEIR RESPECTIVE COMMAND TO BE UNUSABLE.
+# Modifying any of these commands can take effect without a restart.
+denyDistance = 0.0
+cancelDistance = 0.0
+acceptDistance = 0.0
+tpahereDistance = 0.0
+backDistance = 0.0
+blockDistance = 0.0
+toggleDistance = 0.0
+unblockDistance = 0.0
+tpaDistance = 0.0
 
-    [command.limitations]
-    # All limitations are DISABLED by default.
-    # Modifying any of these commands can take effect without a restart.
+[command.limitations]
+# All limitations are DISABLED by default.
+# Modifying any of these commands can take effect without a restart.
+# Whether to allow sending TPA requests if the player(s) are not in the same dimension
+# Set this to false if you wish to disable this limitation
+crossDimAllowed = true
 
-    # Whether to allow sending TPA requests if the player(s) are not in the same dimension
-    # Set this to false if you wish to disable this limitation
-    crossDimAllowed = true
+# How far away a player can be from another player in order to teleport
+# This is measured in blocks.
+# Set this to 0 if you wish to disable this limitation
+# Range: 0.0 ~ 1.7976931348623157E308
+maxTpDistance = 0.0
 
-    # How far away a player can be from another player in order to teleport
-    # This is measured in blocks.
-    # Set this to 0 if you wish to disable this limitation
-    # Range: 0.0 ~ 1.7976931348623157E308
-    maxTpDistance = 0.0
+# How close a player can be from another player in order to teleport
+# This is measured in blocks.
+# Set this to 0 if you wish to disable this limitation
+#Range: 0.0 ~ 1.7976931348623157E308
+minTpDistance = 0.0
 
-    # How close a player can be from another player in order to teleport
-    # This is measured in blocks.
-    # Set this to 0 if you wish to disable this limitation
-    #Range: 0.0 ~ 1.7976931348623157E308
-    minTpDistance = 0.0
-
-    # Whether to disable the range checks feature when teleporting inter-dimensionally
-    # This has no affect if "Allow Inter-Dimensional Teleport" is false
-    # or if all range checks are disabled.
-    # TPAPlusPlus will automatically account for the nether's coordinate system
-    # ( 1 block in the nether is 8 blocks in the overworld! )
-    # Set this to false if you wish to disable this limitation
-    ignoreDistanceCrossDim = true
+# Whether to disable the range checks feature when teleporting inter-dimensionally
+# This has no affect if "Allow Inter-Dimensional Teleport" is false
+# or if all range checks are disabled.
+# TPAPlusPlus will automatically account for the nether's coordinate system
+# ( 1 block in the nether is 8 blocks in the overworld! )
+# Set this to false if you wish to disable this limitation
+ignoreDistanceCrossDim = true

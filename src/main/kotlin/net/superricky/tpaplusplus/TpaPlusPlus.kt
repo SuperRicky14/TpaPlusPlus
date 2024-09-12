@@ -1,18 +1,25 @@
 package net.superricky.tpaplusplus
 
+import kotlinx.coroutines.*
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.server.MinecraftServer
+import net.minecraft.text.Text
 import net.superricky.tpaplusplus.Const.CONFIG_FILE_NAME
 import net.superricky.tpaplusplus.Const.CONFIG_FILE_PATH
 import net.superricky.tpaplusplus.Const.CONFIG_FOLDER_PATH
 import net.superricky.tpaplusplus.Const.MOD_ID
 import net.superricky.tpaplusplus.Const.logger
 import net.superricky.tpaplusplus.config.Config
+import net.superricky.tpaplusplus.utility.TextColorPallet
 import java.nio.file.Files
+import kotlin.coroutines.CoroutineContext
 
-class TpaPlusPlus : ModInitializer {
+object TpaPlusPlus : ModInitializer, CoroutineScope {
+    private lateinit var server: MinecraftServer
+    override val coroutineContext: CoroutineContext = Dispatchers.IO
+    private lateinit var job: Job
 
     override fun onInitialize() {
         val version = FabricLoader.getInstance().getModContainer(MOD_ID).get().metadata.version
@@ -38,16 +45,34 @@ class TpaPlusPlus : ModInitializer {
             logger.error("Error while loading config file", e)
             return
         }
-
         ServerLifecycleEvents.SERVER_STARTING.register(::serverStarting)
         ServerLifecycleEvents.SERVER_STOPPED.register(::serverStopped)
     }
 
-    private fun serverStarting(server: MinecraftServer) {
-        logger.info("Starting TPA++ server")
+    @Suppress("MagicNumber")
+    private fun sendTest() {
+        job = TpaPlusPlus.launch {
+            delay(5000)
+            logger.info("TPA plus test")
+            server.playerManager.playerList.forEach { player ->
+                run {
+                    player.sendMessage(Text.translatable("test").setStyle(TextColorPallet.primary))
+                }
+            }
+            sendTest()
+        }
     }
 
-    private fun serverStopped(server: MinecraftServer) {
+    private fun serverStarting(server: MinecraftServer) {
+        logger.info("Starting TPA++ server")
+        this.server = server
+        job = TpaPlusPlus.launch {
+            sendTest()
+        }
+    }
+
+    private fun serverStopped(ignored: MinecraftServer) {
         logger.info("Shutting down TPA++")
+        job.cancel()
     }
 }

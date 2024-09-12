@@ -17,6 +17,7 @@ val modName: String by project
 val modVersion: String by project
 val mavenGroup: String by project
 val targetJavaVersion = 21
+val javaVersion = JavaVersion.VERSION_21
 
 version = "$modVersion${getVersionMetadata()}"
 group = mavenGroup
@@ -28,12 +29,13 @@ repositories {
 }
 
 dependencies {
+    detektPlugins(libs.detekt)
     minecraft(libs.minecraft)
     mappings(variantOf(libs.yarn.mappings) { classifier("v2") })
     modImplementation(libs.bundles.fabric)
     modImplementation(libs.architectury)
+    modImplementation(libs.bundles.konf)
     shadow(libs.bundles.konf)
-    detektPlugins(libs.detekt)
 }
 
 base {
@@ -42,6 +44,8 @@ base {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
     withSourcesJar()
 }
 
@@ -87,9 +91,28 @@ tasks {
     }
 
     jar {
-        from("LICENSE") {
-            rename { "${it}_${project.base.archivesName}" }
-        }
+        from("LICENSE")
+    }
+
+    shadowJar {
+        from("LICENSE")
+
+        configurations = listOf(
+            project.configurations.shadow.get()
+        )
+        archiveClassifier.set("dev-all")
+
+        exclude("kotlin/**", "kotlinx/**", "javax/**")
+        exclude("org/intellij/**", "org/jetbrains/annotations/**")
+        exclude("org/slf4j/**")
+
+        val relocatePath = "net.superricky.tpaplusplus.libs."
+        relocate("com.moandjiezana.toml", relocatePath + "com.moandjiezana.toml")
+    }
+
+    remapJar {
+        dependsOn(shadowJar)
+        inputFile = shadowJar.get().archiveFile
     }
 }
 

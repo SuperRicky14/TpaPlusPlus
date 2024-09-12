@@ -1,0 +1,173 @@
+# This is tpaplusplus config file
+[common]
+# Whether to send a message to the person being blocked / unblocked, when the sender blocks them.
+# Default: true
+showBlockedMessage = true
+# Whether to allow players with /tptoggle enabled, to send a teleport request
+# Default: false
+toggledPlayerCommand = false
+# How long until teleport requests expire (in seconds)
+# This is measured in seconds.
+# If you wish to disable this set this to 0
+# Default: 60
+# Range: > 0
+tpaTimeout = 60
+# How long does the player have to wait to be teleported
+# This is measured in seconds.
+# Default: 5
+# Range: > 0
+waitTimeBeforeTp = 5
+
+[advanced]
+# WARNING: These options are related to asynchronous operations and/or saving / loading datain.
+# Modifying these from the defaults has a small chance to corrupt data.
+# WARNING: It is only recommended to change these values from their defaults
+# if you know how they work internally UNLESS explicitly said so in the option you are trying to modify.
+# Most options here have already been optimized for most systems, I doubt you will experience significant performance gains by changing the options below, unless you have an insane amount of players connected, in that case boosting the thread counts should help a bit.
+# Modifying these options may require a restart of the game.
+
+# How often (time per second) to update the tick loop.
+# Changing this value will NOT make the game tick run faster
+# It will only make TPA++ more sensitive and responsive to things (since it will be updated faster).
+# For example, a value of 20 will cause TPA++ to update 20 times a second (this is also Minecraft's Tick Rate).
+# It is completely okay to lower this value, even to something low like 4 if you have a lot of players.
+# Modifying this value requires a restart of the game.
+# Default: 20
+# Range: > 1
+asyncLoopRate = 20
+# Whether to use an async tick loop for TPA++, that runs alongside the main thread.
+# Operations that run synchronously with the main thread, are usually extremely inexpensive to run.
+# Only enable this if you have an insane amount of players,
+# or you have noticed performance problems with running it synchronously.
+# Modifying this value requires a restart of the game.
+# Default: false
+unblockingTickLoop = true
+# How long (in seconds) between autosaves, if you experience data loss, set this number lower.\
+# Default: 300
+# Range: > 1
+autoSaveInterval = 300
+# How often to automatically check for updates in the background.
+# This will send a network request to Modrinth's API based off this interval,
+# and tell you if you are running a version of TPA++ that is out of date.
+# Alternatively, you can check for updates manually by running
+# /tpaplusplus version (this setting does not affect manual update checking).
+# This value is measured in minutes, and setting it to 0 will disable update checking.
+# Modifying this value requires a restart of the game.
+# Default: 60
+# Range: 0 ~ 153722867280911
+updateCheckInterval = 60
+
+[command]
+# The following configuration is used to define the commands and the behavior of this mod
+    [command.enable]
+    # This section of the config controls whether each command is enabled
+    # Modifying any of these commands requires a restart to take effect.
+    backEnable = true
+    tpacancelEnable = true
+    tpaunblockEnable = true
+    tpablockEnable = true
+    tpatoggleEnable = true
+    tpahereEnable = true
+    tpaacceptEnable = true
+    tpadenyEnable = true
+    tpaEnable = true
+
+    [command.name]
+    # This section of the config allows you to change the commands to whatever you please!
+    # For example, you can change the /tpa command to /teleport-request,
+    # which means instead of entering /tpa players will have to enter /teleport-request
+    # Command aliases running the same command with one or more commands
+    # For example you can make /tpa, /teleport-request and /tpasend all run the same command ( /tpa )
+    # It is NOT recommended to use anything other than ASCII characters here!
+    # Of course, if this command is not enabled, it will have no effect
+    # Modifying any of these commands requires a restart to take effect.
+    backCommand = "/back"
+    tpacancelCommand = "/tpacancel"
+    tpaunblockCommand = "/tpaunblock"
+    tpablockCommand = "/tpablock"
+    tpatoggleCommand = "/tpatoggle"
+    tpahereCommand = "/tpahere"
+    tpaacceptCommand = "/tpaaccept"
+    tpadenyCommand = "/tpadeny"
+    tpaCommand = "/tpa"
+
+    [command.delay]
+    # This section of the config controls how long things like commands take to execute.
+    # This is measured in seconds.
+    # These values support three decimal places of precision
+    # For example, you can enter 1.5 or 10.375, but not 20.1234
+    # It will still work, just anything after the 3rd decimal place will be discarded.
+    # Set this to 0 if you wish to disable the delay
+    # Modifying any of these commands can take effect without a restart.
+    denyDelay = 0.0
+    cancelDelay = 0.0
+    acceptDelay = 0.0
+    tpahereDelay = 0.0
+    backDelay = 0.0
+    blockDelay = 0.0
+    toggleDelay = 0.0
+    unblockDelay = 0.0
+    tpaDelay = 0.0
+
+    [command.cooldown]
+    # This section of the config controls the cooldown
+    # how long the player must wait after a command executes.
+    # This is measured in seconds.
+    # Set this to 0 if you wish to disable the cooldown
+    # Modifying any of these commands can take effect without a restart.
+    globalCooldown = 0.0
+    denyCooldown = 0.0
+    cancelCooldown = 0.0
+    acceptCooldown = 0.0
+    tpahereCooldown = 0.0
+    backCooldown = 0.0
+    blockCooldown = 0.0
+    toggleCooldown = 0.0
+    unblockCooldown = 0.0
+    tpaCooldown = 0.0
+
+    [command.distance]
+    # This section of the config controls how far away people can be
+    # from the position that they executed each command.
+    # This is measured in blocks.
+    # Set this to 0 if you want players to not be able to move at all during a countdown
+    # or to -1 to completely disable this feature and allow them to move around freely during a windup.
+    # WARNING: SETTING THESE VALUES IN-BETWEEN 0 AND -1 WILL CAUSE THEIR RESPECTIVE COMMAND TO BE UNUSABLE.
+    # Modifying any of these commands can take effect without a restart.
+    denyDistance = 0.0
+    cancelDistance = 0.0
+    acceptDistance = 0.0
+    tpahereDistance = 0.0
+    backDistance = 0.0
+    blockDistance = 0.0
+    toggleDistance = 0.0
+    unblockDistance = 0.0
+    tpaDistance = 0.0
+
+    [command.limitations]
+    # All limitations are DISABLED by default.
+    # Modifying any of these commands can take effect without a restart.
+
+    # Whether to allow sending TPA requests if the player(s) are not in the same dimension
+    # Set this to false if you wish to disable this limitation
+    crossDimAllowed = true
+
+    # How far away a player can be from another player in order to teleport
+    # This is measured in blocks.
+    # Set this to 0 if you wish to disable this limitation
+    # Range: 0.0 ~ 1.7976931348623157E308
+    maxTpDistance = 0.0
+
+    # How close a player can be from another player in order to teleport
+    # This is measured in blocks.
+    # Set this to 0 if you wish to disable this limitation
+    #Range: 0.0 ~ 1.7976931348623157E308
+    minTpDistance = 0.0
+
+    # Whether to disable the range checks feature when teleporting inter-dimensionally
+    # This has no affect if "Allow Inter-Dimensional Teleport" is false
+    # or if all range checks are disabled.
+    # TPAPlusPlus will automatically account for the nether's coordinate system
+    # ( 1 block in the nether is 8 blocks in the overworld! )
+    # Set this to false if you wish to disable this limitation
+    ignoreDistanceCrossDim = true

@@ -36,11 +36,7 @@ comments:
   excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
   DeprecatedBlockTag:
     active: true
-  UndocumentedPublicClass:
-    active: true
   UndocumentedPublicFunction:
-    active: true
-  UndocumentedPublicProperty:
     active: true
 
 complexity:
@@ -183,6 +179,8 @@ formatting:
 naming:
   active: true
   excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+  MemberNameEqualsClassName:
+    active: false
   BooleanPropertyNaming:
     active: true
   FunctionMaxLength:
@@ -241,9 +239,11 @@ style:
   BracesOnIfStatements:
     active: true
     multiLine: consistent
+  WildcardImport:
+    active: false
+  UnusedParameter:
+    active: false
   BracesOnWhenStatements:
-    active: true
-  CascadingCallWrapping:
     active: true
   ClassOrdering:
     active: true

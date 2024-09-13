@@ -1,6 +1,7 @@
 package net.superricky.tpaplusplus
 
 import dev.architectury.event.events.common.CommandRegistrationEvent
+import dev.architectury.event.events.common.PlayerEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ import net.superricky.tpaplusplus.GlobalConst.logger
 import net.superricky.tpaplusplus.command.CommandRegister
 import net.superricky.tpaplusplus.config.Config
 import net.superricky.tpaplusplus.database.DatabaseManager
+import net.superricky.tpaplusplus.event.PlayerEvent as PlayerEventListener
 import java.nio.file.Files
 import kotlin.coroutines.CoroutineContext
 
@@ -53,6 +55,7 @@ object TpaPlusPlus : ModInitializer, CoroutineScope {
                 dispatcher
             )
         }
+        PlayerEvent.PLAYER_JOIN.register(PlayerEventListener::joinEvent)
         ServerLifecycleEvents.SERVER_STARTING.register(::serverStarting)
         ServerLifecycleEvents.SERVER_STOPPED.register(::serverStopped)
     }

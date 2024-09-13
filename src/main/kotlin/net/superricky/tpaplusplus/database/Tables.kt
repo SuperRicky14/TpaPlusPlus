@@ -17,6 +17,7 @@ object Tables {
     class Player(id: EntityID<Int>) : IntEntity(id) {
         var playerId by Players.playerId
         var playerName by Players.playerName
+        var blockAll by Players.blockAll
 
         companion object : IntEntityClass<Player>(Players)
     }

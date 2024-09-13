@@ -14,6 +14,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.sqlite.SQLiteConfig
 import org.sqlite.SQLiteDataSource
+import java.util.*
 import javax.sql.DataSource
 import kotlin.io.path.pathString
 
@@ -77,4 +78,64 @@ object DatabaseManager {
             }
         }
     }
+
+    suspend fun insertPlayer(uuid: UUID, name: String) =
+        execute {
+            val player = Tables.Player.find { Tables.Players.playerId eq uuid }.firstOrNull()
+            if (player == null) {
+                Tables.Player.new {
+                    this.playerId = uuid
+                    this.playerName = name
+                }
+            }
+        }
+
+    suspend fun playerSwitchBlock(uuid: UUID) =
+        execute {
+            val player = Tables.Player.find { Tables.Players.playerId eq uuid }.firstOrNull()
+            if (player == null) {
+                throw NullPointerException("Player $uuid not found")
+            }
+            val blocked = player.blockAll
+            player.blockAll = !blocked
+            return@execute !blocked
+        }
+
+    suspend fun playerSwitchBlock(uuid: UUID, blocked: Boolean) =
+        execute {
+            val player = Tables.Player.find { Tables.Players.playerId eq uuid }.firstOrNull()
+            player?.let {
+                if (player.blockAll == blocked) return@let
+                player.blockAll = blocked
+            }
+        }
+
+    suspend fun insertBlockedPlayer(senderUUID: UUID, targetUUID: UUID) =
+        execute {
+            val sender = Tables.Player.find { Tables.Players.playerId eq senderUUID }.firstOrNull()
+            val target = Tables.Player.find { Tables.Players.playerId eq targetUUID }.firstOrNull()
+            if (sender == null || target == null) {
+                return@execute false
+            }
+            Tables.BlockedPlayer.new {
+                playerId = sender
+                playerName = sender
+                blockedPlayerId = target
+                blockedPlayerName = target
+            }
+            return@execute true
+        }
+
+    suspend fun deleteBlockedPlayer(senderUUID: UUID, targetUUID: UUID) =
+        execute {
+            val blocked = Tables.BlockedPlayer.find {
+                Tables.BlockedPlayers.playerId eq senderUUID and (Tables.BlockedPlayers.blockedPlayerId eq targetUUID)
+            }
+                .firstOrNull()
+            if (blocked == null) {
+                return@execute false
+            }
+            blocked.delete()
+            return@execute true
+        }
 }

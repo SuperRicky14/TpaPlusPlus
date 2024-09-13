@@ -18,5 +18,6 @@ object CommandRegister {
         dispatcher.root.addChild(TpaCommand.build())
         dispatcher.root.addChild(TpaHereCommand.build())
         dispatcher.root.addChild(UnblockCommand.build())
+        dispatcher.root.addChild(BlockCommand.build())
     }
 }

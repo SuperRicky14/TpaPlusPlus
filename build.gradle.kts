@@ -35,10 +35,19 @@ dependencies {
     detektPlugins(libs.detekt)
     minecraft(libs.minecraft)
     mappings(variantOf(libs.yarn.mappings) { classifier("v2") })
+
     modImplementation(libs.bundles.fabric)
     modImplementation(libs.architectury)
     modImplementation(libs.translations)
+
+    // For debug
+    modImplementation(libs.bundles.database)
+    modImplementation(libs.sqlite.jdbc)
     modImplementation(libs.bundles.konf)
+
+    // For release
+    shadow(libs.bundles.database)
+    shadow(libs.sqlite.jdbc)
     shadow(libs.bundles.konf)
 }
 
@@ -120,6 +129,8 @@ tasks {
 
         exclude("kotlin/**", "kotlinx/**", "javax/**")
         exclude("org/intellij/**", "org/jetbrains/annotations/**")
+        exclude("org/slf4j/**")
+        exclude("net/kyori/**")
         exclude("org/slf4j/**")
 
         val relocatePath = "net.superricky.tpaplusplus.libs."

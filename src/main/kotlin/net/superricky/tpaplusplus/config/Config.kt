@@ -4,14 +4,18 @@ import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.RequiredItem
 import com.uchuhimo.konf.source.toml
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.util.WorldSavePath
 import net.superricky.tpaplusplus.GlobalConst
+import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.config.command.*
+import java.nio.file.Path
 
 object Config {
     private val config: Config = Config {
         addSpec(CommonSpec)
         addSpec(ColorSpec)
         addSpec(AdvancedSpec)
+        addSpec(DatabaseSpec)
         addSpec(CommandEnableSpec)
         addSpec(CommandNameSpec)
         addSpec(CommandDelaySpec)
@@ -47,6 +51,15 @@ object Config {
     private fun replaceCommand(item: RequiredItem<String>) {
         if (config[item].startsWith("/")) {
             config[item] = config[item].replace("/", "")
+        }
+    }
+
+    fun getDatabasePath(): Path {
+        val location = config[DatabaseSpec.location]
+        return if (location != null) {
+            Path.of(location)
+        } else {
+            TpaPlusPlus.server.getSavePath(WorldSavePath.ROOT)
         }
     }
 }

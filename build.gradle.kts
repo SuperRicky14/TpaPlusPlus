@@ -42,12 +42,12 @@ dependencies {
 
     // For debug
     modImplementation(libs.bundles.database)
-    modImplementation(libs.sqlite.jdbc)
+    modImplementation(libs.bundles.jdbc)
     modImplementation(libs.bundles.konf)
 
     // For release
     shadow(libs.bundles.database)
-    shadow(libs.sqlite.jdbc)
+    shadow(libs.bundles.jdbc)
     shadow(libs.bundles.konf)
 }
 

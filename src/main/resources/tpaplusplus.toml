@@ -28,7 +28,7 @@ light = "#c5d6f0"
 
 [advanced]
 # WARNING: These options are related to asynchronous operations and/or saving / loading datain.
-# Modifying these from the defaults has a small chance to corrupt data.
+# WARNING: Modifying these from the defaults has a small chance to corrupt data.
 # WARNING: It is only recommended to change these values from their defaults
 # if you know how they work internally UNLESS explicitly said so in the option you are trying to modify.
 # Most options here have already been optimized for most systems, I doubt you will experience significant performance gains by changing the options below, unless you have an insane amount of players connected, in that case boosting the thread counts should help a bit.
@@ -64,6 +64,18 @@ autoSaveInterval = 300
 # Default: 60
 # Range: 0 ~ 153722867280911
 updateCheckInterval = 60
+
+[database]
+# WARNING: These options are related to database config.
+# WARNING: If you do not know the specific meaning, do not modify the configuration.
+# WARNING: Modifying the configuration may cause data loss
+# Modifying these options may require a restart of the game.
+
+# The location of the database file. Defaults to the world folder if not specified
+# It is recommended to place it in the world directory
+# Which can prevent data conflicts between different saves (single player games only).
+# Only has effect when databaseType set to sqlite
+#location = ""
 
 [command.enable]
 # This section of the config controls whether each command is enabled

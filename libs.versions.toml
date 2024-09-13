@@ -35,6 +35,7 @@ sqlite-jdbc = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite-jdbc" }
 fabric = ["fabric-api", "fabric-kotlin", "fabric-loader"]
 konf = ["konf-core", "konf-toml"]
 database = ["exposed-core", "exposed-dao", "exposed-java-time", "exposed-jdbc"]
+jdbc = ["sqlite-jdbc"]
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

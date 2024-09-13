@@ -87,15 +87,15 @@ tpaEnable = true
 # It is NOT recommended to use anything other than ASCII characters here!
 # Of course, if this command is not enabled, it will have no effect
 # Modifying any of these commands requires a restart to take effect.
-backCommand = "/back"
-tpacancelCommand = "/tpacancel"
-tpaunblockCommand = "/tpaunblock"
-tpablockCommand = "/tpablock"
-tpatoggleCommand = "/tpatoggle"
-tpahereCommand = "/tpahere"
-tpaacceptCommand = "/tpaaccept"
-tpadenyCommand = "/tpadeny"
-tpaCommand = "/tpa"
+backCommand = "back"
+tpacancelCommand = "tpacancel"
+tpaunblockCommand = "tpaunblock"
+tpablockCommand = "tpablock"
+tpatoggleCommand = "tpatoggle"
+tpahereCommand = "tpahere"
+tpaacceptCommand = "tpaaccept"
+tpadenyCommand = "tpadeny"
+tpaCommand = "tpa"
 
 [command.delay]
 # This section of the config controls how long things like commands take to execute.

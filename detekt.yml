@@ -36,8 +36,6 @@ comments:
   excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
   DeprecatedBlockTag:
     active: true
-  UndocumentedPublicFunction:
-    active: true
 
 complexity:
   active: true

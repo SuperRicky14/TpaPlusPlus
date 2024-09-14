@@ -6,14 +6,17 @@ import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.text.Text
 import net.superricky.tpaplusplus.TpaPlusPlus
+import net.superricky.tpaplusplus.async.AsyncCommandData
+import net.superricky.tpaplusplus.command.AsyncCommand
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.config.CommonSpec
 import net.superricky.tpaplusplus.config.Config
+import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.command.CommandNameSpec
 import net.superricky.tpaplusplus.database.DatabaseManager
 import net.superricky.tpaplusplus.utility.*
 
-object UnblockCommand : BuildableCommand {
+object UnblockCommand : BuildableCommand, AsyncCommand {
     override fun build(): LiteralNode =
         literal(Config.getConfig()[CommandNameSpec.tpaunblockCommand])
             .then(
@@ -21,6 +24,13 @@ object UnblockCommand : BuildableCommand {
                     .executes { unBlockPlayer(it) }
             )
             .build()
+
+    override fun checkWindupDistance(asyncCommandData: AsyncCommandData): Boolean =
+        checkWindupDistance(
+            asyncCommandData,
+            ::getSenderDistance,
+            Config.getConfig()[CommandDistanceSpec.unblockDistance]
+        )
 
     private fun unBlockPlayer(context: Context): Int {
         val source = context.source

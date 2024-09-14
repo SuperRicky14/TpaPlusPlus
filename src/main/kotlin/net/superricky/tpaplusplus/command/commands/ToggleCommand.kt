@@ -4,13 +4,16 @@ import kotlinx.coroutines.launch
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.text.Text
 import net.superricky.tpaplusplus.TpaPlusPlus
+import net.superricky.tpaplusplus.async.AsyncCommandData
+import net.superricky.tpaplusplus.command.AsyncCommand
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.config.Config
+import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.command.CommandNameSpec
 import net.superricky.tpaplusplus.database.DatabaseManager
 import net.superricky.tpaplusplus.utility.*
 
-object ToggleCommand : BuildableCommand {
+object ToggleCommand : BuildableCommand, AsyncCommand {
     override fun build(): LiteralNode =
         literal(Config.getConfig()[CommandNameSpec.tpatoggleCommand])
             .then(
@@ -23,6 +26,13 @@ object ToggleCommand : BuildableCommand {
             )
             .executes { switchToggle(it) }
             .build()
+
+    override fun checkWindupDistance(asyncCommandData: AsyncCommandData): Boolean =
+        checkWindupDistance(
+            asyncCommandData,
+            ::getSenderDistance,
+            Config.getConfig()[CommandDistanceSpec.toggleDistance]
+        )
 
     private fun switchToggle(context: Context): Int {
         TpaPlusPlus.launch {

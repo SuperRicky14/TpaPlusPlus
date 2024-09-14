@@ -3,7 +3,7 @@ package net.superricky.tpaplusplus.async
 import kotlinx.atomicfu.AtomicBoolean
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.*
-import net.superricky.tpaplusplus.command.commands.TpaCommand
+import net.superricky.tpaplusplus.command.commands.*
 import net.superricky.tpaplusplus.utility.AsyncCommandResult
 import net.superricky.tpaplusplus.utility.CommandType
 import java.util.*
@@ -14,7 +14,15 @@ object AsyncCommandHelper : CoroutineScope {
     private val ticking: AtomicBoolean = atomic(false)
     private val requests: MutableSet<AsyncCommandData> = Collections.synchronizedSet(HashSet())
     private val checkActions: Map<CommandType, Function1<AsyncCommandData, Boolean>> = mapOf(
-        CommandType.TPA to TpaCommand::checkWindupDistance
+        CommandType.TPA to TpaCommand::checkWindupDistance,
+        CommandType.BACK to BackCommand::checkWindupDistance,
+        CommandType.DENY to DenyCommand::checkWindupDistance,
+        CommandType.BLOCK to BlockCommand::checkWindupDistance,
+        CommandType.ACCEPT to AcceptCommand::checkWindupDistance,
+        CommandType.CANCEL to CancelCommand::checkWindupDistance,
+        CommandType.TOGGLE to ToggleCommand::checkWindupDistance,
+        CommandType.TPAHERE to TpaHereCommand::checkWindupDistance,
+        CommandType.UNBLOCK to UnblockCommand::checkWindupDistance
     )
 
     @Suppress("MagicNumber")
@@ -47,11 +55,12 @@ object AsyncCommandHelper : CoroutineScope {
                 return@forEach
             }
             // check distance
-            if (!checkActions[it.getRequest().commandType]?.invoke(it)!!) {
+            if (!checkActions[it.getRequest().commandType]!!.invoke(it)) {
                 it.callback.invoke(AsyncCommandResult.OUT_OF_DISTANCE)
                 elementRemoved.add(it)
                 return@forEach
             }
+            // check timeout
             if (it.tick()) {
                 it.callback.invoke(AsyncCommandResult.TIMEOUT)
                 elementRemoved.add(it)

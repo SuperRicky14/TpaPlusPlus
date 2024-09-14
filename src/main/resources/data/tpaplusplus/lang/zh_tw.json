@@ -9,16 +9,15 @@
 
     "command.error.sender.not_exist": "玩家不存在",
     "command.error.target.not_exist": "目標玩家不存在",
+    "command.error.self": "你不能對自己使用此命令",
 
     "command.toggle.success.on": "自動阻止所有 TPA 請求",
     "command.toggle.success.off": "取消阻止所有 TPA 請求",
 
-    "command.block.error.self": "你不能屏蔽自己",
     "command.block.success": "已阻止所有來自 %s 的 TPA 請求",
     "command.block.be_blocked": "您已被 %s 拉入請求黑名單",
     "command.block.fail": "在阻止所有來自 %s 的 TPA 請求時發生錯誤",
 
-    "command.unblock.error.self": "你不能取消屏蔽自己",
     "command.unblock.success": "已允許所有來自 %s 的 TPA 請求",
     "command.unblock.be_unblock": "你已被 %s 移出請求黑名單",
     "command.unblock.fail": "在允許所有來自 %s 的 TPA 請求時發生錯誤"

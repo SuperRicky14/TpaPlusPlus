@@ -7,6 +7,7 @@ import net.superricky.tpaplusplus.config.Config
 import net.superricky.tpaplusplus.database.DatabaseConst.MAX_QUERY_RETRIES
 import net.superricky.tpaplusplus.database.DatabaseConst.MAX_RETRY_DELAY
 import net.superricky.tpaplusplus.database.DatabaseConst.MIN_RETRY_DELAY
+import net.superricky.tpaplusplus.utility.LevelBoundVec3
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.StatementContext
 import org.jetbrains.exposed.sql.statements.expandArgs
@@ -51,6 +52,7 @@ object DatabaseManager {
         SchemaUtils.createMissingTablesAndColumns(
             Tables.Players,
             Tables.BlockedPlayers,
+            Tables.LastDeaths,
             withLogs = true
         )
         logger.info("Tables created")
@@ -79,9 +81,30 @@ object DatabaseManager {
         }
     }
 
+    suspend fun getPlayer(uuid: UUID): Tables.Player? =
+        execute {
+            return@execute Tables.Player.find { Tables.Players.playerId eq uuid }.firstOrNull()
+        }
+
+    suspend fun insertPlayerDeath(uuid: UUID, pos: LevelBoundVec3) =
+        execute {
+            val player = getPlayer(uuid)
+            player?.let {
+                Tables.LastDeath.find { Tables.LastDeaths.playerId eq uuid }.forEach { it.delete() }
+                Tables.LastDeath.new {
+                    this.playerId = player
+                    this.deathWorld = pos.serverLevel.value.toString()
+                    this.x = pos.x
+                    this.y = pos.y
+                    this.z = pos.z
+                    this.backed = false
+                }
+            }
+        }
+
     suspend fun insertPlayer(uuid: UUID, name: String) =
         execute {
-            val player = Tables.Player.find { Tables.Players.playerId eq uuid }.firstOrNull()
+            val player = getPlayer(uuid)
             if (player == null) {
                 Tables.Player.new {
                     this.playerId = uuid
@@ -92,7 +115,7 @@ object DatabaseManager {
 
     suspend fun playerSwitchBlock(uuid: UUID) =
         execute {
-            val player = Tables.Player.find { Tables.Players.playerId eq uuid }.firstOrNull()
+            val player = getPlayer(uuid)
             if (player == null) {
                 throw NullPointerException("Player $uuid not found")
             }
@@ -103,7 +126,7 @@ object DatabaseManager {
 
     suspend fun playerSwitchBlock(uuid: UUID, blocked: Boolean) =
         execute {
-            val player = Tables.Player.find { Tables.Players.playerId eq uuid }.firstOrNull()
+            val player = getPlayer(uuid)
             player?.let {
                 if (player.blockAll == blocked) return@let
                 player.blockAll = blocked

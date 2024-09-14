@@ -9,16 +9,15 @@
 
     "command.error.sender.not_exist": "玩家不存在",
     "command.error.target.not_exist": "目标玩家不存在",
+    "command.error.self": "你不能对自己使用此命令",
 
     "command.toggle.success.on": "自动阻止所有 TPA 请求",
     "command.toggle.success.off": "取消阻止所有 TPA 请求",
 
-    "command.block.error.self": "你不能屏蔽自己",
     "command.block.success": "已阻止所有来自 %s 的 TPA 请求",
     "command.block.be_blocked": "你已被 %s 拉入请求黑名单",
     "command.block.fail": "在阻止所有来自 %s 的 TPA 请求时发生错误",
 
-    "command.unblock.error.self": "你不能取消屏蔽自己",
     "command.unblock.success": "已允许所有来自 %s 的 TPA 请求",
     "command.unblock.be_unblock": "你已被 %s 移出请求黑名单",
     "command.unblock.fail": "在允许所有来自 %s 的 TPA 请求时发生错误"

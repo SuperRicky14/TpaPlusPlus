@@ -9,16 +9,15 @@
 
     "command.error.sender.not_exist": "Sender player not exist",
     "command.error.target.not_exist": "Target player not exist",
+    "command.error.self": "You cannot use this command on yourself",
 
     "command.toggle.success.on": "Automatically blocks all TPA requests",
     "command.toggle.success.off": "Turn off automatically blocking all TPA requests",
 
-    "command.block.error.self": "You can't block yourself",
     "command.block.success": "All TPA requests come from %s have been set to be blocked",
     "command.block.be_blocked": "You have been blacklisted by %s",
     "command.block.fail": "Blocked all TPA requests come from %s fail",
 
-    "command.unblock.error.self": "You can't unblock yourself",
     "command.unblock.success": "All TPA requests come from %s have been unblocked",
     "command.unblock.be_unblock": "You have not been blacklisted by %s",
     "command.unblock.fail": "Unblocked all TPA requests come from %s fail"

@@ -10,7 +10,7 @@ import net.superricky.tpaplusplus.utility.*
 
 object RootCommand : BuildableCommand {
     override fun build(): LiteralNode =
-        literal("tpaplusplus")
+        literal(GlobalConst.MOD_ID)
             .executes { showMetaData(it) }
             .build()
 

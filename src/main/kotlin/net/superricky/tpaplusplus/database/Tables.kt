@@ -29,7 +29,7 @@ object Tables {
         val blockedPlayerName = reference("blocked_player_name", Players.playerName)
 
         init {
-            index("uuid_index", false, playerId, blockedPlayerId)
+            index("uuid_index_blocked_players", false, playerId, blockedPlayerId)
         }
     }
 
@@ -40,5 +40,29 @@ object Tables {
         var blockedPlayerName by Player referencedOn BlockedPlayers.blockedPlayerName
 
         companion object : IntEntityClass<BlockedPlayer>(BlockedPlayers)
+    }
+
+    object LastDeaths : IntIdTable("${GlobalConst.MOD_ID.lowercase()}_last_deaths") {
+        val playerId = reference("player_id", Players.playerId)
+        val deathWorld = char("death_world", DatabaseConst.MAX_WORLD_LENGTH)
+        val x = double("x")
+        val y = double("y")
+        val z = double("z")
+        val backed = bool("backed").default(false)
+
+        init {
+            index("uuid_index_last_deaths", false, playerId)
+        }
+    }
+
+    class LastDeath(id: EntityID<Int>) : IntEntity(id) {
+        var playerId by Player referencedOn LastDeaths.playerId
+        var deathWorld by LastDeaths.deathWorld
+        var x by LastDeaths.x
+        var y by LastDeaths.y
+        var z by LastDeaths.z
+        var backed by LastDeaths.backed
+
+        companion object : IntEntityClass<LastDeath>(LastDeaths)
     }
 }

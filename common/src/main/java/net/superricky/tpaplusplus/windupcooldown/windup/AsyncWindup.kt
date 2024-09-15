@@ -2,16 +2,11 @@ package net.superricky.tpaplusplus.windupcooldown.windup
 
 import kotlinx.coroutines.*
 import net.minecraft.network.chat.Component
-import net.superricky.tpaplusplus.TPAPlusPlus
 import net.superricky.tpaplusplus.config.Messages
 import net.superricky.tpaplusplus.util.MsgFmt
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 private val scope: CoroutineScope = CoroutineScope(dispatcher)
-
-private val LOGGER: Logger = LoggerFactory.getLogger(TPAPlusPlus.MOD_ID)
 
 fun schedule(abstractWindup: AbstractWindup) {
     require(!abstractWindup.cancelled.get()) { "Tried to schedule a windupData that has already been cancelled." }

@@ -70,3 +70,7 @@ fun onTimeoutEvent(request: Request): EventResult {
     RequestHelper.getRequestSet().remove(request)
     return EventResult.pass()
 }
+
+fun shutdownNow() {
+    scope.cancel()
+}

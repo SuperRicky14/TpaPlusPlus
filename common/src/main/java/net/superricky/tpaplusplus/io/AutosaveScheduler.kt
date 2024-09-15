@@ -16,3 +16,8 @@ fun initialiseAutoSaveService(autosaveIntervalSeconds: Long) {
         }
     }
 }
+
+fun shutdownNow() {
+    autosaving = false
+    scope.cancel()
+}

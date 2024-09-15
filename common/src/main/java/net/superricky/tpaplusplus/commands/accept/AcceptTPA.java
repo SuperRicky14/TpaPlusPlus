@@ -4,15 +4,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.requests.Request;
 import net.superricky.tpaplusplus.requests.RequestGrabUtil;
 import net.superricky.tpaplusplus.requests.RequestHelper;
+import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
-import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
+import net.superricky.tpaplusplus.windupcooldown.windup.impl.AcceptWindup;
 
 import java.util.Map;
 import java.util.Objects;
@@ -34,7 +34,7 @@ public class AcceptTPA {
         if (Config.ACCEPT_WINDUP.get() == 0) {
             absoluteAcceptFunctionality(request, receiver);
         } else {
-            AsyncWindupKt.schedule(new WindupData(request, Config.ACCEPT_WINDUP.get(), receiver.getX(), receiver.getY(), receiver.getZ(), CommandType.ACCEPT, new ServerPlayer[]{receiver}));
+            AsyncWindupKt.schedule(new AcceptWindup(request));
         }
     }
 

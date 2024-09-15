@@ -1,12 +1,11 @@
 package net.superricky.tpaplusplus.limitations.impl;
 
-import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.util.MsgFmt;
-import net.superricky.tpaplusplus.limitations.Limitation;
-
 import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.superricky.tpaplusplus.config.Config;
+import net.superricky.tpaplusplus.config.Messages;
+import net.superricky.tpaplusplus.limitations.Limitation;
+import net.superricky.tpaplusplus.util.MsgFmt;
 
 import java.util.Map;
 

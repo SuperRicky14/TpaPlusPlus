@@ -3,8 +3,8 @@ package net.superricky.tpaplusplus.commands.block;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.io.SaveDataManager;
+import net.superricky.tpaplusplus.util.MsgFmt;
 
 import java.util.Map;
 import java.util.UUID;

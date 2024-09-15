@@ -11,9 +11,9 @@ import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.superricky.tpaplusplus.commands.back.DeathHelper;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.requests.RequestHelper;
+import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcherKt;
 
 import java.util.Map;

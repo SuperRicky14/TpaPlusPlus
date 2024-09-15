@@ -3,30 +3,28 @@ package net.superricky.tpaplusplus.windupcooldown.windup
 import kotlinx.coroutines.*
 import net.minecraft.network.chat.Component
 import net.superricky.tpaplusplus.TPAPlusPlus
-import net.superricky.tpaplusplus.config.Config
 import net.superricky.tpaplusplus.config.Messages
 import net.superricky.tpaplusplus.util.MsgFmt
-import net.superricky.tpaplusplus.windupcooldown.CommandType
 import java.util.concurrent.ConcurrentHashMap
 
 private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 private val scope: CoroutineScope = CoroutineScope(dispatcher)
 
-private val trackedWindupData: MutableSet<WindupData> = ConcurrentHashMap.newKeySet()
+private val trackedAbstractWindupData: MutableSet<AbstractWindup> = ConcurrentHashMap.newKeySet()
 
 private const val WINDUP_DISABLED_DISTANCE = -1.0
 private var ticking = true
 
 fun clearTrackedWindupData() {
-    trackedWindupData.clear()
+    trackedAbstractWindupData.clear()
 }
 
-fun removeWindupData(windupData: WindupData) {
-    trackedWindupData.remove(windupData)
+fun removeWindupData(abstractWindup: AbstractWindup) {
+    trackedAbstractWindupData.remove(abstractWindup)
 }
 
-fun addWindupData(windupData: WindupData) {
-    trackedWindupData.add(windupData)
+fun addWindupData(abstractWindup: AbstractWindup) {
+    trackedAbstractWindupData.add(abstractWindup)
 }
 
 fun startAsyncTickLoop(tickRate: Long) {
@@ -39,8 +37,8 @@ fun startAsyncTickLoop(tickRate: Long) {
 }
 
 fun runTick() {
-    for (windupData in trackedWindupData) {
-        val windupDistance = getWindupDistance(windupData)
+    for (windupData in trackedAbstractWindupData) {
+        val windupDistance = windupData.windupDistance
 
         if (windupDistance == WINDUP_DISABLED_DISTANCE) continue
 
@@ -50,64 +48,24 @@ fun runTick() {
                 windupData.acceptX,
                 windupData.acceptY,
                 windupData.acceptZ,
-                windupData.players[0].x,
-                windupData.players[0].y,
-                windupData.players[0].z
+                windupData.windupPlayer.x,
+                windupData.windupPlayer.y,
+                windupData.windupPlayer.z
             ) > windupDistance
         ) {
             // Squared distance between the position which they started the countdown, and their current position is larger than the allowed distance set in the Config.
             windupData.cancelled.set(true)
 
-            windupData.players[0].sendSystemMessage(
+            windupData.windupPlayer.sendSystemMessage(
                 Component.literal(
                     MsgFmt.fmt(
                         Messages.PLAYER_MOVED_DURING_WINDUP.get(),
-                        mapOf("command_used" to TPAPlusPlus.getCommandNameFromType(windupData.type))
+                        mapOf("command_used" to windupData.commandName)
                     )
                 )
             )
 
-            trackedWindupData.remove(windupData)
-        }
-    }
-}
-
-private fun getWindupDistance(windupData: WindupData): Double {
-    return when (windupData.type) {
-        CommandType.BACK -> {
-            Config.BACK_WINDUP_DISTANCE.get()
-        }
-
-        CommandType.ACCEPT -> {
-            Config.ACCEPT_WINDUP_DISTANCE.get()
-        }
-
-        CommandType.DENY -> {
-            Config.DENY_WINDUP_DISTANCE.get()
-        }
-
-        CommandType.CANCEL -> {
-            Config.CANCEL_WINDUP_DISTANCE.get()
-        }
-
-        CommandType.TPA -> {
-            Config.TPA_WINDUP_DISTANCE.get()
-        }
-
-        CommandType.TPAHERE -> {
-            Config.TPAHERE_WINDUP_DISTANCE.get()
-        }
-
-        CommandType.BLOCK -> {
-            Config.BLOCK_WINDUP_DISTANCE.get()
-        }
-
-        CommandType.TOGGLE -> {
-            Config.TOGGLE_WINDUP_DISTANCE.get()
-        }
-
-        CommandType.UNBLOCK -> {
-            Config.UNBLOCK_WINDUP_DISTANCE.get()
+            trackedAbstractWindupData.remove(windupData)
         }
     }
 }

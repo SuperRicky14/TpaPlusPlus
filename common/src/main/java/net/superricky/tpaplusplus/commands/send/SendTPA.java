@@ -5,18 +5,19 @@ import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.commands.block.PlayerBlockingHelper;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.io.PlayerData;
 import net.superricky.tpaplusplus.io.SaveDataManager;
 import net.superricky.tpaplusplus.limitations.LimitationManager;
 import net.superricky.tpaplusplus.requests.Request;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.timeout.TimeoutManagerKt;
+import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.windupcooldown.CommandType;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
-import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
+import net.superricky.tpaplusplus.windupcooldown.windup.impl.TPAHereWindup;
+import net.superricky.tpaplusplus.windupcooldown.windup.impl.TPAWindup;
 
 import java.util.Map;
 import java.util.Objects;
@@ -71,7 +72,7 @@ public class SendTPA {
             if (Config.TPAHERE_WINDUP.get() == 0) {
                 absoluteSendTeleportRequest(sender, receiver, isHereRequest);
             } else {
-                AsyncWindupKt.schedule(new WindupData(true, Config.TPAHERE_WINDUP.get(), sender.getX(), sender.getY(), sender.getZ(), CommandType.TPAHERE, new ServerPlayer[]{sender, receiver}));
+                AsyncWindupKt.schedule(new TPAHereWindup(sender, receiver));
             }
         } else {
             if (AsyncCooldownHelper.checkCommandCooldownAndNotify(sender, sender.getUUID(), CommandType.TPA))
@@ -83,7 +84,7 @@ public class SendTPA {
             if (Config.TPA_WINDUP.get() == 0) {
                 absoluteSendTeleportRequest(sender, receiver, isHereRequest);
             } else {
-                AsyncWindupKt.schedule(new WindupData(false, Config.TPA_WINDUP.get(), sender.getX(), sender.getY(), sender.getZ(), CommandType.TPA, new ServerPlayer[]{sender, receiver}));
+                AsyncWindupKt.schedule(new TPAWindup(sender, receiver));
             }
         }
     }

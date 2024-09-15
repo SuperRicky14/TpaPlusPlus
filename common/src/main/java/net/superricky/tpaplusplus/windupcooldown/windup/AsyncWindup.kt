@@ -3,72 +3,26 @@ package net.superricky.tpaplusplus.windupcooldown.windup
 import kotlinx.coroutines.*
 import net.minecraft.network.chat.Component
 import net.superricky.tpaplusplus.TPAPlusPlus
-import net.superricky.tpaplusplus.commands.accept.AcceptTPA
-import net.superricky.tpaplusplus.commands.back.Back
-import net.superricky.tpaplusplus.commands.block.BlockPlayer
-import net.superricky.tpaplusplus.commands.cancel.CancelTPA
-import net.superricky.tpaplusplus.commands.deny.DenyTPA
-import net.superricky.tpaplusplus.commands.send.SendTPA
-import net.superricky.tpaplusplus.commands.toggle.TPToggle
-import net.superricky.tpaplusplus.commands.unblock.UnBlockPlayer
-import net.superricky.tpaplusplus.config.Config
 import net.superricky.tpaplusplus.config.Messages
 import net.superricky.tpaplusplus.util.MsgFmt
-import net.superricky.tpaplusplus.windupcooldown.CommandType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.Objects
 
 private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 private val scope: CoroutineScope = CoroutineScope(dispatcher)
 
 private val LOGGER: Logger = LoggerFactory.getLogger(TPAPlusPlus.MOD_ID)
 
-private fun validateInvalidWindupData(windupData: WindupData) {
-    if (AsyncWindupHelper.playersAreNull(*windupData.players)) {
-        throw IllegalArgumentException("The playerlist or one of the players inside is null! Please report this issue to the TPA++ issue page immediately.")
-    }
-
-    if (windupData.players.isEmpty()) {
-        throw IllegalArgumentException("No players were specified when attempting to schedule this task! Please report this issue to the TPA++ issue page immediately.")
-    }
-}
-
-fun schedule(windupData: WindupData) {
-    // Prevent the tasks specified from being in an illegal state (e.g: the caller specified an ACCEPT type, although there was no request to accept).
-    try {
-        validateInvalidWindupData(windupData)
-        AsyncWindupHelper.validateTypeSpecificWindupData(windupData)
-    } catch (e: IllegalArgumentException) {
-        LOGGER.error(e.message)
-        windupData.players[0].sendSystemMessage(Component.literal("§4An internal server error occurred, please check console for more information."))
-        return
-    }
-
-    require(!windupData.cancelled.get()) { "Tried to schedule a windupData that has already been cancelled." }
+fun schedule(abstractWindup: AbstractWindup) {
+    require(!abstractWindup.cancelled.get()) { "Tried to schedule a windupData that has already been cancelled." }
 
     // Request is a valid request.
-    addWindupData(windupData) // Add it to the tracked windupData.
-
-    // Decide whether to message the player.
-    if (AsyncWindupHelper.extractDecimalPart(windupData.originalDelay) > Config.WINDUP_DECIMAL_MESSAGE_THRESHOLD.get()) {
-        // Decimal Number is greater than the threshold specified in the config, so we notify the player here.
-        // Message the player the configured WINDUP_TIME_REMAINING message, except since it isn't an integer, we have to round it here to 3 decimal places (which it should be anyway's)
-        AsyncWindupHelper.fastMSG(
-            MsgFmt.fmt(
-                Messages.WINDUP_TIME_REMAINING.get(),
-                mapOf("time" to (Math.round(windupData.originalDelay * 1000).toDouble() / 1000).toString())
-            ),
-            *windupData.players
-        )
-    }
+    addWindupData(abstractWindup) // Add it to the tracked windupData.
 
     scope.launch {
-        delay(AsyncWindupHelper.getLongMillisFromDoubleSeconds(AsyncWindupHelper.extractDecimalPart(windupData.originalDelay)))
-
         var countingDown = true
         while (countingDown) {
-            countingDown = countdownIteratively(windupData)
+            countingDown = countdownIteratively(abstractWindup)
             delay(1000L)
         }
     }
@@ -78,74 +32,35 @@ fun schedule(windupData: WindupData) {
  * @return True if the countdown should be continued for another iteration
  *         False if the countdown should stop
  */
-private fun countdownIteratively(windupData: WindupData): Boolean {
-    if (windupData.delay.get() > 0) { // Countdown not finished
-        if (windupData.cancelled.get()) {
-            removeWindupData(windupData)
+private fun countdownIteratively(abstractWindup: AbstractWindup): Boolean {
+    if (abstractWindup.windupDelay.get() > 0) {
+        // Countdown not finished
+        if (abstractWindup.cancelled.get()) {
+            removeWindupData(abstractWindup)
             return false
         }
 
-        AsyncWindupHelper.fastMSG(
-            MsgFmt.fmt(
-                Messages.WINDUP_TIME_REMAINING.get(),
-                mapOf("time" to windupData.delay.toString())
-            ), *windupData.players
-        )
+        abstractWindup.windupPlayer.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.WINDUP_TIME_REMAINING.get(),
+            mapOf("time" to abstractWindup.windupDelay.toString()))))
 
-        windupData.delay.decrementAndGet()
+        abstractWindup.windupDelay.decrementAndGet()
         return true
     }
 
-    if (windupData.cancelled.get()) {
-        removeWindupData(windupData)
+    if (abstractWindup.cancelled.get()) {
+        removeWindupData(abstractWindup)
         return false
     }
 
     // Delay is zero, countdown finished
-    try {
-        onCountdownFinished(windupData)
-    } catch (e: NullPointerException) {
-        printScaryNullPointerExceptionError(e)
-    }
+    onCountdownFinished(abstractWindup)
 
-    removeWindupData(windupData)
+    removeWindupData(abstractWindup)
     return false
 }
 
-private fun printScaryNullPointerExceptionError(e: NullPointerException) {
-    LOGGER.error(e.message)
-    LOGGER.warn("A NullPointerException was caught by TPA++. This is an extremely rare case, and if this does not happen again you should be able to continue playing.")
-    LOGGER.warn("Although, please report this issue to TPA++ at \"https://github.com/SuperRicky14/TpaPlusPlus/issues\" along with the error message.")
-    LOGGER.warn("If you notice any unexpected behaviour shutdown your server immediately and create a backup of your world before turning it back on.")
-}
 
-private fun onCountdownFinished(windupData: WindupData) {
-    when (windupData.type) {
-        CommandType.BACK -> Back.absoluteTeleportToLatestDeath(windupData.players[0], windupData.deathPosition)
 
-        CommandType.ACCEPT -> AcceptTPA.absoluteAcceptFunctionality(
-            Objects.requireNonNull(windupData.request), windupData.request!!.receiver
-        )
-
-        CommandType.DENY -> DenyTPA.absoluteDeny(Objects.requireNonNull(windupData.request))
-
-        CommandType.CANCEL -> CancelTPA.absoluteCancel(Objects.requireNonNull(windupData.request))
-
-        CommandType.TPA, CommandType.TPAHERE -> SendTPA.absoluteSendTeleportRequest(
-            windupData.players[0],
-            windupData.players[1], Objects.requireNonNull(windupData.hereRequest)
-        )
-
-        CommandType.BLOCK -> BlockPlayer.absoluteBlockPlayer(
-            Objects.requireNonNull(windupData.playerData),
-            windupData.players[0], windupData.players[1]
-        )
-
-        CommandType.TOGGLE -> TPToggle.toggleTP(windupData.players[0])
-
-        CommandType.UNBLOCK -> UnBlockPlayer.absoluteUnBlockPlayer(
-            Objects.requireNonNull(windupData.playerData),
-            windupData.players[0], windupData.players[1]
-        )
-    }
+private fun onCountdownFinished(abstractWindup: AbstractWindup) {
+    abstractWindup.onWindupFinished()
 }

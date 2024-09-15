@@ -4,9 +4,9 @@ import dev.architectury.event.EventResult
 import kotlinx.coroutines.*
 import net.minecraft.network.chat.Component
 import net.superricky.tpaplusplus.config.Messages
-import net.superricky.tpaplusplus.util.MsgFmt
 import net.superricky.tpaplusplus.requests.Request
 import net.superricky.tpaplusplus.requests.RequestHelper
+import net.superricky.tpaplusplus.util.MsgFmt
 
 // Create a shared thread pool
 private val dispatcher: CoroutineDispatcher = Dispatchers.IO

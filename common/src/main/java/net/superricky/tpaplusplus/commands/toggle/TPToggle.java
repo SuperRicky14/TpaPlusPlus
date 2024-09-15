@@ -11,7 +11,7 @@ import net.superricky.tpaplusplus.windupcooldown.CommandType;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
-import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
+import net.superricky.tpaplusplus.windupcooldown.windup.impl.TPToggleWindup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ public class TPToggle {
         if (Config.TOGGLE_WINDUP.get() == 0) {
             toggleTP(executor);
         } else {
-            AsyncWindupKt.schedule(new WindupData(Config.TOGGLE_WINDUP.get(), executor.getX(), executor.getY(), executor.getZ(), CommandType.TOGGLE, new ServerPlayer[]{executor}));
+            AsyncWindupKt.schedule(new TPToggleWindup(executor));
         }
     }
 

@@ -8,7 +8,7 @@ import net.superricky.tpaplusplus.windupcooldown.CommandType;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
-import net.superricky.tpaplusplus.windupcooldown.windup.WindupData;
+import net.superricky.tpaplusplus.windupcooldown.windup.impl.BackWindup;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -41,7 +41,7 @@ public class Back {
         if (Config.BACK_WINDUP.get() == 0) {
             absoluteTeleportToLatestDeath(executor, deathPosition);
         } else {
-            AsyncWindupKt.schedule(new WindupData(deathPosition, Config.BACK_WINDUP.get(), executor.getX(), executor.getY(), executor.getZ(), CommandType.BACK, new ServerPlayer[]{executor}));
+            AsyncWindupKt.schedule(new BackWindup(executor, deathPosition));
         }
     }
 

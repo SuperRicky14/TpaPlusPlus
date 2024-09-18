@@ -9,6 +9,7 @@ import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.async.AsyncCommandData
 import net.superricky.tpaplusplus.command.AsyncCommand
 import net.superricky.tpaplusplus.command.BuildableCommand
+import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
 import net.superricky.tpaplusplus.config.CommonSpec
 import net.superricky.tpaplusplus.config.Config
 import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
@@ -34,20 +35,10 @@ object BlockCommand : BuildableCommand, AsyncCommand {
 
     private fun blockPlayer(context: Context): Int {
         val source = context.source
-        val sender = source.player
-        val target = EntityArgumentType.getPlayer(context, "player")
-        if (sender == null) {
-            source.sendError(Text.translatable("command.error.sender.not_exist"))
-            return CommandResult.SENDER_NOT_EXIST.status
-        }
-        if (target == null) {
-            source.sendError(Text.translatable("command.error.target.not_exist"))
-            return CommandResult.TARGET_NOT_EXIST.status
-        }
-        if (sender == target) {
-            source.sendError(Text.translatable("command.block.error.self"))
-            return CommandResult.SELF_CHECK_ERROR.status
-        }
+        val (result, sender, target) = checkSenderReceiver(context)
+        if (result != CommandResult.NORMAL) return result.status
+        sender!!
+        target!!
         TpaPlusPlus.launch {
             if (DatabaseManager.insertBlockedPlayer(sender.uuid, target.uuid)) {
                 source.sendFeedback(

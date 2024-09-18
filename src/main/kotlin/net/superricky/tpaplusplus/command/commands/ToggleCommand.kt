@@ -7,6 +7,7 @@ import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.async.AsyncCommandData
 import net.superricky.tpaplusplus.command.AsyncCommand
 import net.superricky.tpaplusplus.command.BuildableCommand
+import net.superricky.tpaplusplus.command.CommandHelper
 import net.superricky.tpaplusplus.config.Config
 import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.command.CommandNameSpec
@@ -35,13 +36,11 @@ object ToggleCommand : BuildableCommand, AsyncCommand {
         )
 
     private fun switchToggle(context: Context): Int {
+        val source = context.source
+        val (result, sender) = CommandHelper.checkSenderReceiver(context, CommandHelper::checkSender)
+        if (result != CommandResult.NORMAL) return result.status
+        sender!!
         TpaPlusPlus.launch {
-            val source = context.source
-            val sender = source.player
-            if (sender == null) {
-                source.sendError(Text.translatable("command.toggle.error.sender.not_exist"))
-                return@launch
-            }
             val blocked = DatabaseManager.playerSwitchBlock(sender.uuid)
             if (blocked) {
                 source.sendFeedback({ Text.translatable("command.toggle.success.on") }, false)
@@ -53,13 +52,11 @@ object ToggleCommand : BuildableCommand, AsyncCommand {
     }
 
     private fun switchToggle(context: Context, blocked: Boolean): Int {
+        val source = context.source
+        val (result, sender) = CommandHelper.checkSenderReceiver(context, CommandHelper::checkSender)
+        if (result != CommandResult.NORMAL) return result.status
+        sender!!
         TpaPlusPlus.launch {
-            val source = context.source
-            val sender = source.player
-            if (sender == null) {
-                source.sendError(Text.translatable("command.toggle.error.sender.not_exist"))
-                return@launch
-            }
             if (blocked) {
                 sender.toggleOn()
                 source.sendFeedback({ Text.translatable("command.toggle.success.on") }, false)

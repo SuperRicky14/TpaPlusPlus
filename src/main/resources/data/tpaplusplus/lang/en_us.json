@@ -20,5 +20,13 @@
 
     "command.unblock.success": "All TPA requests come from %s have been unblocked",
     "command.unblock.be_unblock": "You have not been blacklisted by %s",
-    "command.unblock.fail": "Unblocked all TPA requests come from %s fail"
+    "command.unblock.fail": "Unblocked all TPA requests come from %s fail",
+
+    "command.tpa.request.sender": "Successfully sent teleport request to %s",
+    "command.tpa.request.receiver": "%s wants to teleport to you!",
+    "command.tpa.request.cancel": "Teleport request from %s has been canceled!",
+    "command.tpa.timeout.sender": "Your teleport request to %s timed out",
+    "command.tpa.timeout.receiver": "Your teleport request from %s timed out",
+
+    "command.windup.error.out_distance": "You moved too much whilst trying to execute %s, so it was cancelled"
 }

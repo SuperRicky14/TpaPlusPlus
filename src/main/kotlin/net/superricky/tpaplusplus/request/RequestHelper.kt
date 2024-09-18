@@ -29,7 +29,7 @@ object RequestHelper {
 
     fun teleport(request: Request) {
         val sender = request.sender
-        val receiver = request.receiver
+        val receiver = request.receiver!!
 
         if (request.hereRequest) {
             receiver.teleport(sender.serverWorld, sender.x, sender.y, sender.z, sender.yaw, sender.pitch)

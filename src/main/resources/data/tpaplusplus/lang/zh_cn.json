@@ -20,5 +20,13 @@
 
     "command.unblock.success": "已允许所有来自 %s 的 TPA 请求",
     "command.unblock.be_unblock": "你已被 %s 移出请求黑名单",
-    "command.unblock.fail": "在允许所有来自 %s 的 TPA 请求时发生错误"
+    "command.unblock.fail": "在允许所有来自 %s 的 TPA 请求时发生错误",
+
+    "command.tpa.request.sender": "成功向 %s 发送传送请求",
+    "command.tpa.request.receiver": "%s 想传送到你身边！",
+    "command.tpa.request.cancel": "来自 %s 的传送请求已被取消！",
+    "command.tpa.timeout.sender": "传送到 %s 的传送请求超时",
+    "command.tpa.timeout.receiver": "来自 %s 的传送请求超时",
+
+    "command.windup.error.out_distance": "执行 %s 的时候移动幅度过大, 取消执行"
 }

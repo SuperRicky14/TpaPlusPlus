@@ -50,19 +50,19 @@ object AsyncCommandHelper : CoroutineScope {
         requests.forEach {
             // check canceled
             if (it.isCanceled()) {
-                it.callback.invoke(AsyncCommandResult.BE_CANCELED)
+                it.call(AsyncCommandResult.BE_CANCELED)
                 elementRemoved.add(it)
                 return@forEach
             }
             // check distance
             if (!checkActions[it.getRequest().commandType]!!.invoke(it)) {
-                it.callback.invoke(AsyncCommandResult.OUT_OF_DISTANCE)
+                it.call(AsyncCommandResult.OUT_OF_DISTANCE)
                 elementRemoved.add(it)
                 return@forEach
             }
             // check timeout
             if (it.tick()) {
-                it.callback.invoke(AsyncCommandResult.TIMEOUT)
+                it.call(AsyncCommandResult.TIMEOUT)
                 elementRemoved.add(it)
                 return@forEach
             }

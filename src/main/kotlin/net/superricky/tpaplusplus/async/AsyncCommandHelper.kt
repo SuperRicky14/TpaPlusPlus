@@ -3,6 +3,7 @@ package net.superricky.tpaplusplus.async
 import kotlinx.atomicfu.AtomicBoolean
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.*
+import net.minecraft.server.network.ServerPlayerEntity
 import net.superricky.tpaplusplus.GlobalConst.ONE_SECOND
 import java.util.*
 import kotlin.coroutines.CoroutineContext
@@ -58,7 +59,16 @@ object AsyncCommandHelper : CoroutineScope {
         }
         if (request.needDelay()) {
             var delayTime = request.getDelay()
-            val job = getJob(request)
+            val job = launch {
+                while (true) {
+                    delay(tickDelay)
+                    if (!request.getRequest().commandType.handler.checkWindupDistance(request)) {
+                        request.call(AsyncCommandResult.OUT_OF_DISTANCE)
+                        request.cancel()
+                        return@launch
+                    }
+                }
+            }
             launch {
                 request.call(AsyncCommandResult.UPDATE_DELAY_MESSAGE)
                 while (true) {
@@ -84,15 +94,24 @@ object AsyncCommandHelper : CoroutineScope {
         }
     }
 
-    private fun getJob(request: AsyncCommandData) = launch {
-        while (true) {
-            delay(tickDelay)
-            if (!request.getRequest().commandType.handler.checkWindupDistance(request)) {
-                request.call(AsyncCommandResult.OUT_OF_DISTANCE)
-                request.cancel()
-                return@launch
-            }
+    fun acceptRequest(receiver: ServerPlayerEntity): AsyncCommandResult {
+        val request = requests.find { it.getRequest().receiver == receiver }
+        if (request == null) {
+            return AsyncCommandResult.REQUEST_NOT_FOUND
         }
+        request.cancel()
+        request.call(AsyncCommandResult.REQUEST_ACCEPTED)
+        return AsyncCommandResult.ACCEPT_SUCCESS
+    }
+
+    fun acceptRequest(receiver: ServerPlayerEntity, sender: ServerPlayerEntity): AsyncCommandResult {
+        val request = requests.find { it.getRequest().receiver == receiver && it.getRequest().sender == sender }
+        if (request == null) {
+            return AsyncCommandResult.REQUEST_NOT_FOUND
+        }
+        request.cancel()
+        request.call(AsyncCommandResult.REQUEST_ACCEPTED)
+        return AsyncCommandResult.ACCEPT_SUCCESS
     }
 
     fun runTick() {

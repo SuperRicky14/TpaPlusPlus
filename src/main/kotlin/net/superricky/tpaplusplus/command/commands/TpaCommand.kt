@@ -6,6 +6,7 @@ import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.text.Text
 import net.superricky.tpaplusplus.async.*
 import net.superricky.tpaplusplus.async.request.Request
+import net.superricky.tpaplusplus.async.request.RequestHelper
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
 import net.superricky.tpaplusplus.command.CommandResult
@@ -62,8 +63,14 @@ object TpaCommand : BuildableCommand, AsyncCommand {
                 request.sender.sendRemainTime(request.delay)
             }
 
-            AsyncCommandResult.ACCEPT -> {
-                AsyncCommandHelper.addCooldown(request.sender.uuid, AsyncCommandType.TPA)
+            AsyncCommandResult.REQUEST_ACCEPTED -> {
+                RequestHelper.teleport(request)
+                if (AsyncCommandType.TPA.handler.getCooldownTime() != 0.0) {
+                    AsyncCommandHelper.addCooldown(request.sender.uuid, AsyncCommandType.TPA)
+                }
+                if (AsyncCommandType.ACCEPT.handler.getDelayTime() != 0.0) {
+                    AsyncCommandHelper.addCooldown(request.receiver.uuid, AsyncCommandType.ACCEPT)
+                }
             }
 
             AsyncCommandResult.UNDER_COOLDOWN -> {

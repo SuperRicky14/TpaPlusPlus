@@ -7,7 +7,6 @@ import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.async.AsyncCommand
 import net.superricky.tpaplusplus.async.AsyncCommandData
 import net.superricky.tpaplusplus.command.BuildableCommand
-import net.superricky.tpaplusplus.command.CommandHelper
 import net.superricky.tpaplusplus.command.CommandResult
 import net.superricky.tpaplusplus.config.Config
 import net.superricky.tpaplusplus.config.command.CommandCooldownSpec
@@ -47,9 +46,8 @@ object ToggleCommand : BuildableCommand, AsyncCommand {
 
     private fun switchToggle(context: Context): Int {
         val source = context.source
-        val (result, sender) = CommandHelper.checkSenderReceiver(context, CommandHelper::checkSender)
-        if (result != CommandResult.NORMAL) return result.status
-        sender!!
+        val sender = source.player
+        sender ?: return CommandResult.SENDER_NOT_EXIST.status
         TpaPlusPlus.launch {
             val blocked = DatabaseManager.playerSwitchBlock(sender.uuid)
             if (blocked) {
@@ -63,9 +61,8 @@ object ToggleCommand : BuildableCommand, AsyncCommand {
 
     private fun switchToggle(context: Context, blocked: Boolean): Int {
         val source = context.source
-        val (result, sender) = CommandHelper.checkSenderReceiver(context, CommandHelper::checkSender)
-        if (result != CommandResult.NORMAL) return result.status
-        sender!!
+        val sender = source.player
+        sender ?: return CommandResult.SENDER_NOT_EXIST.status
         TpaPlusPlus.launch {
             if (blocked) {
                 sender.toggleOn()

@@ -10,6 +10,8 @@
     "command.error.sender.not_exist": "Sender player not exist",
     "command.error.target.not_exist": "Target player not exist",
     "command.error.self": "You cannot use this command on yourself",
+    "command.error.request.notfound.all": "Could not find your teleport request",
+    "command.error.request.notfound.target": "Could not find your teleport request to %s",
 
     "command.toggle.success.on": "Automatically blocks all TPA requests",
     "command.toggle.success.off": "Turn off automatically blocking all TPA requests",
@@ -27,6 +29,9 @@
     "command.tpa.request.cancel": "Teleport request from %s has been canceled!",
     "command.tpa.timeout.sender": "Your teleport request to %s timed out",
     "command.tpa.timeout.receiver": "Your teleport request from %s timed out",
+
+    "command.tpaaccept.request.accept.sender": "Your teleport request for %s was accepted!",
+    "command.tpaaccept.request.accept.receiver": "Accepted teleport request from %s",
 
     "command.windup.remain": "The command is executing, please wait %s s",
     "command.windup.error.out_distance": "You moved too much whilst trying to execute /%s, so it was cancelled",

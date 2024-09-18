@@ -4,16 +4,23 @@ import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.superricky.tpaplusplus.utility.Context
+import net.superricky.tpaplusplus.utility.TextColorPallet
 
 object CommandHelper {
-    fun checkSenderReceiver(
-        context: Context,
-        checker: Function2<ServerPlayerEntity?, ServerPlayerEntity?, CommandResult> = this::checkSenderReceiver,
-    ): Triple<CommandResult, ServerPlayerEntity?, ServerPlayerEntity?> {
+
+    fun requestNotFound(sender: ServerPlayerEntity) =
+        sender.sendMessage(Text.translatable("command.error.request.notfound.all").setStyle(TextColorPallet.error))
+
+    fun requestNotFound(sender: ServerPlayerEntity, receiver: ServerPlayerEntity) =
+        sender.sendMessage(
+            Text.translatable("command.error.request.notfound.target", receiver.name).setStyle(TextColorPallet.error)
+        )
+
+    fun checkSenderReceiver(context: Context): Triple<CommandResult, ServerPlayerEntity?, ServerPlayerEntity?> {
         val source = context.source
         val sender = source.player
         val receiver = EntityArgumentType.getPlayer(context, "player")
-        val result = checker.invoke(sender, receiver)
+        val result = checkSenderReceiver(sender, receiver)
         return when (result) {
             CommandResult.SELF_CHECK_ERROR -> {
                 source.sendError(Text.translatable("command.error.self"))
@@ -34,11 +41,6 @@ object CommandHelper {
                 Triple(CommandResult.NORMAL, sender, receiver)
             }
         }
-    }
-
-    fun checkSender(sender: ServerPlayerEntity?, ignored: ServerPlayerEntity?): CommandResult {
-        sender ?: return CommandResult.SENDER_NOT_EXIST
-        return CommandResult.NORMAL
     }
 
     fun checkSenderReceiver(sender: ServerPlayerEntity?, receiver: ServerPlayerEntity?): CommandResult {

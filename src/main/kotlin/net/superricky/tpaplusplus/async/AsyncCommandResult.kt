@@ -7,5 +7,7 @@ enum class AsyncCommandResult {
     AFTER_DELAY,
     UPDATE_DELAY_MESSAGE,
     UNDER_COOLDOWN,
-    ACCEPT
+    REQUEST_ACCEPTED,
+    REQUEST_NOT_FOUND,
+    ACCEPT_SUCCESS
 }

@@ -24,7 +24,7 @@ primary = "#009688"
 primaryVariant = "#52c7b8"
 secondary = "#1e88e5"
 secondaryVariant = "#6ab7ff"
-light = "#c5d6f0"
+error = "#fb5454"
 
 [advanced]
 # WARNING: These options are related to asynchronous operations and/or saving / loading datain.

@@ -9,7 +9,6 @@ import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.superricky.tpaplusplus.TpaPlusPlus
-import net.superricky.tpaplusplus.config.AdvancedSpec
 import net.superricky.tpaplusplus.config.Config
 import net.superricky.tpaplusplus.database.DatabaseManager
 
@@ -42,18 +41,34 @@ fun PlayerEntity.sendMessage(
     )
 }
 
-@Suppress("MagicNumber")
-fun Long.translateSecondToTick(): Long =
-    if (Config.getConfig()[AdvancedSpec.unblockingTickLoop]) {
-        this * Config.getConfig()[AdvancedSpec.asyncLoopRate]
-    } else {
-        this * 20
-    }
+fun PlayerEntity.sendRemainTime(
+    time: Double,
+    outStyle: Style = TextColorPallet.primary,
+    inStyle: Style = TextColorPallet.secondary
+) {
+    this.sendMessage(
+        Text.translatable(
+            "command.windup.remain",
+            String.format("%.1f", time).literal().setStyle(inStyle)
+        ).setStyle(outStyle)
+    )
+}
 
-@Suppress("MagicNumber")
-fun Double.translateTickToSecond(): Double =
-    if (Config.getConfig()[AdvancedSpec.unblockingTickLoop]) {
-        this / Config.getConfig()[AdvancedSpec.asyncLoopRate].toDouble()
-    } else {
-        this / 20.0
-    }
+fun PlayerEntity.sendCooldownTime(
+    commandName: String,
+    time: Double,
+    outStyle: Style = TextColorPallet.primary,
+    inStyle: Style = TextColorPallet.secondary
+) {
+    this.sendMessage(
+        Text.translatable(
+            "command.cooldown.command",
+            commandName.literal().setStyle(inStyle),
+            String.format("%.1f", time).literal().setStyle(inStyle)
+        ).setStyle(outStyle)
+    )
+}
+
+fun Double.translateSecondToTick(): Double = this * Config.getTickRate()
+
+fun Double.translateTickToSecond(): Double = this / Config.getTickRate()

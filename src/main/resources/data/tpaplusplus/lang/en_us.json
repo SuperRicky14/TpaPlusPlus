@@ -28,5 +28,8 @@
     "command.tpa.timeout.sender": "Your teleport request to %s timed out",
     "command.tpa.timeout.receiver": "Your teleport request from %s timed out",
 
-    "command.windup.error.out_distance": "You moved too much whilst trying to execute %s, so it was cancelled"
+    "command.windup.remain": "The command is executing, please wait %s s",
+    "command.windup.error.out_distance": "You moved too much whilst trying to execute /%s, so it was cancelled",
+
+    "command.cooldown.command": "Command /%s is currently on cooldown, please wait %s s!"
 }

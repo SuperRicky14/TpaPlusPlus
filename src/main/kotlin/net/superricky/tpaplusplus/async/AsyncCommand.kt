@@ -1,11 +1,14 @@
-package net.superricky.tpaplusplus.command
+package net.superricky.tpaplusplus.async
 
-import net.superricky.tpaplusplus.async.AsyncCommandData
 import net.superricky.tpaplusplus.utility.LevelBoundVec3
 import net.superricky.tpaplusplus.utility.getDimension
 
 interface AsyncCommand {
     fun checkWindupDistance(asyncCommandData: AsyncCommandData): Boolean
+
+    fun getCooldownTime(): Double
+
+    fun getDelayTime(): Double
 
     fun checkWindupDistance(
         asyncCommandData: AsyncCommandData,

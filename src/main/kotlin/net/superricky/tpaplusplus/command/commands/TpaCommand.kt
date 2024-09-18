@@ -3,16 +3,17 @@ package net.superricky.tpaplusplus.command.commands
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
-import net.superricky.tpaplusplus.async.AsyncCommandData
-import net.superricky.tpaplusplus.async.AsyncCommandHelper
-import net.superricky.tpaplusplus.command.AsyncCommand
+import net.minecraft.text.Text
+import net.superricky.tpaplusplus.async.*
+import net.superricky.tpaplusplus.async.request.Request
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
+import net.superricky.tpaplusplus.command.CommandResult
 import net.superricky.tpaplusplus.config.Config
+import net.superricky.tpaplusplus.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.command.CommandNameSpec
-import net.superricky.tpaplusplus.request.Request
 import net.superricky.tpaplusplus.utility.*
 
 object TpaCommand : BuildableCommand, AsyncCommand {
@@ -23,6 +24,10 @@ object TpaCommand : BuildableCommand, AsyncCommand {
                     .executes { tpaPlayer(it) }
             )
             .build()
+
+    override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.tpaCooldown]
+
+    override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.tpaDelay]
 
     override fun checkWindupDistance(asyncCommandData: AsyncCommandData): Boolean =
         checkWindupDistance(
@@ -44,12 +49,28 @@ object TpaCommand : BuildableCommand, AsyncCommand {
                 request.receiver.sendMessage("command.tpa.timeout.receiver", request.sender)
             }
 
-            AsyncCommandResult.BE_CANCELED -> {
+            AsyncCommandResult.OUT_OF_DISTANCE -> {
+                request.sender.sendMessage(
+                    Text.translatable(
+                        "command.windup.error.out_distance",
+                        Config.getConfig()[CommandNameSpec.tpaCommand].literal().setStyle(TextColorPallet.secondary)
+                    ).setStyle(TextColorPallet.primary)
+                )
             }
 
-            AsyncCommandResult.OUT_OF_DISTANCE -> {
-                request.sender.sendMessage("command.windup.error.out_distance", request.receiver)
-                request.receiver.sendMessage("command.tpa.request.cancel", request.sender)
+            AsyncCommandResult.UPDATE_DELAY_MESSAGE -> {
+                request.sender.sendRemainTime(request.delay)
+            }
+
+            AsyncCommandResult.ACCEPT -> {
+                AsyncCommandHelper.addCooldown(request.sender.uuid, AsyncCommandType.TPA)
+            }
+
+            AsyncCommandResult.UNDER_COOLDOWN -> {
+                request.sender.sendCooldownTime(
+                    Config.getConfig()[CommandNameSpec.tpaCommand],
+                    request.cooldown.translateTickToSecond()
+                )
             }
 
             else -> {}
@@ -63,9 +84,8 @@ object TpaCommand : BuildableCommand, AsyncCommand {
         sender!!
         target!!
         val asyncCommandData = AsyncCommandData(
-            Request(sender, target, CommandType.TPA, false),
+            Request(sender, target, AsyncCommandType.TPA),
             LevelBoundVec3(sender.getDimension(), sender.pos),
-            Config.getConfig()[CommandDelaySpec.tpaDelay],
             ::asyncCommandCallback
         )
         AsyncCommandHelper.schedule(asyncCommandData)

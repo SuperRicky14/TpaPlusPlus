@@ -7,15 +7,21 @@ import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.text.Text
 import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.async.AsyncCommandData
-import net.superricky.tpaplusplus.command.AsyncCommand
+import net.superricky.tpaplusplus.async.AsyncCommand
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
+import net.superricky.tpaplusplus.command.CommandResult
 import net.superricky.tpaplusplus.config.CommonSpec
 import net.superricky.tpaplusplus.config.Config
+import net.superricky.tpaplusplus.config.command.CommandCooldownSpec
+import net.superricky.tpaplusplus.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.command.CommandNameSpec
 import net.superricky.tpaplusplus.database.DatabaseManager
-import net.superricky.tpaplusplus.utility.*
+import net.superricky.tpaplusplus.utility.Context
+import net.superricky.tpaplusplus.utility.LiteralNode
+import net.superricky.tpaplusplus.utility.TextColorPallet
+import net.superricky.tpaplusplus.utility.getColoredName
 
 object BlockCommand : BuildableCommand, AsyncCommand {
     override fun build(): LiteralNode =
@@ -25,6 +31,10 @@ object BlockCommand : BuildableCommand, AsyncCommand {
                     .executes { blockPlayer(it) }
             )
             .build()
+
+    override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.blockCooldown]
+
+    override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.blockDelay]
 
     override fun checkWindupDistance(asyncCommandData: AsyncCommandData): Boolean =
         checkWindupDistance(

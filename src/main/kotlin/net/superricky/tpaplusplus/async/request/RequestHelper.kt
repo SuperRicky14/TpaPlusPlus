@@ -1,4 +1,4 @@
-package net.superricky.tpaplusplus.request
+package net.superricky.tpaplusplus.async.request
 
 import net.minecraft.server.network.ServerPlayerEntity
 

@@ -3,7 +3,6 @@ package net.superricky.tpaplusplus.command
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
-import net.superricky.tpaplusplus.utility.CommandResult
 import net.superricky.tpaplusplus.utility.Context
 
 object CommandHelper {

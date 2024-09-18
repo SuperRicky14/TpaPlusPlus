@@ -28,5 +28,8 @@
     "command.tpa.timeout.sender": "传送到 %s 的传送请求超时",
     "command.tpa.timeout.receiver": "来自 %s 的传送请求超时",
 
-    "command.windup.error.out_distance": "执行 %s 的时候移动幅度过大, 取消执行"
+    "command.windup.remain": "正在执行命令，请等待 %s 秒",
+    "command.windup.error.out_distance": "执行 /%s 的时候移动幅度过大, 取消执行",
+
+    "command.cooldown.command": "/%s 当前正在冷却，请在%s秒后重试！"
 }

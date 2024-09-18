@@ -1,4 +1,4 @@
-package net.superricky.tpaplusplus.utility
+package net.superricky.tpaplusplus.command
 
 enum class CommandResult(val status: Int) {
     NORMAL(1),

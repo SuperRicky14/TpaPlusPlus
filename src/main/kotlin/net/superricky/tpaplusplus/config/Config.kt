@@ -62,4 +62,12 @@ object Config {
             TpaPlusPlus.server.getSavePath(WorldSavePath.ROOT)
         }
     }
+
+    fun getTickRate(): Double {
+        return if (getConfig()[AdvancedSpec.unblockingTickLoop]) {
+            getConfig()[AdvancedSpec.asyncLoopRate].toDouble()
+        } else {
+            GlobalConst.SERVER_TICK_RATE
+        }
+    }
 }

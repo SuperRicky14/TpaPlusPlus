@@ -3,9 +3,7 @@ package net.superricky.tpaplusplus.async
 import kotlinx.atomicfu.AtomicBoolean
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.*
-import net.superricky.tpaplusplus.command.commands.*
-import net.superricky.tpaplusplus.utility.AsyncCommandResult
-import net.superricky.tpaplusplus.utility.CommandType
+import net.superricky.tpaplusplus.GlobalConst.ONE_SECOND
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
@@ -13,36 +11,88 @@ object AsyncCommandHelper : CoroutineScope {
     override val coroutineContext: CoroutineContext = Dispatchers.IO
     private val ticking: AtomicBoolean = atomic(false)
     private val requests: MutableSet<AsyncCommandData> = Collections.synchronizedSet(HashSet())
-    private val checkActions: Map<CommandType, Function1<AsyncCommandData, Boolean>> = mapOf(
-        CommandType.TPA to TpaCommand::checkWindupDistance,
-        CommandType.BACK to BackCommand::checkWindupDistance,
-        CommandType.DENY to DenyCommand::checkWindupDistance,
-        CommandType.BLOCK to BlockCommand::checkWindupDistance,
-        CommandType.ACCEPT to AcceptCommand::checkWindupDistance,
-        CommandType.CANCEL to CancelCommand::checkWindupDistance,
-        CommandType.TOGGLE to ToggleCommand::checkWindupDistance,
-        CommandType.TPAHERE to TpaHereCommand::checkWindupDistance,
-        CommandType.UNBLOCK to UnblockCommand::checkWindupDistance
-    )
+    private val underCooldown: MutableMap<UUID, MutableMap<AsyncCommandType, Double>> =
+        Collections.synchronizedMap(HashMap())
+    private lateinit var mainLoopJob: Job
+    private var tickDelay = 0L
+    private var tickRate = 0L
 
-    @Suppress("MagicNumber")
     fun startTickLoop(tickRate: Long) {
         ticking.value = true
-        launch {
+        this.tickRate = tickRate
+        tickDelay = ONE_SECOND / tickRate
+        mainLoopJob = launch {
             while (isActive && ticking.value) {
                 runTick()
-                delay(1000L / tickRate)
+                delay(tickDelay)
             }
         }
     }
 
     fun stopTickLoop() {
         ticking.value = false
+        mainLoopJob.cancel()
         coroutineContext.cancel()
     }
 
+    fun addCooldown(uuid: UUID, type: AsyncCommandType) {
+        val playerData = underCooldown[uuid]
+        if (playerData == null) {
+            underCooldown[uuid] = mutableMapOf(
+                type to type.handler.getCooldownTime() * tickRate
+            )
+            return
+        }
+        playerData[type] = type.handler.getCooldownTime() * tickRate
+    }
+
     fun schedule(request: AsyncCommandData) {
-        requests.add(request)
+        val uuid = request.getRequest().sender.uuid
+        val playerData = underCooldown[uuid]
+        if (playerData == null) {
+            underCooldown[uuid] = mutableMapOf()
+        } else if (playerData[request.getRequest().commandType] != null) {
+            request.updateCooldown(playerData[request.getRequest().commandType]!!)
+            request.call(AsyncCommandResult.UNDER_COOLDOWN)
+            return
+        }
+        if (request.needDelay()) {
+            var delayTime = request.getDelay()
+            val job = getJob(request)
+            launch {
+                request.call(AsyncCommandResult.UPDATE_DELAY_MESSAGE)
+                while (true) {
+                    delay(ONE_SECOND)
+                    if (request.isCanceled()) {
+                        return@launch
+                    }
+                    delayTime -= 1
+                    request.updateDelay(delayTime)
+                    request.call(AsyncCommandResult.UPDATE_DELAY_MESSAGE)
+                    if (delayTime < 1.0) {
+                        break
+                    }
+                }
+                delay((delayTime * ONE_SECOND).toLong())
+                request.call(AsyncCommandResult.AFTER_DELAY)
+                job.cancel()
+                requests.add(request)
+            }
+        } else {
+            request.call(AsyncCommandResult.AFTER_DELAY)
+            requests.add(request)
+        }
+    }
+
+    private fun getJob(request: AsyncCommandData) = launch {
+        while (true) {
+            delay(tickDelay)
+            if (!request.getRequest().commandType.handler.checkWindupDistance(request)) {
+                request.call(AsyncCommandResult.OUT_OF_DISTANCE)
+                request.cancel()
+                return@launch
+            }
+        }
     }
 
     fun runTick() {
@@ -50,13 +100,6 @@ object AsyncCommandHelper : CoroutineScope {
         requests.forEach {
             // check canceled
             if (it.isCanceled()) {
-                it.call(AsyncCommandResult.BE_CANCELED)
-                elementRemoved.add(it)
-                return@forEach
-            }
-            // check distance
-            if (!checkActions[it.getRequest().commandType]!!.invoke(it)) {
-                it.call(AsyncCommandResult.OUT_OF_DISTANCE)
                 elementRemoved.add(it)
                 return@forEach
             }
@@ -68,5 +111,12 @@ object AsyncCommandHelper : CoroutineScope {
             }
         }
         requests.removeAll(elementRemoved)
+        // update cooldown
+        underCooldown.forEach { (key, value) ->
+            for (entry in value) {
+                entry.setValue(entry.value - 1)
+            }
+            underCooldown[key] = value.filter { it.value > 0 }.toMutableMap()
+        }
     }
 }

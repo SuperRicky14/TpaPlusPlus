@@ -8,4 +8,5 @@ object ColorSpec : ConfigSpec("common.color") {
     val secondary by required<String>()
     val secondaryVariant by required<String>()
     val error by required<String>()
+    val errorVariant by required<String>()
 }

@@ -6,6 +6,7 @@ import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.text.Text
 import net.superricky.tpaplusplus.async.*
 import net.superricky.tpaplusplus.command.BuildableCommand
+import net.superricky.tpaplusplus.command.CommandHelper
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
 import net.superricky.tpaplusplus.command.CommandResult
 import net.superricky.tpaplusplus.config.Config
@@ -92,6 +93,20 @@ object TpaCommand : AsyncCommand(), BuildableCommand {
         if (result != CommandResult.NORMAL) return result.status
         sender!!
         target!!
+        if (CommandHelper.checkToggled(sender, target) ||
+            CommandHelper.checkBlocked(sender, target)
+        ) {
+            return CommandResult.NORMAL.status
+        }
+        if (AsyncCommandHelper.checkRequestExist(sender, target, AsyncCommandType.TPA)) {
+            sender.sendMessageWithPlayerName("command.error.request.exist", target)
+            return CommandResult.NORMAL.status
+        }
+        val limitResult = LimitationHelper.checkLimitation(sender, target)
+        limitResult?.let {
+            sender.sendMessage(limitResult)
+            return CommandResult.NORMAL.status
+        }
         val asyncCommandData = AsyncCommandData(
             AsyncRequest(sender, target, AsyncCommandType.TPA, sender, target),
             LevelBoundVec3(sender.getDimension(), sender.pos),

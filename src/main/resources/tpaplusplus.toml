@@ -21,12 +21,13 @@ waitTimeBeforeTp = 5.0
 
 [common.color]
 # Colors in hex format
-# Modifying these options may require a restart of the game.
+# Modifying these options can take effect without a restart of the game.
 primary = "#009688"
 primaryVariant = "#52c7b8"
 secondary = "#1e88e5"
 secondaryVariant = "#6ab7ff"
-error = "#fb5454"
+error = "#d62929"
+errorVariant = "#fb7171"
 
 [advanced]
 # WARNING: These options are related to asynchronous operations and/or saving / loading datain.

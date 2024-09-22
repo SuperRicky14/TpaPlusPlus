@@ -5,6 +5,7 @@ import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.*
 import net.minecraft.server.network.ServerPlayerEntity
 import net.superricky.tpaplusplus.GlobalConst.ONE_SECOND
+import net.superricky.tpaplusplus.GlobalConst.logger
 import net.superricky.tpaplusplus.config.CommonSpec
 import net.superricky.tpaplusplus.config.Config
 import java.util.*
@@ -26,7 +27,13 @@ object AsyncCommandHelper : CoroutineScope {
         tickDelay = ONE_SECOND / tickRate
         mainLoopJob = launch {
             while (isActive && ticking.value) {
-                runTick()
+                launch {
+                    try {
+                        runTick()
+                    } catch (e: Exception) {
+                        logger.error(e)
+                    }
+                }
                 delay(tickDelay)
             }
         }
@@ -49,7 +56,19 @@ object AsyncCommandHelper : CoroutineScope {
         playerData[type] = type.handler.getCooldownTime() * tickRate
     }
 
-    fun asyncWindupCheck(
+    fun checkRequestExist(
+        sender: ServerPlayerEntity,
+        receiver: ServerPlayerEntity,
+        commandType: AsyncCommandType
+    ): Boolean {
+        return requests.find {
+            it.getRequest().sender == sender &&
+                    it.getRequest().receiver == receiver &&
+                    it.getRequest().commandType == commandType
+        } != null
+    }
+
+    private fun asyncWindupCheck(
         asyncCommandData: AsyncCommandData,
         successCallback: Function1<AsyncCommandData, Unit>? = null,
         errorCallback: Function1<AsyncCommandData, Unit>? = null,
@@ -76,12 +95,13 @@ object AsyncCommandHelper : CoroutineScope {
                 }
                 delayTime -= 1
                 asyncCommandData.updateDelay(delayTime)
+                if (delayTime < 1.0) break
                 progressCallback?.invoke(asyncCommandData)
-                if (delayTime < 1.0) {
-                    break
-                }
             }
-            delay((delayTime * ONE_SECOND).toLong())
+            if (delayTime != 0.0) {
+                progressCallback?.invoke(asyncCommandData)
+                delay((delayTime * ONE_SECOND).toLong())
+            }
             if (asyncCommandData.isCanceled()) {
                 return@launch
             }

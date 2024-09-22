@@ -4,8 +4,6 @@ import net.minecraft.util.math.Position
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import net.superricky.tpaplusplus.GlobalConst.NETHER_COEFFICIENT
-import net.superricky.tpaplusplus.config.Config
-import net.superricky.tpaplusplus.config.command.CommandLimitationsSpec
 
 class LevelBoundVec3(
     val serverLevel: ServerDimension,
@@ -18,17 +16,11 @@ class LevelBoundVec3(
 
     fun distance(other: LevelBoundVec3): Double {
         if (serverLevel != other.serverLevel) {
-            if (!Config.getConfig()[CommandLimitationsSpec.crossDimAllowed]) {
-                return -1.0
-            }
-            if (Config.getConfig()[CommandLimitationsSpec.ignoreDistanceCrossDim]) {
-                return 0.0
-            }
             if (serverLevel == World.NETHER && other.serverLevel != World.NETHER) {
                 return other.distanceTo(
                     Vec3d(
                         x * NETHER_COEFFICIENT,
-                        y * NETHER_COEFFICIENT,
+                        y,
                         z * NETHER_COEFFICIENT
                     )
                 )
@@ -37,7 +29,7 @@ class LevelBoundVec3(
                 return distanceTo(
                     Vec3d(
                         other.x * NETHER_COEFFICIENT,
-                        other.y * NETHER_COEFFICIENT,
+                        other.y,
                         other.z * NETHER_COEFFICIENT
                     )
                 )

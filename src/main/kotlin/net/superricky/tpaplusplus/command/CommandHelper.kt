@@ -3,8 +3,10 @@ package net.superricky.tpaplusplus.command
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
+import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.utility.Context
 import net.superricky.tpaplusplus.utility.TextColorPallet
+import net.superricky.tpaplusplus.utility.sendMessageWithPlayerName
 
 object CommandHelper {
 
@@ -50,5 +52,31 @@ object CommandHelper {
             return CommandResult.SELF_CHECK_ERROR
         }
         return CommandResult.NORMAL
+    }
+
+    fun checkBlocked(sender: ServerPlayerEntity, receiver: ServerPlayerEntity): Boolean {
+        if (TpaPlusPlus.dataService.checkPlayerBlocked(receiver.uuid, sender.uuid)) {
+            sender.sendMessageWithPlayerName("command.error.request.blocked.sender", receiver)
+            return true
+        }
+        if (TpaPlusPlus.dataService.checkPlayerBlocked(sender.uuid, receiver.uuid)) {
+            sender.sendMessageWithPlayerName("command.error.request.blocked.receiver", receiver)
+            return true
+        }
+        return false
+    }
+
+    fun checkToggled(sender: ServerPlayerEntity, receiver: ServerPlayerEntity): Boolean {
+        if (TpaPlusPlus.dataService.checkPlayerToggle(sender.uuid)) {
+            sender.sendMessage(
+                Text.translatable("command.error.request.toggled.sender").setStyle(TextColorPallet.error)
+            )
+            return true
+        }
+        if (TpaPlusPlus.dataService.checkPlayerToggle(receiver.uuid)) {
+            sender.sendMessageWithPlayerName("command.error.request.toggled.receiver", receiver)
+            return true
+        }
+        return false
     }
 }

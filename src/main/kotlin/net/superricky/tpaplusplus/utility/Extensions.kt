@@ -17,11 +17,11 @@ fun String.getWorld(): ServerDimension =
     RegistryKey.of(RegistryKeys.WORLD, Identifier.of(this))
 
 fun PlayerEntity.toggleOn() = TpaPlusPlus.launch {
-    TpaPlusPlus.dataService.playerSwitchBlock(uuid, true)
+    TpaPlusPlus.dataService.playerSwitchToggle(uuid, true)
 }
 
 fun PlayerEntity.toggleOff() = TpaPlusPlus.launch {
-    TpaPlusPlus.dataService.playerSwitchBlock(uuid, false)
+    TpaPlusPlus.dataService.playerSwitchToggle(uuid, false)
 }
 
 fun PlayerEntity.getColoredName(color: Style): MutableText? = this.name.literalString?.literal()?.setStyle(color)

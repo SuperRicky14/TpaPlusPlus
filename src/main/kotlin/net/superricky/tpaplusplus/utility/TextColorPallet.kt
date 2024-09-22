@@ -24,4 +24,8 @@ object TextColorPallet {
             TextColor.parse(config[ColorSpec.secondaryVariant]).result().getOrNull()
         )
     val error: Style get() = Style.EMPTY.withColor(TextColor.parse(config[ColorSpec.error]).result().getOrNull())
+    val errorVariant: Style
+        get() = Style.EMPTY.withColor(
+            TextColor.parse(config[ColorSpec.errorVariant]).result().getOrNull()
+        )
 }

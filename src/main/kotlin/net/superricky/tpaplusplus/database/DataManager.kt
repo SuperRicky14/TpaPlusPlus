@@ -11,7 +11,9 @@ import net.superricky.tpaplusplus.GlobalConst.PLAYER_DATA_FILE_NAME
 import net.superricky.tpaplusplus.GlobalConst.logger
 import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.config.AdvancedSpec
+import net.superricky.tpaplusplus.config.CommonSpec
 import net.superricky.tpaplusplus.config.Config
+import net.superricky.tpaplusplus.database.service.DataService
 import net.superricky.tpaplusplus.utility.LevelBoundVec3
 import java.io.File
 import java.io.FileReader
@@ -20,7 +22,7 @@ import java.io.IOException
 import java.nio.file.Files
 import java.util.*
 
-object PlayerDataManager : DataService {
+object DataManager : DataService {
     private var playerDataMap: MutableMap<UUID, PlayerData> = Collections.synchronizedMap(HashMap())
     private val gson = GsonBuilder().setPrettyPrinting().create()
     private val dataSavePath: File = Config.getDatabasePath().resolve(PLAYER_DATA_FILE_NAME).toFile()
@@ -39,7 +41,7 @@ object PlayerDataManager : DataService {
         loadPlayerData()
         TpaPlusPlus.launch {
             while (isActive) {
-                savePlayerData()
+                saveData()
                 delay(Config.getConfig()[AdvancedSpec.autoSaveInterval] * ONE_SECOND)
             }
         }
@@ -66,7 +68,7 @@ object PlayerDataManager : DataService {
         return false
     }
 
-    override fun playerSwitchBlock(uuid: UUID): Boolean {
+    override fun playerSwitchToggle(uuid: UUID): Boolean {
         if (playerDataMap.containsKey(uuid) && playerDataMap[uuid] != null) {
             playerDataMap[uuid]!!.toggle = !playerDataMap[uuid]!!.toggle
             return playerDataMap[uuid]!!.toggle
@@ -74,7 +76,7 @@ object PlayerDataManager : DataService {
         return false
     }
 
-    override fun playerSwitchBlock(uuid: UUID, toggle: Boolean): Boolean {
+    override fun playerSwitchToggle(uuid: UUID, toggle: Boolean): Boolean {
         if (playerDataMap.containsKey(uuid) && playerDataMap[uuid] != null) {
             playerDataMap[uuid]!!.toggle = toggle
             return true
@@ -97,7 +99,13 @@ object PlayerDataManager : DataService {
         playerData.lastDeathPos.backed = false
     }
 
-    override fun savePlayerData() {
+    override fun checkPlayerBlocked(srcUUID: UUID, destUuid: UUID): Boolean =
+        playerDataMap[srcUUID]!!.blockPlayers.contains(destUuid)
+
+    override fun checkPlayerToggle(uuid: UUID): Boolean =
+        playerDataMap[uuid]!!.toggle && !Config.getConfig()[CommonSpec.toggledPlayerCommand]
+
+    override fun saveData() {
         try {
             FileWriter(dataSavePath).use {
                 gson.toJson(playerDataMap, it)

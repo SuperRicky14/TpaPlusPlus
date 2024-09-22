@@ -52,7 +52,7 @@ object ToggleCommand : AsyncCommand(), BuildableCommand {
         val sender = source.player
         sender ?: return CommandResult.SENDER_NOT_EXIST.status
         TpaPlusPlus.launch {
-            val blocked = TpaPlusPlus.dataService.playerSwitchBlock(sender.uuid)
+            val blocked = TpaPlusPlus.dataService.playerSwitchToggle(sender.uuid)
             if (blocked) {
                 source.sendFeedback({ Text.translatable("command.toggle.success.on") }, false)
             } else {

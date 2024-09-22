@@ -21,17 +21,17 @@ import net.superricky.tpaplusplus.async.AsyncCommandHelper
 import net.superricky.tpaplusplus.command.CommandRegister
 import net.superricky.tpaplusplus.config.AdvancedSpec
 import net.superricky.tpaplusplus.config.Config
-import net.superricky.tpaplusplus.database.DataService
-import net.superricky.tpaplusplus.database.PlayerDataManager
+import net.superricky.tpaplusplus.database.service.DataService
+import net.superricky.tpaplusplus.database.DataManager
 import java.nio.file.Files
 import kotlin.coroutines.CoroutineContext
-import net.superricky.tpaplusplus.event.PlayerEvent as PlayerEventListener
+import net.superricky.tpaplusplus.utility.PlayerEvent as PlayerEventListener
 
 object TpaPlusPlus : ModInitializer, CoroutineScope {
     lateinit var server: MinecraftServer
     override val coroutineContext: CoroutineContext = Dispatchers.IO
     val version: Version = FabricLoader.getInstance().getModContainer(MOD_ID).get().metadata.version
-    var dataService: DataService = PlayerDataManager
+    lateinit var dataService: DataService
 
     override fun onInitialize() {
         logger.info("Initializing TPA++ ${version.friendlyString}")
@@ -76,6 +76,7 @@ object TpaPlusPlus : ModInitializer, CoroutineScope {
         logger.info("Server starting...")
         logger.info("Main logic initializing...")
         this.server = server
+        this.dataService = DataManager
 
         logger.info("Data service initializing...")
         dataService.initDataService()
@@ -102,6 +103,6 @@ object TpaPlusPlus : ModInitializer, CoroutineScope {
         logger.info("Shutting down TPA++")
         AsyncCommandHelper.stopTickLoop()
         coroutineContext.cancel()
-        dataService.savePlayerData()
+        dataService.saveData()
     }
 }

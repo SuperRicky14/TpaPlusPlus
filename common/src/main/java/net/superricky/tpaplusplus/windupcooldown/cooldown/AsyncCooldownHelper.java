@@ -2,10 +2,9 @@ package net.superricky.tpaplusplus.windupcooldown.cooldown;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.superricky.tpaplusplus.TPAPlusPlus;
+import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.util.MsgFmt;
-import net.superricky.tpaplusplus.windupcooldown.CommandType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -16,6 +15,40 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class AsyncCooldownHelper {
     private static final Set<CooldownData> cooldownSet = ConcurrentHashMap.newKeySet();
+
+    private static String getCommandNameFromType(CommandType commandType) {
+        switch (commandType) {
+            case BACK -> {
+                return Config.BACK_COMMAND_NAME.get();
+            }
+            case ACCEPT -> {
+                return Config.TPAACCEPT_COMMAND_NAME.get();
+            }
+            case DENY -> {
+                return Config.TPADENY_COMMAND_NAME.get();
+            }
+            case CANCEL -> {
+                return Config.TPACANCEL_COMMAND_NAME.get();
+            }
+            case TPA -> {
+                return Config.TPA_COMMAND_NAME.get();
+            }
+            case TPAHERE -> {
+                return Config.TPAHERE_COMMAND_NAME.get();
+            }
+            case BLOCK -> {
+                return Config.TPBLOCK_COMMAND_NAME.get();
+            }
+            case TOGGLE -> {
+                return Config.TPTOGGLE_COMMAND_NAME.get();
+            }
+            case UNBLOCK -> {
+                return Config.TPUNBLOCK_COMMAND_NAME.get();
+            }
+        }
+
+        throw new AssertionError("Unreachable code reached: Could not find name for Command Type \"" + commandType + "\"!");
+    }
 
     static Set<CooldownData> getCooldownSet() {
         return cooldownSet;
@@ -36,7 +69,7 @@ public class AsyncCooldownHelper {
         }
 
         if (commandCooldownDelay > 0) {
-            currentPlayer.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.COMMAND_ON_COOLDOWN_MESSAGE.get(), Map.of("command_used", TPAPlusPlus.getCommandNameFromType(type), "time_remaining", String.valueOf(commandCooldownDelay)))));
+            currentPlayer.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.COMMAND_ON_COOLDOWN_MESSAGE.get(), Map.of("command_used", getCommandNameFromType(type), "time_remaining", String.valueOf(commandCooldownDelay)))));
             return true;
         }
 

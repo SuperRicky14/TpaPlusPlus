@@ -20,7 +20,6 @@ import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.timeout.RequestTimeoutEvent;
 import net.superricky.tpaplusplus.timeout.TimeoutManagerKt;
 import net.superricky.tpaplusplus.util.MsgFmt;
-import net.superricky.tpaplusplus.windupcooldown.CommandType;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcherKt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +33,6 @@ public class TPAPlusPlus {
 
     public static final String CONFIG_PATH = "tpaplusplus-config.toml";
     public static final String MESSAGES_CONFIG_PATH = "tpaplusplus-messages.toml";
-
-    private static final String SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE = "Switch statement could not find the respective command!";
 
     public static void init() {
         LOGGER.info("INITIALIZING...");
@@ -95,39 +92,5 @@ public class TPAPlusPlus {
         double diffZ = z2 - z1;
 
         return Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
-    }
-
-    public static String getCommandNameFromType(CommandType commandType) {
-        switch (commandType) {
-            case BACK -> {
-                return Config.BACK_COMMAND_NAME.get();
-            }
-            case ACCEPT -> {
-                return Config.TPAACCEPT_COMMAND_NAME.get();
-            }
-            case DENY -> {
-                return Config.TPADENY_COMMAND_NAME.get();
-            }
-            case CANCEL -> {
-                return Config.TPACANCEL_COMMAND_NAME.get();
-            }
-            case TPA -> {
-                return Config.TPA_COMMAND_NAME.get();
-            }
-            case TPAHERE -> {
-                return Config.TPAHERE_COMMAND_NAME.get();
-            }
-            case BLOCK -> {
-                return Config.TPBLOCK_COMMAND_NAME.get();
-            }
-            case TOGGLE -> {
-                return Config.TPTOGGLE_COMMAND_NAME.get();
-            }
-            case UNBLOCK -> {
-                return Config.TPUNBLOCK_COMMAND_NAME.get();
-            }
-        }
-        LOGGER.error(SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE);
-        throw new IllegalStateException(SWITCH_COMMAND_NAME_FAILURE_ERROR_MESSAGE);
     }
 }

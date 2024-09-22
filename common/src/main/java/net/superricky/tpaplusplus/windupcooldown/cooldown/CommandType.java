@@ -1,4 +1,4 @@
-package net.superricky.tpaplusplus.windupcooldown;
+package net.superricky.tpaplusplus.windupcooldown.cooldown;
 
 public enum CommandType {
     BACK,

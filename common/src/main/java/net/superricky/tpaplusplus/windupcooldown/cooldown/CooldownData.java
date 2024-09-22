@@ -1,7 +1,5 @@
 package net.superricky.tpaplusplus.windupcooldown.cooldown;
 
-import net.superricky.tpaplusplus.windupcooldown.CommandType;
-
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 

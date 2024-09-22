@@ -7,7 +7,8 @@ import net.superricky.tpaplusplus.utility.getDimension
  * Abstract class for asyncCommand
  */
 abstract class AsyncCommand {
-    protected lateinit var commandName: String
+    @JvmField
+    protected var commandName: String = ""
 
     /**
      * This function is used to check if the player's movement

@@ -41,14 +41,12 @@ dependencies {
     modImplementation(libs.translations)
 
     // For debug
-    modImplementation(libs.bundles.database)
-    modImplementation(libs.bundles.jdbc)
     modImplementation(libs.bundles.konf)
+    modImplementation(libs.gson)
 
     // For release
-    shadow(libs.bundles.database)
-    shadow(libs.bundles.jdbc)
     shadow(libs.bundles.konf)
+    shadow(libs.gson)
 }
 
 base {

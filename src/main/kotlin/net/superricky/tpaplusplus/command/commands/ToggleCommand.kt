@@ -13,7 +13,6 @@ import net.superricky.tpaplusplus.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.command.CommandNameSpec
-import net.superricky.tpaplusplus.database.DatabaseManager
 import net.superricky.tpaplusplus.utility.Context
 import net.superricky.tpaplusplus.utility.LiteralNode
 import net.superricky.tpaplusplus.utility.toggleOff
@@ -53,7 +52,7 @@ object ToggleCommand : AsyncCommand(), BuildableCommand {
         val sender = source.player
         sender ?: return CommandResult.SENDER_NOT_EXIST.status
         TpaPlusPlus.launch {
-            val blocked = DatabaseManager.playerSwitchBlock(sender.uuid)
+            val blocked = TpaPlusPlus.dataService.playerSwitchBlock(sender.uuid)
             if (blocked) {
                 source.sendFeedback({ Text.translatable("command.toggle.success.on") }, false)
             } else {

@@ -17,7 +17,6 @@ import net.superricky.tpaplusplus.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.command.CommandNameSpec
-import net.superricky.tpaplusplus.database.DatabaseManager
 import net.superricky.tpaplusplus.utility.Context
 import net.superricky.tpaplusplus.utility.LiteralNode
 import net.superricky.tpaplusplus.utility.TextColorPallet
@@ -54,7 +53,7 @@ object BlockCommand : AsyncCommand(), BuildableCommand {
         sender!!
         target!!
         TpaPlusPlus.launch {
-            if (DatabaseManager.insertBlockedPlayer(sender.uuid, target.uuid)) {
+            if (TpaPlusPlus.dataService.addBlockPlayer(sender.uuid, target.uuid)) {
                 source.sendFeedback(
                     {
                         Text.translatable(

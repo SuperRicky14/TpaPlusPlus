@@ -9,9 +9,7 @@ yarn-mappings = "1.21.1+build.3"
 translations = "2.3.1+1.21-pre2"
 detekt = "1.23.7"
 konf = "1.1.2"
-
-exposed = "0.54.0"
-sqlite-jdbc = "3.46.1.0"
+gson = "2.11.0"
 
 [libraries]
 minecraft = { module = "net.minecraft:minecraft", version.ref = "minecraft" }
@@ -25,17 +23,11 @@ konf-core = { module = "com.uchuhimo:konf-core", version.ref = "konf"}
 konf-toml = { module = "com.uchuhimo:konf-toml", version.ref = "konf"}
 translations = { module = "xyz.nucleoid:server-translations-api", version.ref = "translations" }
 
-exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
-exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
-exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
-exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
-sqlite-jdbc = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite-jdbc" }
+gson = {module = "com.google.code.gson:gson", version.ref="gson"}
 
 [bundles]
 fabric = ["fabric-api", "fabric-kotlin", "fabric-loader"]
 konf = ["konf-core", "konf-toml"]
-database = ["exposed-core", "exposed-dao", "exposed-java-time", "exposed-jdbc"]
-jdbc = ["sqlite-jdbc"]
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

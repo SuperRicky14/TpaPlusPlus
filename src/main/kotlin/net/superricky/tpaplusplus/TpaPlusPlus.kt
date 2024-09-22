@@ -7,7 +7,6 @@ import dev.architectury.event.events.common.TickEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.loader.api.FabricLoader
@@ -22,7 +21,8 @@ import net.superricky.tpaplusplus.async.AsyncCommandHelper
 import net.superricky.tpaplusplus.command.CommandRegister
 import net.superricky.tpaplusplus.config.AdvancedSpec
 import net.superricky.tpaplusplus.config.Config
-import net.superricky.tpaplusplus.database.DatabaseManager
+import net.superricky.tpaplusplus.database.DataService
+import net.superricky.tpaplusplus.database.PlayerDataManager
 import java.nio.file.Files
 import kotlin.coroutines.CoroutineContext
 import net.superricky.tpaplusplus.event.PlayerEvent as PlayerEventListener
@@ -31,6 +31,7 @@ object TpaPlusPlus : ModInitializer, CoroutineScope {
     lateinit var server: MinecraftServer
     override val coroutineContext: CoroutineContext = Dispatchers.IO
     val version: Version = FabricLoader.getInstance().getModContainer(MOD_ID).get().metadata.version
+    var dataService: DataService = PlayerDataManager
 
     override fun onInitialize() {
         logger.info("Initializing TPA++ ${version.friendlyString}")
@@ -76,15 +77,8 @@ object TpaPlusPlus : ModInitializer, CoroutineScope {
         logger.info("Main logic initializing...")
         this.server = server
 
-        logger.info("Database initializing...")
-        DatabaseManager.setup()
-        DatabaseManager.ensureTables()
-
-        logger.info("Make database cache...")
-        launch {
-            DatabaseManager.setupCache()
-            logger.info("The database cache is successfully constructed")
-        }
+        logger.info("Data service initializing...")
+        dataService.initDataService()
 
         logger.info("Add player event listener...")
         PlayerEvent.PLAYER_JOIN.register(PlayerEventListener::joinEvent)
@@ -108,5 +102,6 @@ object TpaPlusPlus : ModInitializer, CoroutineScope {
         logger.info("Shutting down TPA++")
         AsyncCommandHelper.stopTickLoop()
         coroutineContext.cancel()
+        dataService.savePlayerData()
     }
 }

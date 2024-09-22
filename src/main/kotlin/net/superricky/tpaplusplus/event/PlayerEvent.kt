@@ -6,15 +6,12 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.superricky.tpaplusplus.TpaPlusPlus
-import net.superricky.tpaplusplus.database.DatabaseManager
 import net.superricky.tpaplusplus.utility.LevelBoundVec3
 import net.superricky.tpaplusplus.utility.getDimension
 
 object PlayerEvent {
     fun joinEvent(player: ServerPlayerEntity) {
-        TpaPlusPlus.launch {
-            player.name.literalString?.let { DatabaseManager.insertPlayer(player.uuid, it) }
-        }
+        TpaPlusPlus.dataService.insertPlayer(player.uuid)
     }
 
     fun deathEvent(deathEntity: LivingEntity, ignored: DamageSource): EventResult {
@@ -23,7 +20,7 @@ object PlayerEvent {
         }
         val deathPos = LevelBoundVec3(deathEntity.getDimension(), deathEntity.pos)
         TpaPlusPlus.launch {
-            DatabaseManager.insertPlayerDeath(deathEntity.uuid, deathPos)
+            TpaPlusPlus.dataService.insertDeath(deathEntity.uuid, deathPos)
         }
         return EventResult.pass()
     }

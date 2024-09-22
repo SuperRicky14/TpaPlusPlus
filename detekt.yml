@@ -250,8 +250,6 @@ style:
   DataClassContainsFunctions:
     active: true
     allowOperators: true
-  DataClassShouldBeImmutable:
-    active: true
   DestructuringDeclarationWithTooManyEntries:
     active: false
   ForbiddenComment:

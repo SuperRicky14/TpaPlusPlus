@@ -27,7 +27,7 @@ fun PlayerEntity.toggleOff() = TpaPlusPlus.launch {
 
 fun PlayerEntity.getColoredName(color: Style): MutableText? = this.name.literalString?.literal()?.setStyle(color)
 fun PlayerEntity.getDimension(): ServerDimension = this.world.registryKey
-fun PlayerEntity.sendMessage(
+fun PlayerEntity.sendMessageWithPlayerName(
     translateKey: String,
     player: PlayerEntity,
     outStyle: Style = TextColorPallet.primary,
@@ -64,6 +64,19 @@ fun PlayerEntity.sendCooldownTime(
         Text.translatable(
             "command.cooldown.command",
             commandName.literal().setStyle(inStyle),
+            String.format("%.1f", time).literal().setStyle(inStyle)
+        ).setStyle(outStyle)
+    )
+}
+
+fun PlayerEntity.sendTeleportTime(
+    time: Double,
+    outStyle: Style = TextColorPallet.primary,
+    inStyle: Style = TextColorPallet.secondary
+) {
+    this.sendMessage(
+        Text.translatable(
+            "command.teleport.wait",
             String.format("%.1f", time).literal().setStyle(inStyle)
         ).setStyle(outStyle)
     )

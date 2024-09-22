@@ -23,9 +23,13 @@ import net.superricky.tpaplusplus.utility.LiteralNode
 import net.superricky.tpaplusplus.utility.TextColorPallet
 import net.superricky.tpaplusplus.utility.getColoredName
 
-object UnblockCommand : BuildableCommand, AsyncCommand {
+object UnblockCommand : AsyncCommand(), BuildableCommand {
+    init {
+        commandName = Config.getConfig()[CommandNameSpec.tpaunblockCommand]
+    }
+
     override fun build(): LiteralNode =
-        literal(Config.getConfig()[CommandNameSpec.tpaunblockCommand])
+        literal(commandName)
             .then(
                 argument("player", EntityArgumentType.player())
                     .executes { unBlockPlayer(it) }

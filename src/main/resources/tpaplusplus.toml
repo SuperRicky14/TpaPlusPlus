@@ -9,14 +9,14 @@ toggledPlayerCommand = false
 # How long until teleport requests expire (in seconds)
 # This is measured in seconds.
 # If you wish to disable this set this to 0
-# Default: 60
+# Default: 60.0
 # Range: > 0
-tpaTimeout = 60
+tpaTimeout = 60.0
 # How long does the player have to wait to be teleported
 # This is measured in seconds.
-# Default: 5
-# Range: > 0
-waitTimeBeforeTp = 5
+# Default: 5.0
+# Range: >= 0
+waitTimeBeforeTp = 5.0
 
 [common.color]
 # Colors in hex format
@@ -86,7 +86,7 @@ tpaunblockEnable = true
 tpablockEnable = true
 tpatoggleEnable = true
 tpahereEnable = true
-tpaacceptEnable = true
+tpacceptEnable = true
 tpadenyEnable = true
 tpaEnable = true
 
@@ -105,7 +105,7 @@ tpaunblockCommand = "tpaunblock"
 tpablockCommand = "tpablock"
 tpatoggleCommand = "tpatoggle"
 tpahereCommand = "tpahere"
-tpaacceptCommand = "tpaaccept"
+tpacceptCommand = "tpaccept"
 tpadenyCommand = "tpadeny"
 tpaCommand = "tpa"
 

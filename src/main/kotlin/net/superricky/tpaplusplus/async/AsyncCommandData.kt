@@ -2,30 +2,32 @@ package net.superricky.tpaplusplus.async
 
 import kotlinx.atomicfu.AtomicBoolean
 import kotlinx.atomicfu.atomic
+import net.minecraft.text.Text
 import net.superricky.tpaplusplus.config.CommonSpec
 import net.superricky.tpaplusplus.config.Config
-import net.superricky.tpaplusplus.async.request.Request
 import net.superricky.tpaplusplus.utility.LevelBoundVec3
+import net.superricky.tpaplusplus.utility.TextColorPallet
+import net.superricky.tpaplusplus.utility.sendRemainTime
 import net.superricky.tpaplusplus.utility.translateSecondToTick
 
 class AsyncCommandData(
-    private val request: Request,
-    private val pos: LevelBoundVec3,
-    private val callback: Function2<AsyncCommandResult, Request, Unit>
+    private val asyncRequest: AsyncRequest,
+    private var pos: LevelBoundVec3,
+    private val callback: Function2<AsyncCommandEvent, AsyncCommandData, Unit>
 ) {
     private var canceled: AtomicBoolean = atomic(false)
-    private var timeout = Config.getConfig()[CommonSpec.tpaTimeout].toDouble().translateSecondToTick()
+    private var timeout = Config.getConfig()[CommonSpec.tpaTimeout].translateSecondToTick()
 
-    fun needDelay(): Boolean = request.delay != 0.0
+    fun needDelay(): Boolean = asyncRequest.delay != 0.0
 
-    fun getDelay(): Double = request.delay
+    fun getDelay(): Double = asyncRequest.delay
 
     fun updateDelay(delay: Double) {
-        request.delay = delay
+        asyncRequest.delay = delay
     }
 
     fun updateCooldown(cooldown: Double) {
-        request.cooldown = cooldown
+        asyncRequest.cooldown = cooldown
     }
 
     fun tick(): Boolean {
@@ -35,15 +37,32 @@ class AsyncCommandData(
 
     fun getPos(): LevelBoundVec3 = pos
 
-    fun getRequest(): Request = request
+    fun getRequest(): AsyncRequest = asyncRequest
 
     fun isCanceled(): Boolean = canceled.value
 
-    fun call(commandResult: AsyncCommandResult) {
+    fun call(commandResult: AsyncCommandEvent) {
         if (isCanceled()) {
             return
         }
-        callback.invoke(commandResult, request)
+        when (commandResult) {
+            AsyncCommandEvent.REQUEST_OUT_DISTANCE -> {
+                asyncRequest.sender.sendMessage(
+                    Text.translatable(
+                        "command.windup.error.out_distance",
+                        asyncRequest.commandType.handler.getCommandName()
+                    ).setStyle(TextColorPallet.error)
+                )
+            }
+
+            AsyncCommandEvent.REQUEST_UPDATE_MESSAGE -> {
+                asyncRequest.sender.sendRemainTime(asyncRequest.delay)
+            }
+
+            else -> {
+                callback.invoke(commandResult, this)
+            }
+        }
     }
 
     fun cancel() {

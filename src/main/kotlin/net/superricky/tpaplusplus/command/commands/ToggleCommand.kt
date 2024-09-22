@@ -19,9 +19,13 @@ import net.superricky.tpaplusplus.utility.LiteralNode
 import net.superricky.tpaplusplus.utility.toggleOff
 import net.superricky.tpaplusplus.utility.toggleOn
 
-object ToggleCommand : BuildableCommand, AsyncCommand {
+object ToggleCommand : AsyncCommand(), BuildableCommand {
+    init {
+        commandName = Config.getConfig()[CommandNameSpec.tpatoggleCommand]
+    }
+
     override fun build(): LiteralNode =
-        literal(Config.getConfig()[CommandNameSpec.tpatoggleCommand])
+        literal(commandName)
             .then(
                 literal("on")
                     .executes { switchToggle(it, true) }

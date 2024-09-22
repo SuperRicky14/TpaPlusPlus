@@ -6,8 +6,8 @@ import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.text.Text
 import net.superricky.tpaplusplus.TpaPlusPlus
-import net.superricky.tpaplusplus.async.AsyncCommandData
 import net.superricky.tpaplusplus.async.AsyncCommand
+import net.superricky.tpaplusplus.async.AsyncCommandData
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
 import net.superricky.tpaplusplus.command.CommandResult
@@ -23,9 +23,13 @@ import net.superricky.tpaplusplus.utility.LiteralNode
 import net.superricky.tpaplusplus.utility.TextColorPallet
 import net.superricky.tpaplusplus.utility.getColoredName
 
-object BlockCommand : BuildableCommand, AsyncCommand {
+object BlockCommand : AsyncCommand(), BuildableCommand {
+    init {
+        commandName = Config.getConfig()[CommandNameSpec.tpablockCommand]
+    }
+
     override fun build(): LiteralNode =
-        literal(Config.getConfig()[CommandNameSpec.tpablockCommand])
+        literal(commandName)
             .then(
                 argument("player", EntityArgumentType.player())
                     .executes { blockPlayer(it) }

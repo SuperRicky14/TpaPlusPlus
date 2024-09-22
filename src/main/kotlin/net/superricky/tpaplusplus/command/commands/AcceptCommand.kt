@@ -4,7 +4,6 @@ import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
 import net.superricky.tpaplusplus.async.*
-import net.superricky.tpaplusplus.async.request.Request
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
@@ -14,14 +13,15 @@ import net.superricky.tpaplusplus.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.command.CommandNameSpec
-import net.superricky.tpaplusplus.utility.Context
-import net.superricky.tpaplusplus.utility.LevelBoundVec3
-import net.superricky.tpaplusplus.utility.LiteralNode
-import net.superricky.tpaplusplus.utility.getDimension
+import net.superricky.tpaplusplus.utility.*
 
-object AcceptCommand : BuildableCommand, AsyncCommand {
+object AcceptCommand : AsyncCommand(), BuildableCommand {
+    init {
+        commandName = Config.getConfig()[CommandNameSpec.tpacceptCommand]
+    }
+
     override fun build(): LiteralNode =
-        literal(Config.getConfig()[CommandNameSpec.tpaacceptCommand])
+        literal(commandName)
             .then(
                 argument("player", EntityArgumentType.player())
                     .executes { acceptCommandWithTarget(it) }
@@ -41,14 +41,26 @@ object AcceptCommand : BuildableCommand, AsyncCommand {
         )
 
     private fun acceptCommandWithTarget(context: Context): Int {
-        fun asyncCommandCallback(result: AsyncCommandResult, request: Request) {
-            if (result == AsyncCommandResult.AFTER_DELAY) {
-                val sender = request.sender
-                val receiver = request.receiver!!
-                val acceptResult = AsyncCommandHelper.acceptRequest(sender, receiver)
-                if (acceptResult == AsyncCommandResult.REQUEST_NOT_FOUND) {
-                    CommandHelper.requestNotFound(sender, receiver)
+        fun asyncCommandCallback(result: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {
+            val asyncRequest = asyncCommandData.getRequest()
+            when (result) {
+                AsyncCommandEvent.REQUEST_AFTER_DELAY -> {
+                    val sender = asyncRequest.sender
+                    val receiver = asyncRequest.receiver!!
+                    val acceptResult = AsyncCommandHelper.acceptRequest(sender, receiver)
+                    if (acceptResult == AsyncCommandEvent.REQUEST_NOT_FOUND) {
+                        CommandHelper.requestNotFound(sender, receiver)
+                    }
                 }
+
+                AsyncCommandEvent.REQUEST_UNDER_COOLDOWN -> {
+                    asyncRequest.sender.sendCooldownTime(
+                        Config.getConfig()[CommandNameSpec.tpacceptCommand],
+                        asyncRequest.cooldown.translateTickToSecond()
+                    )
+                }
+
+                else -> {}
             }
         }
 
@@ -58,7 +70,7 @@ object AcceptCommand : BuildableCommand, AsyncCommand {
         sender!!
         receiver!!
         val asyncCommandData = AsyncCommandData(
-            Request(sender, receiver, AsyncCommandType.ACCEPT),
+            AsyncRequest(sender, receiver, AsyncCommandType.ACCEPT),
             LevelBoundVec3(sender.getDimension(), sender.pos),
             ::asyncCommandCallback
         )
@@ -67,13 +79,25 @@ object AcceptCommand : BuildableCommand, AsyncCommand {
     }
 
     private fun acceptCommand(context: Context): Int {
-        fun asyncCommandCallback(result: AsyncCommandResult, request: Request) {
-            if (result == AsyncCommandResult.AFTER_DELAY) {
-                val sender = request.sender
-                val acceptResult = AsyncCommandHelper.acceptRequest(sender)
-                if (acceptResult == AsyncCommandResult.REQUEST_NOT_FOUND) {
-                    CommandHelper.requestNotFound(sender)
+        fun asyncCommandCallback(result: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {
+            val asyncRequest = asyncCommandData.getRequest()
+            when (result) {
+                AsyncCommandEvent.REQUEST_AFTER_DELAY -> {
+                    val sender = asyncRequest.sender
+                    val acceptResult = AsyncCommandHelper.acceptRequest(sender)
+                    if (acceptResult == AsyncCommandEvent.REQUEST_NOT_FOUND) {
+                        CommandHelper.requestNotFound(sender)
+                    }
                 }
+
+                AsyncCommandEvent.REQUEST_UNDER_COOLDOWN -> {
+                    asyncRequest.sender.sendCooldownTime(
+                        Config.getConfig()[CommandNameSpec.tpacceptCommand],
+                        asyncRequest.cooldown.translateTickToSecond()
+                    )
+                }
+
+                else -> {}
             }
         }
 
@@ -81,7 +105,7 @@ object AcceptCommand : BuildableCommand, AsyncCommand {
         val sender = source.player
         sender ?: return CommandResult.SENDER_NOT_EXIST.status
         val asyncCommandData = AsyncCommandData(
-            Request(sender, null, AsyncCommandType.ACCEPT),
+            AsyncRequest(sender, null, AsyncCommandType.ACCEPT),
             LevelBoundVec3(sender.getDimension(), sender.pos),
             ::asyncCommandCallback
         )

@@ -13,6 +13,14 @@
     "command.error.request.notfound.all": "找不到傳送請求",
     "command.error.request.notfound.target": "找不到傳送到 %s 的傳送請求",
 
+    "command.windup.remain": "正在執行命令，請等待 %s 秒",
+    "command.windup.error.out_distance": "執行 /%s 的時候移動幅度過大，取消執行",
+
+    "command.teleport.out_distance": "在傳送過程中移動幅度過大",
+    "command.teleport.wait": "正在傳送，請等待 %s 秒",
+
+    "command.cooldown.command": "/%s 當前正在冷卻，請在%s秒後重試！",
+
     "command.toggle.success.on": "自動阻止所有 TPA 請求",
     "command.toggle.success.off": "取消阻止所有 TPA 請求",
 
@@ -29,12 +37,9 @@
     "command.tpa.request.cancel": "來自 %s 的傳送請求已被取消！",
     "command.tpa.timeout.sender": "傳送到 %s 的傳送請求超時",
     "command.tpa.timeout.receiver": "來自 %s 的傳送請求超時",
+    "command.tpa.request.accept.from": "傳送到 %s 的傳送請求已被接受，正在準備傳送",
+    "command.tpa.request.accept.to": "已接受來自 %s 的傳送請求",
 
     "command.tpaaccept.request.accept.sender": "%s 已接收你的傳送請求！",
-    "command.tpaaccept.request.accept.receiver": "已接受來自 %s 的傳送請求",
-
-    "command.windup.remain": "正在執行命令，請等待 %s 秒",
-    "command.windup.error.out_distance": "執行 /%s 的時候移動幅度過大，取消執行",
-
-    "command.cooldown.command": "/%s 當前正在冷卻，請在%s秒後重試！"
+    "command.tpaaccept.request.accept.receiver": "已接受來自 %s 的傳送請求"
 }

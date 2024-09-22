@@ -27,8 +27,8 @@ group = mavenGroup
 repositories {
     maven("https://maven.architectury.dev/")
     maven("https://maven.nucleoid.xyz")
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
 }
 
 dependencies {

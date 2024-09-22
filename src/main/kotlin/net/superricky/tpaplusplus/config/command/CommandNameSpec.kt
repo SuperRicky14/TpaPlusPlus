@@ -9,7 +9,7 @@ object CommandNameSpec : ConfigSpec("command.name") {
     val tpablockCommand by required<String>()
     val tpatoggleCommand by required<String>()
     val tpahereCommand by required<String>()
-    val tpaacceptCommand by required<String>()
+    val tpacceptCommand by required<String>()
     val tpadenyCommand by required<String>()
     val tpaCommand by required<String>()
 }

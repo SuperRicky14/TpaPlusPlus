@@ -11,9 +11,13 @@ import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.command.CommandNameSpec
 import net.superricky.tpaplusplus.utility.LiteralNode
 
-object TpaHereCommand : BuildableCommand, AsyncCommand {
+object TpaHereCommand : AsyncCommand(), BuildableCommand {
+    init {
+        commandName = Config.getConfig()[CommandNameSpec.tpahereCommand]
+    }
+
     override fun build(): LiteralNode =
-        literal(Config.getConfig()[CommandNameSpec.tpahereCommand])
+        literal(commandName)
             .build()
 
     override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.tpahereCooldown]

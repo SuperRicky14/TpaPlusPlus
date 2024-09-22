@@ -6,6 +6,7 @@ import dev.architectury.event.events.common.PlayerEvent
 import dev.architectury.event.events.common.TickEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
@@ -106,5 +107,6 @@ object TpaPlusPlus : ModInitializer, CoroutineScope {
     private fun serverStopped(ignored: MinecraftServer) {
         logger.info("Shutting down TPA++")
         AsyncCommandHelper.stopTickLoop()
+        coroutineContext.cancel()
     }
 }

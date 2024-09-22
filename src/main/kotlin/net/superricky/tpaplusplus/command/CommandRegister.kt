@@ -52,8 +52,8 @@ object CommandRegister {
             return
         }
 
-        if (config[CommandEnableSpec.tpaacceptEnable]) {
-            logger.info("Register command /${config[CommandNameSpec.tpaacceptCommand]}...")
+        if (config[CommandEnableSpec.tpacceptEnable]) {
+            logger.info("Register command /${config[CommandNameSpec.tpacceptCommand]}...")
             dispatcher.root.addChild(AcceptCommand.build())
         }
 

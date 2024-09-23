@@ -40,6 +40,7 @@ object TpaCommand : AsyncCommand(), BuildableCommand {
             Config.getConfig()[CommandDistanceSpec.tpaDistance]
         )
 
+    @Suppress("LongMethod")
     private fun asyncCommandCallback(result: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {
         val asyncRequest = asyncCommandData.getRequest()
         require(asyncRequest.receiver != null) { "Receiver cannot be null" }
@@ -80,6 +81,17 @@ object TpaCommand : AsyncCommand(), BuildableCommand {
                 )
                 asyncRequest.receiver.sendMessageWithPlayerName(
                     "command.tpa.request.cancel.receiver",
+                    asyncRequest.sender
+                )
+            }
+
+            AsyncCommandEvent.REQUEST_REFUSED -> {
+                asyncRequest.sender.sendMessageWithPlayerName(
+                    "command.tpa.request.refuse.sender",
+                    asyncRequest.receiver
+                )
+                asyncRequest.receiver.sendMessageWithPlayerName(
+                    "command.tpa.request.refuse.receiver",
                     asyncRequest.sender
                 )
             }

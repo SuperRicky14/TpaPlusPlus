@@ -47,5 +47,7 @@
     "command.tpa.request.accept.sender": "Teleport request to %s has been accepted, preparing for teleport",
     "command.tpa.request.accept.receiver": "You have accepted teleport request from %s",
     "command.tpa.request.cancel.sender": "Your teleport request to %s has been canceled",
-    "command.tpa.request.cancel.receiver": "Teleport request from %s has been canceled"
+    "command.tpa.request.cancel.receiver": "Teleport request from %s has been canceled",
+    "command.tpa.request.refuse.sender": "Your teleport request to %s has been refused",
+    "command.tpa.request.refuse.receiver": "Teleport request from %s has been refused"
 }

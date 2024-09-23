@@ -181,6 +181,7 @@ object AsyncCommandHelper : CoroutineScope {
                 teleportPlayer(asyncRequest.from!!, asyncRequest.to!!)
                 return@launch
             }
+            asyncCommandData.updateCurrentPos()
             asyncWindupCheck(
                 asyncCommandData,
                 successCallback = {

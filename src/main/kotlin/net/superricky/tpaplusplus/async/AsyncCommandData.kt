@@ -19,6 +19,11 @@ class AsyncCommandData(
 
     fun getDelay(): Double = asyncRequest.delay
 
+    fun updateCurrentPos() {
+        val sender = asyncRequest.sender
+        pos = LevelBoundVec3(sender.getDimension(), sender.pos)
+    }
+
     fun updateDelay(delay: Double) {
         asyncRequest.delay = delay
     }

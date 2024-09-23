@@ -5,10 +5,7 @@ import kotlinx.atomicfu.atomic
 import net.minecraft.text.Text
 import net.superricky.tpaplusplus.config.CommonSpec
 import net.superricky.tpaplusplus.config.Config
-import net.superricky.tpaplusplus.utility.LevelBoundVec3
-import net.superricky.tpaplusplus.utility.TextColorPallet
-import net.superricky.tpaplusplus.utility.sendRemainTime
-import net.superricky.tpaplusplus.utility.translateSecondToTick
+import net.superricky.tpaplusplus.utility.*
 
 class AsyncCommandData(
     private val asyncRequest: AsyncRequest,
@@ -57,6 +54,13 @@ class AsyncCommandData(
 
             AsyncCommandEvent.REQUEST_UPDATE_MESSAGE -> {
                 asyncRequest.sender.sendRemainTime(asyncRequest.delay)
+            }
+
+            AsyncCommandEvent.REQUEST_UNDER_COOLDOWN -> {
+                asyncRequest.sender.sendCooldownTime(
+                    asyncRequest.commandType.handler.getCommandName(),
+                    asyncRequest.cooldown.translateTickToSecond()
+                )
             }
 
             else -> {

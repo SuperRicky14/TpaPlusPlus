@@ -4,6 +4,8 @@ import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.superricky.tpaplusplus.TpaPlusPlus
+import net.superricky.tpaplusplus.async.AsyncCommandHelper
+import net.superricky.tpaplusplus.async.AsyncCommandType
 import net.superricky.tpaplusplus.utility.Context
 import net.superricky.tpaplusplus.utility.TextColorPallet
 import net.superricky.tpaplusplus.utility.sendMessageWithPlayerName
@@ -75,6 +77,18 @@ object CommandHelper {
         }
         if (TpaPlusPlus.dataService.checkPlayerToggle(receiver.uuid)) {
             sender.sendMessageWithPlayerName("command.error.request.toggled.receiver", receiver)
+            return true
+        }
+        return false
+    }
+
+    fun checkRequestExist(
+        sender: ServerPlayerEntity,
+        receiver: ServerPlayerEntity,
+        commandType: AsyncCommandType
+    ): Boolean {
+        if (AsyncCommandHelper.checkRequestExist(sender, receiver, commandType)) {
+            sender.sendMessageWithPlayerName("command.error.request.exist", receiver)
             return true
         }
         return false

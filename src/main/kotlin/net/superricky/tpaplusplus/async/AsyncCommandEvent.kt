@@ -4,6 +4,7 @@ enum class AsyncCommandEvent {
     REQUEST_AFTER_DELAY, // Command windup finish event, take effect
     REQUEST_UPDATE_MESSAGE, // windup message update event, show message to player
     REQUEST_CANCELED, // Teleport canceled
+    REQUEST_REFUSED, // Teleport refused
     REQUEST_OUT_DISTANCE, // Move too much, fail to execute command
     REQUEST_TIMEOUT, // Request out of time event
     REQUEST_UNDER_COOLDOWN, // command under cooldown event

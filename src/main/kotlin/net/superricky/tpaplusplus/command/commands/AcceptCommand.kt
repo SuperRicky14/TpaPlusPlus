@@ -53,13 +53,6 @@ object AcceptCommand : AsyncCommand(), BuildableCommand {
                     }
                 }
 
-                AsyncCommandEvent.REQUEST_UNDER_COOLDOWN -> {
-                    asyncRequest.sender.sendCooldownTime(
-                        Config.getConfig()[CommandNameSpec.tpacceptCommand],
-                        asyncRequest.cooldown.translateTickToSecond()
-                    )
-                }
-
                 else -> {}
             }
         }
@@ -69,12 +62,13 @@ object AcceptCommand : AsyncCommand(), BuildableCommand {
         if (result != CommandResult.NORMAL) return result.status
         sender!!
         receiver!!
-        val asyncCommandData = AsyncCommandData(
-            AsyncRequest(sender, receiver, AsyncCommandType.ACCEPT),
-            LevelBoundVec3(sender.getDimension(), sender.pos),
-            ::asyncCommandCallback
+        AsyncCommandHelper.schedule(
+            AsyncCommandData(
+                AsyncRequest(sender, receiver, AsyncCommandType.ACCEPT),
+                LevelBoundVec3(sender.getDimension(), sender.pos),
+                ::asyncCommandCallback
+            )
         )
-        AsyncCommandHelper.schedule(asyncCommandData)
         return CommandResult.NORMAL.status
     }
 
@@ -90,13 +84,6 @@ object AcceptCommand : AsyncCommand(), BuildableCommand {
                     }
                 }
 
-                AsyncCommandEvent.REQUEST_UNDER_COOLDOWN -> {
-                    asyncRequest.sender.sendCooldownTime(
-                        Config.getConfig()[CommandNameSpec.tpacceptCommand],
-                        asyncRequest.cooldown.translateTickToSecond()
-                    )
-                }
-
                 else -> {}
             }
         }
@@ -104,12 +91,13 @@ object AcceptCommand : AsyncCommand(), BuildableCommand {
         val source = context.source
         val sender = source.player
         sender ?: return CommandResult.SENDER_NOT_EXIST.status
-        val asyncCommandData = AsyncCommandData(
-            AsyncRequest(sender, null, AsyncCommandType.ACCEPT),
-            LevelBoundVec3(sender.getDimension(), sender.pos),
-            ::asyncCommandCallback
+        AsyncCommandHelper.schedule(
+            AsyncCommandData(
+                AsyncRequest(sender, null, AsyncCommandType.ACCEPT),
+                LevelBoundVec3(sender.getDimension(), sender.pos),
+                ::asyncCommandCallback
+            )
         )
-        AsyncCommandHelper.schedule(asyncCommandData)
         return CommandResult.NORMAL.status
     }
 }

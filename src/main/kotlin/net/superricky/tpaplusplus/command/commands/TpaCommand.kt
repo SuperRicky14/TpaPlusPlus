@@ -67,13 +67,6 @@ object TpaCommand : AsyncCommand(), BuildableCommand {
                 }
             }
 
-            AsyncCommandEvent.REQUEST_UNDER_COOLDOWN -> {
-                asyncRequest.sender.sendCooldownTime(
-                    Config.getConfig()[CommandNameSpec.tpaCommand],
-                    asyncRequest.cooldown.translateTickToSecond()
-                )
-            }
-
             AsyncCommandEvent.TELEPORT_OUT_DISTANCE -> {
                 asyncRequest.from?.sendMessage(
                     Text.translatable("command.teleport.out_distance").setStyle(TextColorPallet.error)
@@ -94,25 +87,22 @@ object TpaCommand : AsyncCommand(), BuildableCommand {
         sender!!
         target!!
         if (CommandHelper.checkToggled(sender, target) ||
-            CommandHelper.checkBlocked(sender, target)
+            CommandHelper.checkBlocked(sender, target) ||
+            CommandHelper.checkRequestExist(sender, target, AsyncCommandType.TPA)
         ) {
             return CommandResult.NORMAL.status
         }
-        if (AsyncCommandHelper.checkRequestExist(sender, target, AsyncCommandType.TPA)) {
-            sender.sendMessageWithPlayerName("command.error.request.exist", target)
+        LimitationHelper.checkLimitation(sender, target)?.let {
+            sender.sendMessage(it)
             return CommandResult.NORMAL.status
         }
-        val limitResult = LimitationHelper.checkLimitation(sender, target)
-        limitResult?.let {
-            sender.sendMessage(limitResult)
-            return CommandResult.NORMAL.status
-        }
-        val asyncCommandData = AsyncCommandData(
-            AsyncRequest(sender, target, AsyncCommandType.TPA, sender, target),
-            LevelBoundVec3(sender.getDimension(), sender.pos),
-            ::asyncCommandCallback
+        AsyncCommandHelper.schedule(
+            AsyncCommandData(
+                AsyncRequest(sender, target, AsyncCommandType.TPA, sender, target),
+                LevelBoundVec3(sender.getDimension(), sender.pos),
+                ::asyncCommandCallback
+            )
         )
-        AsyncCommandHelper.schedule(asyncCommandData)
         return CommandResult.NORMAL.status
     }
 }

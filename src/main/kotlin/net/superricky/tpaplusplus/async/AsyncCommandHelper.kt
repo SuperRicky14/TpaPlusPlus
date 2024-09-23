@@ -56,18 +56,6 @@ object AsyncCommandHelper : CoroutineScope {
         playerData[type] = type.handler.getCooldownTime() * tickRate
     }
 
-    fun checkRequestExist(
-        sender: ServerPlayerEntity,
-        receiver: ServerPlayerEntity,
-        commandType: AsyncCommandType
-    ): Boolean {
-        return requests.find {
-            it.getRequest().sender == sender &&
-                    it.getRequest().receiver == receiver &&
-                    it.getRequest().commandType == commandType
-        } != null
-    }
-
     private fun asyncWindupCheck(
         asyncCommandData: AsyncCommandData,
         successCallback: Function1<AsyncCommandData, Unit>? = null,
@@ -110,34 +98,6 @@ object AsyncCommandHelper : CoroutineScope {
         }
     }
 
-    private fun teleportPlayer(from: ServerPlayerEntity, to: ServerPlayerEntity) =
-        from.teleport(to.serverWorld, to.x, to.y, to.z, to.yaw, to.pitch)
-
-    fun teleport(asyncCommandData: AsyncCommandData) {
-        launch {
-            val asyncRequest = asyncCommandData.getRequest()
-            if (Config.getConfig()[CommonSpec.waitTimeBeforeTp] == 0.0) {
-                teleportPlayer(asyncRequest.from!!, asyncRequest.to!!)
-                return@launch
-            }
-            asyncWindupCheck(
-                asyncCommandData,
-                successCallback = {
-                    teleportPlayer(asyncRequest.from!!, asyncRequest.to!!)
-                    it.cancel()
-                },
-                errorCallback = {
-                    it.call(AsyncCommandEvent.TELEPORT_OUT_DISTANCE)
-                    it.cancel()
-                },
-                progressCallback = {
-                    it.call(AsyncCommandEvent.TELEPORT_UPDATE_MESSAGE)
-                },
-                Config.getConfig()[CommonSpec.waitTimeBeforeTp]
-            )
-        }
-    }
-
     fun schedule(request: AsyncCommandData) {
         val uuid = request.getRequest().sender.uuid
         val playerData = underCooldown[uuid]
@@ -174,26 +134,6 @@ object AsyncCommandHelper : CoroutineScope {
         )
     }
 
-    fun acceptRequest(receiver: ServerPlayerEntity): AsyncCommandEvent {
-        val request = requests.find { it.getRequest().receiver == receiver }
-        if (request == null) {
-            return AsyncCommandEvent.REQUEST_NOT_FOUND
-        }
-        requests.remove(request)
-        request.call(AsyncCommandEvent.REQUEST_ACCEPTED)
-        return AsyncCommandEvent.USELESS_VOID
-    }
-
-    fun acceptRequest(receiver: ServerPlayerEntity, sender: ServerPlayerEntity): AsyncCommandEvent {
-        val request = requests.find { it.getRequest().receiver == receiver && it.getRequest().sender == sender }
-        if (request == null) {
-            return AsyncCommandEvent.REQUEST_NOT_FOUND
-        }
-        requests.remove(request)
-        request.call(AsyncCommandEvent.REQUEST_ACCEPTED)
-        return AsyncCommandEvent.USELESS_VOID
-    }
-
     fun runTick() {
         val elementRemoved = HashSet<AsyncCommandData>()
         requests.forEach {
@@ -217,5 +157,90 @@ object AsyncCommandHelper : CoroutineScope {
             }
             underCooldown[key] = value.filter { it.value > 0 }.toMutableMap()
         }
+    }
+
+    fun checkRequestExist(
+        sender: ServerPlayerEntity,
+        receiver: ServerPlayerEntity,
+        commandType: AsyncCommandType
+    ): Boolean {
+        return requests.find {
+            it.getRequest().sender == sender &&
+                    it.getRequest().receiver == receiver &&
+                    it.getRequest().commandType == commandType
+        } != null
+    }
+
+    private fun teleportPlayer(from: ServerPlayerEntity, to: ServerPlayerEntity) =
+        from.teleport(to.serverWorld, to.x, to.y, to.z, to.yaw, to.pitch)
+
+    fun teleport(asyncCommandData: AsyncCommandData) {
+        launch {
+            val asyncRequest = asyncCommandData.getRequest()
+            if (Config.getConfig()[CommonSpec.waitTimeBeforeTp] == 0.0) {
+                teleportPlayer(asyncRequest.from!!, asyncRequest.to!!)
+                return@launch
+            }
+            asyncWindupCheck(
+                asyncCommandData,
+                successCallback = {
+                    teleportPlayer(asyncRequest.from!!, asyncRequest.to!!)
+                    it.cancel()
+                },
+                errorCallback = {
+                    it.call(AsyncCommandEvent.TELEPORT_OUT_DISTANCE)
+                    it.cancel()
+                },
+                progressCallback = {
+                    it.call(AsyncCommandEvent.TELEPORT_UPDATE_MESSAGE)
+                },
+                Config.getConfig()[CommonSpec.waitTimeBeforeTp]
+            )
+        }
+    }
+
+    private fun acceptRequest(request: AsyncCommandData?): AsyncCommandEvent {
+        request ?: return AsyncCommandEvent.REQUEST_NOT_FOUND
+        requests.remove(request)
+        request.call(AsyncCommandEvent.REQUEST_ACCEPTED)
+        return AsyncCommandEvent.USELESS_VOID
+    }
+
+    fun acceptRequest(receiver: ServerPlayerEntity): AsyncCommandEvent {
+        return acceptRequest(requests.find { it.getRequest().receiver == receiver })
+    }
+
+    fun acceptRequest(receiver: ServerPlayerEntity, sender: ServerPlayerEntity): AsyncCommandEvent {
+        return acceptRequest(requests.find { it.getRequest().receiver == receiver && it.getRequest().sender == sender })
+    }
+
+    private fun cancelRequest(request: AsyncCommandData?): AsyncCommandEvent {
+        request ?: return AsyncCommandEvent.REQUEST_NOT_FOUND
+        requests.remove(request)
+        request.call(AsyncCommandEvent.REQUEST_CANCELED)
+        return AsyncCommandEvent.USELESS_VOID
+    }
+
+    fun cancelRequest(receiver: ServerPlayerEntity): AsyncCommandEvent {
+        return cancelRequest(requests.find { it.getRequest().receiver == receiver })
+    }
+
+    fun cancelRequest(receiver: ServerPlayerEntity, sender: ServerPlayerEntity): AsyncCommandEvent {
+        return cancelRequest(requests.find { it.getRequest().receiver == receiver && it.getRequest().sender == sender })
+    }
+
+    private fun refuseRequest(request: AsyncCommandData?): AsyncCommandEvent {
+        request ?: return AsyncCommandEvent.REQUEST_NOT_FOUND
+        requests.remove(request)
+        request.call(AsyncCommandEvent.REQUEST_REFUSED)
+        return AsyncCommandEvent.USELESS_VOID
+    }
+
+    fun refuseRequest(receiver: ServerPlayerEntity): AsyncCommandEvent {
+        return refuseRequest(requests.find { it.getRequest().receiver == receiver })
+    }
+
+    fun refuseRequest(receiver: ServerPlayerEntity, sender: ServerPlayerEntity): AsyncCommandEvent {
+        return refuseRequest(requests.find { it.getRequest().receiver == receiver && it.getRequest().sender == sender })
     }
 }

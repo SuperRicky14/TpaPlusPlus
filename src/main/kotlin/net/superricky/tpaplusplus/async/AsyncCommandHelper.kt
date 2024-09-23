@@ -221,12 +221,12 @@ object AsyncCommandHelper : CoroutineScope {
         return AsyncCommandEvent.USELESS_VOID
     }
 
-    fun cancelRequest(receiver: ServerPlayerEntity): AsyncCommandEvent {
-        return cancelRequest(requests.find { it.getRequest().receiver == receiver })
+    fun cancelRequest(sender: ServerPlayerEntity): AsyncCommandEvent {
+        return cancelRequest(requests.find { it.getRequest().sender == sender })
     }
 
-    fun cancelRequest(receiver: ServerPlayerEntity, sender: ServerPlayerEntity): AsyncCommandEvent {
-        return cancelRequest(requests.find { it.getRequest().receiver == receiver && it.getRequest().sender == sender })
+    fun cancelRequest(sender: ServerPlayerEntity, receiver: ServerPlayerEntity): AsyncCommandEvent {
+        return cancelRequest(requests.find { it.getRequest().sender == sender && it.getRequest().receiver == receiver })
     }
 
     private fun refuseRequest(request: AsyncCommandData?): AsyncCommandEvent {

@@ -56,8 +56,14 @@ object TpaCommand : AsyncCommand(), BuildableCommand {
 
             AsyncCommandEvent.REQUEST_ACCEPTED -> {
                 require(asyncRequest.canBeTeleported()) { "Request can't be teleported!" }
-                asyncRequest.sender.sendMessageWithPlayerName("command.tpa.request.accept.from", asyncRequest.receiver)
-                asyncRequest.receiver.sendMessageWithPlayerName("command.tpa.request.accept.to", asyncRequest.sender)
+                asyncRequest.sender.sendMessageWithPlayerName(
+                    "command.tpa.request.accept.sender",
+                    asyncRequest.receiver
+                )
+                asyncRequest.receiver.sendMessageWithPlayerName(
+                    "command.tpa.request.accept.receiver",
+                    asyncRequest.sender
+                )
                 AsyncCommandHelper.teleport(asyncCommandData)
                 if (AsyncCommandType.TPA.handler.getCooldownTime() != 0.0) {
                     AsyncCommandHelper.addCooldown(asyncRequest.sender.uuid, AsyncCommandType.TPA)
@@ -65,6 +71,17 @@ object TpaCommand : AsyncCommand(), BuildableCommand {
                 if (AsyncCommandType.ACCEPT.handler.getCooldownTime() != 0.0) {
                     AsyncCommandHelper.addCooldown(asyncRequest.receiver.uuid, AsyncCommandType.ACCEPT)
                 }
+            }
+
+            AsyncCommandEvent.REQUEST_CANCELED -> {
+                asyncRequest.sender.sendMessageWithPlayerName(
+                    "command.tpa.request.cancel.sender",
+                    asyncRequest.receiver
+                )
+                asyncRequest.receiver.sendMessageWithPlayerName(
+                    "command.tpa.request.cancel.receiver",
+                    asyncRequest.sender
+                )
             }
 
             AsyncCommandEvent.TELEPORT_OUT_DISTANCE -> {

@@ -13,7 +13,10 @@ import net.superricky.tpaplusplus.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.command.CommandNameSpec
-import net.superricky.tpaplusplus.utility.*
+import net.superricky.tpaplusplus.utility.Context
+import net.superricky.tpaplusplus.utility.LevelBoundVec3
+import net.superricky.tpaplusplus.utility.LiteralNode
+import net.superricky.tpaplusplus.utility.getDimension
 
 object AcceptCommand : AsyncCommand(), BuildableCommand {
     init {
@@ -43,17 +46,12 @@ object AcceptCommand : AsyncCommand(), BuildableCommand {
     private fun acceptCommandWithTarget(context: Context): Int {
         fun asyncCommandCallback(result: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {
             val asyncRequest = asyncCommandData.getRequest()
-            when (result) {
-                AsyncCommandEvent.REQUEST_AFTER_DELAY -> {
-                    val sender = asyncRequest.sender
-                    val receiver = asyncRequest.receiver!!
-                    val acceptResult = AsyncCommandHelper.acceptRequest(sender, receiver)
-                    if (acceptResult == AsyncCommandEvent.REQUEST_NOT_FOUND) {
-                        CommandHelper.requestNotFound(sender, receiver)
-                    }
+            if (result == AsyncCommandEvent.REQUEST_AFTER_DELAY) {
+                val sender = asyncRequest.sender
+                val receiver = asyncRequest.receiver!!
+                if (AsyncCommandHelper.acceptRequest(sender, receiver) == AsyncCommandEvent.REQUEST_NOT_FOUND) {
+                    CommandHelper.requestNotFound(sender, receiver)
                 }
-
-                else -> {}
             }
         }
 
@@ -75,16 +73,11 @@ object AcceptCommand : AsyncCommand(), BuildableCommand {
     private fun acceptCommand(context: Context): Int {
         fun asyncCommandCallback(result: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {
             val asyncRequest = asyncCommandData.getRequest()
-            when (result) {
-                AsyncCommandEvent.REQUEST_AFTER_DELAY -> {
-                    val sender = asyncRequest.sender
-                    val acceptResult = AsyncCommandHelper.acceptRequest(sender)
-                    if (acceptResult == AsyncCommandEvent.REQUEST_NOT_FOUND) {
-                        CommandHelper.requestNotFound(sender)
-                    }
+            if (result == AsyncCommandEvent.REQUEST_AFTER_DELAY) {
+                val sender = asyncRequest.sender
+                if (AsyncCommandHelper.acceptRequest(sender) == AsyncCommandEvent.REQUEST_NOT_FOUND) {
+                    CommandHelper.requestNotFound(sender)
                 }
-
-                else -> {}
             }
         }
 

@@ -42,12 +42,10 @@
 
     "command.tpa.request.sender": "Successfully sent teleport request to %s",
     "command.tpa.request.receiver": "%s wants to teleport to you!",
-    "command.tpa.request.cancel": "Teleport request from %s has been canceled!",
     "command.tpa.timeout.sender": "Your teleport request to %s timed out",
     "command.tpa.timeout.receiver": "Your teleport request from %s timed out",
-    "command.tpa.request.accept.from": "Teleport request to %s has been accepted, preparing for teleport",
-    "command.tpa.request.accept.to": "You have accepted teleport request from %s",
-
-    "command.tpaaccept.request.accept.sender": "Your teleport request for %s was accepted!",
-    "command.tpaaccept.request.accept.receiver": "Accepted teleport request from %s"
+    "command.tpa.request.accept.sender": "Teleport request to %s has been accepted, preparing for teleport",
+    "command.tpa.request.accept.receiver": "You have accepted teleport request from %s",
+    "command.tpa.request.cancel.sender": "Your teleport request to %s has been canceled",
+    "command.tpa.request.cancel.receiver": "Teleport request from %s has been canceled"
 }

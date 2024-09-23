@@ -42,12 +42,9 @@
 
     "command.tpa.request.sender": "成功向 %s 發送傳送請求",
     "command.tpa.request.receiver": "%s 想傳送到你身邊！",
-    "command.tpa.request.cancel": "來自 %s 的傳送請求已被取消！",
     "command.tpa.timeout.sender": "傳送到 %s 的傳送請求超時",
     "command.tpa.timeout.receiver": "來自 %s 的傳送請求超時",
-    "command.tpa.request.accept.from": "傳送到 %s 的傳送請求已被接受，正在準備傳送",
-    "command.tpa.request.accept.to": "已接受來自 %s 的傳送請求",
+    "command.tpa.request.accept.sender": "傳送到 %s 的傳送請求已被接受，正在準備傳送",
+    "command.tpa.request.accept.receiver": "已接受來自 %s 的傳送請求"
 
-    "command.tpaaccept.request.accept.sender": "%s 已接收你的傳送請求！",
-    "command.tpaaccept.request.accept.receiver": "已接受來自 %s 的傳送請求"
 }

@@ -29,89 +29,54 @@ object TpaHereCommand : AsyncCommand(), BuildableCommand {
 
     override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.tpahereDistance]
 
-    private fun asyncCommandCallback(event: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {
-        val asyncRequest = asyncCommandData.getRequest()
-        asyncRequest.receiver!!
-        when (event) {
-            AsyncCommandEvent.REQUEST_AFTER_DELAY -> {
-                asyncRequest.sender.sendMessageWithPlayerName("command.tpahere.request.sender", asyncRequest.receiver)
-                asyncRequest.receiver.sendMessageWithPlayerName("command.tpahere.request.receiver", asyncRequest.sender)
-            }
-
-            AsyncCommandEvent.REQUEST_TIMEOUT -> {
-                asyncRequest.sender.sendMessageWithPlayerName("command.tpahere.timeout.sender", asyncRequest.receiver)
-                asyncRequest.receiver.sendMessageWithPlayerName("command.tpahere.timeout.receiver", asyncRequest.sender)
-            }
-
-            AsyncCommandEvent.REQUEST_ACCEPTED -> {
-                require(asyncRequest.canBeTeleported()) { "Request can't be teleported!" }
-                asyncRequest.sender.sendMessageWithPlayerName(
-                    "command.tpahere.request.accept.sender",
-                    asyncRequest.receiver
-                )
-                asyncRequest.receiver.sendMessageWithPlayerName(
-                    "command.tpahere.request.accept.receiver",
-                    asyncRequest.sender
-                )
-                AsyncCommandHelper.teleport(asyncCommandData)
-            }
-
-            AsyncCommandEvent.REQUEST_CANCELED -> {
-                asyncRequest.sender.sendMessageWithPlayerName(
-                    "command.tpahere.request.cancel.sender",
-                    asyncRequest.receiver
-                )
-                asyncRequest.receiver.sendMessageWithPlayerName(
-                    "command.tpahere.request.cancel.receiver",
-                    asyncRequest.sender
-                )
-            }
-
-            AsyncCommandEvent.REQUEST_REFUSED -> {
-                asyncRequest.sender.sendMessageWithPlayerName(
-                    "command.tpahere.request.refuse.sender",
-                    asyncRequest.receiver
-                )
-                asyncRequest.receiver.sendMessageWithPlayerName(
-                    "command.tpahere.request.refuse.receiver",
-                    asyncRequest.sender
-                )
-            }
-
-            AsyncCommandEvent.TELEPORT_OUT_DISTANCE -> {
-                asyncRequest.from?.sendMessage(
-                    Text.translatable("command.teleport.out_distance").setStyle(TextColorPallet.error)
-                )
-            }
-
-            AsyncCommandEvent.TELEPORT_UPDATE_MESSAGE -> {
-                asyncRequest.from?.sendTeleportTime(asyncRequest.delay)
-            }
-
-            else -> {}
-        }
-    }
-
     private fun tpaHereRequest(context: Context): Int {
-        val (result, sender, target) = checkSenderReceiver(context)
+        val (result, sender, receiver) = checkSenderReceiver(context)
         if (result != CommandResult.NORMAL) return result.status
         sender!!
-        target!!
-        if (CommandHelper.checkToggled(sender, target) ||
-            CommandHelper.checkBlocked(sender, target) ||
-            CommandHelper.checkRequestExist(sender, target, AsyncCommandType.TPAHERE)
+        receiver!!
+        if (CommandHelper.checkToggled(sender, receiver) ||
+            CommandHelper.checkBlocked(sender, receiver) ||
+            CommandHelper.checkRequestExist(sender, receiver, AsyncCommandType.TPAHERE)
         ) {
             return CommandResult.NORMAL.status
         }
-        LimitationHelper.checkLimitation(sender, target)?.let {
+        LimitationHelper.checkLimitation(sender, receiver)?.let {
             sender.sendMessage(it)
             return CommandResult.NORMAL.status
         }
         AsyncCommandHelper.schedule(
             AsyncCommandData(
-                AsyncRequest(sender, target, AsyncCommandType.TPAHERE, target, sender),
+                AsyncRequest(sender, receiver, AsyncCommandType.TPAHERE, receiver, sender),
                 LevelBoundVec3(sender.getDimension(), sender.pos),
-                ::asyncCommandCallback
+                AsyncCommandEventFactory
+                    .addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
+                        sender.sendMessageWithPlayerName("command.tpahere.request.sender", receiver)
+                        receiver.sendMessageWithPlayerName("command.tpahere.request.receiver", sender)
+                    }
+                    .addListener(AsyncCommandEvent.REQUEST_TIMEOUT) {
+                        sender.sendMessageWithPlayerName("command.tpahere.timeout.sender", receiver)
+                        receiver.sendMessageWithPlayerName("command.tpahere.timeout.receiver", sender)
+                    }
+                    .addListener(AsyncCommandEvent.REQUEST_ACCEPTED) {
+                        sender.sendMessageWithPlayerName("command.tpahere.request.accept.sender", receiver)
+                        receiver.sendMessageWithPlayerName("command.tpahere.request.accept.receiver", sender)
+                        AsyncCommandHelper.teleport(it)
+                    }.addListener(AsyncCommandEvent.REQUEST_CANCELED) {
+                        sender.sendMessageWithPlayerName("command.tpahere.request.cancel.sender", receiver)
+                        receiver.sendMessageWithPlayerName("command.tpahere.request.cancel.receiver", sender)
+                    }
+                    .addListener(AsyncCommandEvent.REQUEST_REFUSED) {
+                        sender.sendMessageWithPlayerName("command.tpahere.request.refuse.sender", receiver)
+                        receiver.sendMessageWithPlayerName("command.tpahere.request.refuse.receiver", sender)
+                    }
+                    .addListener(AsyncCommandEvent.TELEPORT_OUT_DISTANCE) {
+                        receiver.sendMessage(
+                            Text.translatable("command.teleport.out_distance").setStyle(TextColorPallet.error)
+                        )
+                    }
+                    .addListener(AsyncCommandEvent.TELEPORT_UPDATE_MESSAGE) {
+                        receiver.sendTeleportTime(it.getRequest().delay)
+                    }
             )
         )
         return CommandResult.NORMAL.status

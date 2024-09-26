@@ -11,11 +11,38 @@ import net.superricky.tpaplusplus.utility.*
 class AsyncCommandData(
     private val asyncRequest: AsyncRequest,
     private var pos: LevelBoundVec3,
-    private val callback: Function2<AsyncCommandEvent, AsyncCommandData, Unit>
+    private val asyncCommandEventFactory: AsyncCommandEventFactory
 ) {
     private var canceled: AtomicBoolean = atomic(false)
     private var timeout = Config.getConfig()[CommonSpec.tpaTimeout].translateSecondToTick()
     private var checkTarget = asyncRequest.sender
+
+    init {
+        asyncCommandEventFactory
+            .addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
+                AsyncCommandHelper.addCooldown(
+                    asyncRequest.sender.uuid,
+                    asyncRequest.commandType
+                )
+            }
+            .addListener(AsyncCommandEvent.REQUEST_OUT_DISTANCE) {
+                asyncRequest.sender.sendMessage(
+                    Text.translatable(
+                        "command.windup.error.out_distance",
+                        asyncRequest.commandType.handler.getCommandName()
+                    ).setStyle(TextColorPallet.error)
+                )
+            }
+            .addListener(AsyncCommandEvent.REQUEST_UPDATE_MESSAGE) {
+                asyncRequest.sender.sendRemainTime(asyncRequest.delay)
+            }
+            .addListener(AsyncCommandEvent.REQUEST_UNDER_COOLDOWN) {
+                asyncRequest.sender.sendCooldownTime(
+                    asyncRequest.commandType.handler.getCommandName(),
+                    asyncRequest.cooldown.translateTickToSecond()
+                )
+            }
+    }
 
     fun needDelay(): Boolean = asyncRequest.delay != 0.0
 
@@ -54,34 +81,7 @@ class AsyncCommandData(
         if (isCanceled()) {
             return
         }
-        when (commandResult) {
-            AsyncCommandEvent.REQUEST_AFTER_DELAY -> {
-                AsyncCommandHelper.addCooldown(asyncRequest.sender.uuid, asyncRequest.commandType)
-            }
-
-            AsyncCommandEvent.REQUEST_OUT_DISTANCE -> {
-                asyncRequest.sender.sendMessage(
-                    Text.translatable(
-                        "command.windup.error.out_distance",
-                        asyncRequest.commandType.handler.getCommandName()
-                    ).setStyle(TextColorPallet.error)
-                )
-            }
-
-            AsyncCommandEvent.REQUEST_UPDATE_MESSAGE -> {
-                asyncRequest.sender.sendRemainTime(asyncRequest.delay)
-            }
-
-            AsyncCommandEvent.REQUEST_UNDER_COOLDOWN -> {
-                asyncRequest.sender.sendCooldownTime(
-                    asyncRequest.commandType.handler.getCommandName(),
-                    asyncRequest.cooldown.translateTickToSecond()
-                )
-            }
-
-            else -> {}
-        }
-        callback.invoke(commandResult, this)
+        asyncCommandEventFactory.invoke(commandResult, this)
     }
 
     fun cancel() {

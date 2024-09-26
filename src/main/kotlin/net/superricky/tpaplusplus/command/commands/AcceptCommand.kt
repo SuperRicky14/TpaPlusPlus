@@ -59,23 +59,17 @@ object AcceptCommand : AsyncCommand(), BuildableCommand {
             AsyncCommandData(
                 AsyncRequest(sender, receiver, AsyncCommandType.ACCEPT),
                 LevelBoundVec3(sender.getDimension(), sender.pos),
-                ::asyncCommandCallback
+                AsyncCommandEventFactory.addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
+                    if (AsyncCommandHelper.acceptRequest(sender, receiver) == AsyncCommandEvent.REQUEST_NOT_FOUND) {
+                        CommandHelper.requestNotFound(sender, receiver)
+                    }
+                }
             )
         )
         return CommandResult.NORMAL.status
     }
 
     private fun acceptCommand(context: Context): Int {
-        fun asyncCommandCallback(result: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {
-            val asyncRequest = asyncCommandData.getRequest()
-            if (result == AsyncCommandEvent.REQUEST_AFTER_DELAY) {
-                val sender = asyncRequest.sender
-                if (AsyncCommandHelper.acceptRequest(sender) == AsyncCommandEvent.REQUEST_NOT_FOUND) {
-                    CommandHelper.requestNotFound(sender)
-                }
-            }
-        }
-
         val source = context.source
         val sender = source.player
         sender ?: return CommandResult.SENDER_NOT_EXIST.status
@@ -83,7 +77,11 @@ object AcceptCommand : AsyncCommand(), BuildableCommand {
             AsyncCommandData(
                 AsyncRequest(sender, null, AsyncCommandType.ACCEPT),
                 LevelBoundVec3(sender.getDimension(), sender.pos),
-                ::asyncCommandCallback
+                AsyncCommandEventFactory.addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
+                    if (AsyncCommandHelper.acceptRequest(sender) == AsyncCommandEvent.REQUEST_NOT_FOUND) {
+                        CommandHelper.requestNotFound(sender)
+                    }
+                }
             )
         )
         return CommandResult.NORMAL.status

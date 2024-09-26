@@ -38,17 +38,6 @@ object DenyCommand : AsyncCommand(), BuildableCommand {
     override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.denyDistance]
 
     private fun refuseRequestWithTarget(context: Context): Int {
-        fun asyncCommandCallback(result: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {
-            val asyncRequest = asyncCommandData.getRequest()
-            if (result == AsyncCommandEvent.REQUEST_AFTER_DELAY) {
-                val sender = asyncRequest.sender
-                val receiver = asyncRequest.receiver!!
-                if (AsyncCommandHelper.refuseRequest(sender, receiver) == AsyncCommandEvent.REQUEST_NOT_FOUND) {
-                    CommandHelper.requestNotFound(sender, receiver)
-                }
-            }
-        }
-
         val source = context.source
         val (result, sender, receiver) = checkSenderReceiver(context)
         if (result != CommandResult.NORMAL) return result.status
@@ -58,23 +47,17 @@ object DenyCommand : AsyncCommand(), BuildableCommand {
             AsyncCommandData(
                 AsyncRequest(sender, receiver, AsyncCommandType.DENY),
                 LevelBoundVec3(sender.getDimension(), sender.pos),
-                ::asyncCommandCallback
+                AsyncCommandEventFactory.addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
+                    if (AsyncCommandHelper.refuseRequest(sender, receiver) == AsyncCommandEvent.REQUEST_NOT_FOUND) {
+                        CommandHelper.requestNotFound(sender, receiver)
+                    }
+                }
             )
         )
         return CommandResult.NORMAL.status
     }
 
     private fun refuseRequest(context: Context): Int {
-        fun asyncCommandCallback(result: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {
-            val asyncRequest = asyncCommandData.getRequest()
-            if (result == AsyncCommandEvent.REQUEST_AFTER_DELAY) {
-                val sender = asyncRequest.sender
-                if (AsyncCommandHelper.refuseRequest(sender) == AsyncCommandEvent.REQUEST_NOT_FOUND) {
-                    CommandHelper.requestNotFound(sender)
-                }
-            }
-        }
-
         val source = context.source
         val sender = source.player
         sender ?: return CommandResult.SENDER_NOT_EXIST.status
@@ -82,7 +65,11 @@ object DenyCommand : AsyncCommand(), BuildableCommand {
             AsyncCommandData(
                 AsyncRequest(sender, null, AsyncCommandType.DENY),
                 LevelBoundVec3(sender.getDimension(), sender.pos),
-                ::asyncCommandCallback
+                AsyncCommandEventFactory.addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
+                    if (AsyncCommandHelper.refuseRequest(sender) == AsyncCommandEvent.REQUEST_NOT_FOUND) {
+                        CommandHelper.requestNotFound(sender)
+                    }
+                }
             )
         )
         return CommandResult.NORMAL.status

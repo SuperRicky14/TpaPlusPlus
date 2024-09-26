@@ -2,6 +2,7 @@ package net.superricky.tpaplusplus.async
 
 import kotlinx.atomicfu.AtomicBoolean
 import kotlinx.atomicfu.atomic
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.superricky.tpaplusplus.config.CommonSpec
 import net.superricky.tpaplusplus.config.Config
@@ -14,14 +15,20 @@ class AsyncCommandData(
 ) {
     private var canceled: AtomicBoolean = atomic(false)
     private var timeout = Config.getConfig()[CommonSpec.tpaTimeout].translateSecondToTick()
+    private var checkTarget = asyncRequest.sender
 
     fun needDelay(): Boolean = asyncRequest.delay != 0.0
 
     fun getDelay(): Double = asyncRequest.delay
 
     fun updateCurrentPos() {
-        val sender = asyncRequest.sender
-        pos = LevelBoundVec3(sender.getDimension(), sender.pos)
+        val from = asyncRequest.from
+        from ?: return
+        pos = LevelBoundVec3(from.getDimension(), from.pos)
+    }
+
+    fun setCheckTarget(checkTarget: ServerPlayerEntity) {
+        this.checkTarget = checkTarget
     }
 
     fun updateDelay(delay: Double) {
@@ -48,6 +55,10 @@ class AsyncCommandData(
             return
         }
         when (commandResult) {
+            AsyncCommandEvent.REQUEST_AFTER_DELAY -> {
+                AsyncCommandHelper.addCooldown(asyncRequest.sender.uuid, asyncRequest.commandType)
+            }
+
             AsyncCommandEvent.REQUEST_OUT_DISTANCE -> {
                 asyncRequest.sender.sendMessage(
                     Text.translatable(
@@ -68,13 +79,20 @@ class AsyncCommandData(
                 )
             }
 
-            else -> {
-                callback.invoke(commandResult, this)
-            }
+            else -> {}
         }
+        callback.invoke(commandResult, this)
     }
 
     fun cancel() {
         canceled.value = true
+    }
+
+    fun checkWindupDistance(): Boolean {
+        val minDistance = asyncRequest.commandType.handler.getMinDistance()
+        if (minDistance < 0) {
+            return true
+        }
+        return pos.distance(LevelBoundVec3(checkTarget.getDimension(), checkTarget.pos)) <= minDistance
     }
 }

@@ -46,14 +46,16 @@ object AsyncCommandHelper : CoroutineScope {
     }
 
     fun addCooldown(uuid: UUID, type: AsyncCommandType) {
-        val playerData = underCooldown[uuid]
-        if (playerData == null) {
-            underCooldown[uuid] = mutableMapOf(
-                type to type.handler.getCooldownTime() * tickRate
-            )
+        // Check if cooldown is disabled
+        if (type.handler.getCooldownTime() == 0.0) {
             return
         }
-        playerData[type] = type.handler.getCooldownTime() * tickRate
+        val playerData = underCooldown[uuid]
+        playerData?.let {
+            it[type] = type.handler.getCooldownTime() * tickRate
+            return
+        }
+        underCooldown[uuid] = mutableMapOf(type to type.handler.getCooldownTime() * tickRate)
     }
 
     private fun asyncWindupCheck(
@@ -66,7 +68,7 @@ object AsyncCommandHelper : CoroutineScope {
         val job = launch {
             while (true) {
                 delay(tickDelay)
-                if (!asyncCommandData.getRequest().commandType.handler.checkWindupDistance(asyncCommandData)) {
+                if (!asyncCommandData.checkWindupDistance()) {
                     errorCallback?.invoke(asyncCommandData)
                     return@launch
                 }
@@ -182,6 +184,7 @@ object AsyncCommandHelper : CoroutineScope {
                 return@launch
             }
             asyncCommandData.updateCurrentPos()
+            asyncCommandData.setCheckTarget(asyncCommandData.getRequest().from!!)
             asyncWindupCheck(
                 asyncCommandData,
                 successCallback = {

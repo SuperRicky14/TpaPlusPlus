@@ -25,7 +25,7 @@ object TpaCommand : AsyncCommand(), BuildableCommand {
         literal(commandName)
             .then(
                 argument("player", EntityArgumentType.player())
-                    .executes { tpaPlayer(it) }
+                    .executes { tpaRequest(it) }
             )
             .build()
 
@@ -33,21 +33,17 @@ object TpaCommand : AsyncCommand(), BuildableCommand {
 
     override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.tpaDelay]
 
-    override fun checkWindupDistance(asyncCommandData: AsyncCommandData): Boolean =
-        checkWindupDistance(
-            asyncCommandData,
-            ::getSenderDistance,
-            Config.getConfig()[CommandDistanceSpec.tpaDistance]
-        )
+    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.tpaDistance]
 
     @Suppress("LongMethod")
-    private fun asyncCommandCallback(result: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {
+    private fun asyncCommandCallback(event: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {
         val asyncRequest = asyncCommandData.getRequest()
         require(asyncRequest.receiver != null) { "Receiver cannot be null" }
-        when (result) {
+        when (event) {
             AsyncCommandEvent.REQUEST_AFTER_DELAY -> {
                 asyncRequest.sender.sendMessageWithPlayerName("command.tpa.request.sender", asyncRequest.receiver)
                 asyncRequest.receiver.sendMessageWithPlayerName("command.tpa.request.receiver", asyncRequest.sender)
+                AsyncCommandHelper.addCooldown(asyncRequest.sender.uuid, AsyncCommandType.TPA)
             }
 
             AsyncCommandEvent.REQUEST_TIMEOUT -> {
@@ -66,12 +62,6 @@ object TpaCommand : AsyncCommand(), BuildableCommand {
                     asyncRequest.sender
                 )
                 AsyncCommandHelper.teleport(asyncCommandData)
-                if (AsyncCommandType.TPA.handler.getCooldownTime() != 0.0) {
-                    AsyncCommandHelper.addCooldown(asyncRequest.sender.uuid, AsyncCommandType.TPA)
-                }
-                if (AsyncCommandType.ACCEPT.handler.getCooldownTime() != 0.0) {
-                    AsyncCommandHelper.addCooldown(asyncRequest.receiver.uuid, AsyncCommandType.ACCEPT)
-                }
             }
 
             AsyncCommandEvent.REQUEST_CANCELED -> {
@@ -110,7 +100,7 @@ object TpaCommand : AsyncCommand(), BuildableCommand {
         }
     }
 
-    private fun tpaPlayer(context: Context): Int {
+    private fun tpaRequest(context: Context): Int {
         val (result, sender, target) = checkSenderReceiver(context)
         if (result != CommandResult.NORMAL) return result.status
         sender!!

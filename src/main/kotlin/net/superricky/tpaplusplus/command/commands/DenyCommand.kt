@@ -35,13 +35,7 @@ object DenyCommand : AsyncCommand(), BuildableCommand {
     override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.denyCooldown]
 
     override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.denyDelay]
-
-    override fun checkWindupDistance(asyncCommandData: AsyncCommandData): Boolean =
-        checkWindupDistance(
-            asyncCommandData,
-            ::getSenderDistance,
-            Config.getConfig()[CommandDistanceSpec.denyDistance]
-        )
+    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.denyDistance]
 
     private fun refuseRequestWithTarget(context: Context): Int {
         fun asyncCommandCallback(result: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {

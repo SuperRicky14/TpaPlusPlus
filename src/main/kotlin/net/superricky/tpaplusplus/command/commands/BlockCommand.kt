@@ -7,7 +7,8 @@ import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.text.Text
 import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.async.AsyncCommand
-import net.superricky.tpaplusplus.async.AsyncCommandData
+import net.superricky.tpaplusplus.async.AsyncCommandHelper
+import net.superricky.tpaplusplus.async.AsyncCommandType
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
 import net.superricky.tpaplusplus.command.CommandResult
@@ -38,13 +39,7 @@ object BlockCommand : AsyncCommand(), BuildableCommand {
     override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.blockCooldown]
 
     override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.blockDelay]
-
-    override fun checkWindupDistance(asyncCommandData: AsyncCommandData): Boolean =
-        checkWindupDistance(
-            asyncCommandData,
-            ::getSenderDistance,
-            Config.getConfig()[CommandDistanceSpec.blockDistance]
-        )
+    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.blockDistance]
 
     private fun blockPlayer(context: Context): Int {
         val source = context.source
@@ -84,6 +79,7 @@ object BlockCommand : AsyncCommand(), BuildableCommand {
                     false
                 )
             }
+            AsyncCommandHelper.addCooldown(sender.uuid, AsyncCommandType.BLOCK)
         }
         return CommandResult.NORMAL.status
     }

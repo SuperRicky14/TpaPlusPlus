@@ -35,13 +35,7 @@ object CancelCommand : AsyncCommand(), BuildableCommand {
     override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.cancelCooldown]
 
     override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.cancelDelay]
-
-    override fun checkWindupDistance(asyncCommandData: AsyncCommandData): Boolean =
-        checkWindupDistance(
-            asyncCommandData,
-            ::getSenderDistance,
-            Config.getConfig()[CommandDistanceSpec.cancelDistance]
-        )
+    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.cancelDistance]
 
     private fun cancelRequestWithTarget(context: Context): Int {
         fun asyncCommandCallback(result: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {

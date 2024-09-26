@@ -5,7 +5,8 @@ import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.text.Text
 import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.async.AsyncCommand
-import net.superricky.tpaplusplus.async.AsyncCommandData
+import net.superricky.tpaplusplus.async.AsyncCommandHelper
+import net.superricky.tpaplusplus.async.AsyncCommandType
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandResult
 import net.superricky.tpaplusplus.config.Config
@@ -40,12 +41,7 @@ object ToggleCommand : AsyncCommand(), BuildableCommand {
 
     override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.toggleDelay]
 
-    override fun checkWindupDistance(asyncCommandData: AsyncCommandData): Boolean =
-        checkWindupDistance(
-            asyncCommandData,
-            ::getSenderDistance,
-            Config.getConfig()[CommandDistanceSpec.toggleDistance]
-        )
+    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.toggleDistance]
 
     private fun switchToggle(context: Context): Int {
         val source = context.source
@@ -58,6 +54,7 @@ object ToggleCommand : AsyncCommand(), BuildableCommand {
             } else {
                 source.sendFeedback({ Text.translatable("command.toggle.success.off") }, false)
             }
+            AsyncCommandHelper.addCooldown(sender.uuid, AsyncCommandType.TOGGLE)
         }
         return CommandResult.NORMAL.status
     }
@@ -74,6 +71,7 @@ object ToggleCommand : AsyncCommand(), BuildableCommand {
                 sender.toggleOff()
                 source.sendFeedback({ Text.translatable("command.toggle.success.off") }, false)
             }
+            AsyncCommandHelper.addCooldown(sender.uuid, AsyncCommandType.TOGGLE)
         }
         return CommandResult.NORMAL.status
     }

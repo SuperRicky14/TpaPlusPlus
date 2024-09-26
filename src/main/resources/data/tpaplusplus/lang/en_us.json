@@ -49,5 +49,16 @@
     "command.tpa.request.cancel.sender": "Your teleport request to %s has been canceled",
     "command.tpa.request.cancel.receiver": "Teleport request from %s has been canceled",
     "command.tpa.request.refuse.sender": "Your teleport request to %s has been refused",
-    "command.tpa.request.refuse.receiver": "Teleport request from %s has been refused"
+    "command.tpa.request.refuse.receiver": "Teleport request from %s has been refused",
+
+    "command.tpahere.request.sender": "Successfully sent teleport request to %s",
+    "command.tpahere.request.receiver": "%s wants you to teleport to them!",
+    "command.tpahere.timeout.sender": "Your teleport request to %s timed out",
+    "command.tpahere.timeout.receiver": "Your teleport request from %s timed out",
+    "command.tpahere.request.accept.sender": "The teleport request to you has been accepted by %s",
+    "command.tpahere.request.accept.receiver": "You have accepted teleport request to %s, preparing for teleport",
+    "command.tpahere.request.cancel.sender": "Your teleport request to %s has been canceled",
+    "command.tpahere.request.cancel.receiver": "Teleport request from %s has been canceled",
+    "command.tpahere.request.refuse.sender": "Your teleport request to %s has been refused",
+    "command.tpahere.request.refuse.receiver": "Teleport request from %s has been refused"
 }

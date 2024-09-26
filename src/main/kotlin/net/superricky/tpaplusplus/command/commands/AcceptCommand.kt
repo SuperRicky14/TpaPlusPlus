@@ -36,12 +36,7 @@ object AcceptCommand : AsyncCommand(), BuildableCommand {
 
     override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.acceptDelay]
 
-    override fun checkWindupDistance(asyncCommandData: AsyncCommandData): Boolean =
-        checkWindupDistance(
-            asyncCommandData,
-            ::getSenderDistance,
-            Config.getConfig()[CommandDistanceSpec.acceptDistance]
-        )
+    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.acceptDistance]
 
     private fun acceptCommandWithTarget(context: Context): Int {
         fun asyncCommandCallback(result: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {

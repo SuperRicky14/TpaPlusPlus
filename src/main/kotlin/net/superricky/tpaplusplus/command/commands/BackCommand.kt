@@ -2,7 +2,6 @@ package net.superricky.tpaplusplus.command.commands
 
 import net.minecraft.server.command.CommandManager.literal
 import net.superricky.tpaplusplus.async.AsyncCommand
-import net.superricky.tpaplusplus.async.AsyncCommandData
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.config.Config
 import net.superricky.tpaplusplus.config.command.CommandCooldownSpec
@@ -24,10 +23,5 @@ object BackCommand : AsyncCommand(), BuildableCommand {
 
     override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.backDelay]
 
-    override fun checkWindupDistance(asyncCommandData: AsyncCommandData): Boolean =
-        checkWindupDistance(
-            asyncCommandData,
-            ::getSenderDistance,
-            Config.getConfig()[CommandDistanceSpec.backDistance]
-        )
+    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.backDistance]
 }

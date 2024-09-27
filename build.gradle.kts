@@ -81,7 +81,6 @@ tasks {
         inputs.property("version", project.version)
         inputs.property("minecraft_version", minecraftVersion)
         inputs.property("loader_version", loaderVersion)
-        inputs.property("server_translates_api", serverTranslatesApi)
         filteringCharset = "UTF-8"
 
         filesMatching("fabric.mod.json") {
@@ -89,7 +88,8 @@ tasks {
                 "version" to project.version,
                 "minecraft_version" to minecraftVersion,
                 "loader_version" to loaderVersion,
-                "kotlin_loader_version" to kotlinLoaderVersion
+                "kotlin_loader_version" to kotlinLoaderVersion,
+                "server_translates_api" to serverTranslatesApi
             )
         }
     }

@@ -4,9 +4,8 @@ import kotlinx.coroutines.launch
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
-import net.minecraft.text.Text
 import net.superricky.tpaplusplus.TpaPlusPlus
-import net.superricky.tpaplusplus.async.AsyncCommand
+import net.superricky.tpaplusplus.async.*
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
 import net.superricky.tpaplusplus.command.CommandResult
@@ -16,10 +15,7 @@ import net.superricky.tpaplusplus.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.command.CommandNameSpec
-import net.superricky.tpaplusplus.utility.Context
-import net.superricky.tpaplusplus.utility.LiteralNode
-import net.superricky.tpaplusplus.utility.TextColorPallet
-import net.superricky.tpaplusplus.utility.getColoredName
+import net.superricky.tpaplusplus.utility.*
 
 object UnblockCommand : AsyncCommand(), BuildableCommand {
     init {
@@ -41,44 +37,28 @@ object UnblockCommand : AsyncCommand(), BuildableCommand {
     override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.unblockDistance]
 
     private fun unBlockPlayer(context: Context): Int {
-        val source = context.source
-        val (result, sender, target) = checkSenderReceiver(context)
+        val (result, sender, receiver) = checkSenderReceiver(context)
         if (result != CommandResult.NORMAL) return result.status
         sender!!
-        target!!
-        TpaPlusPlus.launch {
-            if (TpaPlusPlus.dataService.removeBlockPlayer(sender.uuid, target.uuid)) {
-                source.sendFeedback(
-                    {
-                        Text.translatable(
-                            "command.unblock.success",
-                            target.getColoredName(TextColorPallet.secondary)
-                        )
-                            .setStyle(TextColorPallet.primary)
-                    },
-                    false
-                )
-                if (Config.getConfig()[CommonSpec.showBlockedMessage]) {
-                    target.sendMessage(
-                        Text.translatable(
-                            "command.unblock.be_unblock",
-                            sender.getColoredName(TextColorPallet.secondary)
-                        ).setStyle(TextColorPallet.primary)
-                    )
+        receiver!!
+        AsyncCommandHelper.schedule(
+            AsyncCommandData(
+                AsyncRequest(AsyncCommandType.UNBLOCK, sender, receiver),
+                LevelBoundVec3(sender.getDimension(), sender.pos),
+                AsyncCommandEventFactory.addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
+                    TpaPlusPlus.launch {
+                        if (TpaPlusPlus.dataService.removeBlockPlayer(sender.uuid, receiver.uuid)) {
+                            sender.sendMessageWithPlayerName("command.unblock.success", receiver)
+                            if (Config.getConfig()[CommonSpec.showBlockedMessage]) {
+                                receiver.sendMessageWithPlayerName("command.unblock.be_unblock", sender)
+                            }
+                        } else {
+                            sender.sendMessageWithPlayerName("command.unblock.fail", receiver)
+                        }
+                    }
                 }
-            } else {
-                source.sendFeedback(
-                    {
-                        Text.translatable(
-                            "command.unblock.fail",
-                            target.getColoredName(TextColorPallet.secondary)
-                        )
-                            .setStyle(TextColorPallet.primary)
-                    },
-                    false
-                )
-            }
-        }
+            )
+        )
         return CommandResult.NORMAL.status
     }
 }

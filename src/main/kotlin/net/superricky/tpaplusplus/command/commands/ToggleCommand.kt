@@ -4,9 +4,7 @@ import kotlinx.coroutines.launch
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.text.Text
 import net.superricky.tpaplusplus.TpaPlusPlus
-import net.superricky.tpaplusplus.async.AsyncCommand
-import net.superricky.tpaplusplus.async.AsyncCommandHelper
-import net.superricky.tpaplusplus.async.AsyncCommandType
+import net.superricky.tpaplusplus.async.*
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandResult
 import net.superricky.tpaplusplus.config.Config
@@ -14,10 +12,7 @@ import net.superricky.tpaplusplus.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.command.CommandNameSpec
-import net.superricky.tpaplusplus.utility.Context
-import net.superricky.tpaplusplus.utility.LiteralNode
-import net.superricky.tpaplusplus.utility.toggleOff
-import net.superricky.tpaplusplus.utility.toggleOn
+import net.superricky.tpaplusplus.utility.*
 
 object ToggleCommand : AsyncCommand(), BuildableCommand {
     init {
@@ -47,15 +42,28 @@ object ToggleCommand : AsyncCommand(), BuildableCommand {
         val source = context.source
         val sender = source.player
         sender ?: return CommandResult.SENDER_NOT_EXIST.status
-        TpaPlusPlus.launch {
-            val blocked = TpaPlusPlus.dataService.playerSwitchToggle(sender.uuid)
-            if (blocked) {
-                source.sendFeedback({ Text.translatable("command.toggle.success.on") }, false)
-            } else {
-                source.sendFeedback({ Text.translatable("command.toggle.success.off") }, false)
-            }
-            AsyncCommandHelper.addCooldown(sender.uuid, AsyncCommandType.TOGGLE)
-        }
+        AsyncCommandHelper.schedule(
+            AsyncCommandData(
+                AsyncRequest(AsyncCommandType.TOGGLE, sender),
+                LevelBoundVec3(sender.getDimension(), sender.pos),
+                AsyncCommandEventFactory
+                    .addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
+                        TpaPlusPlus.launch {
+                            val blocked = TpaPlusPlus.dataService.playerSwitchToggle(sender.uuid)
+                            if (blocked) {
+                                sender.sendMessage(
+                                    Text.translatable("command.toggle.success.on").setStyle(TextColorPallet.primary)
+                                )
+                            } else {
+                                sender.sendMessage(
+                                    Text.translatable("command.toggle.success.off").setStyle(TextColorPallet.primary)
+                                )
+                            }
+                            AsyncCommandHelper.addCooldown(sender.uuid, AsyncCommandType.TOGGLE)
+                        }
+                    }
+            )
+        )
         return CommandResult.NORMAL.status
     }
 
@@ -63,16 +71,29 @@ object ToggleCommand : AsyncCommand(), BuildableCommand {
         val source = context.source
         val sender = source.player
         sender ?: return CommandResult.SENDER_NOT_EXIST.status
-        TpaPlusPlus.launch {
-            if (blocked) {
-                sender.toggleOn()
-                source.sendFeedback({ Text.translatable("command.toggle.success.on") }, false)
-            } else {
-                sender.toggleOff()
-                source.sendFeedback({ Text.translatable("command.toggle.success.off") }, false)
-            }
-            AsyncCommandHelper.addCooldown(sender.uuid, AsyncCommandType.TOGGLE)
-        }
+        AsyncCommandHelper.schedule(
+            AsyncCommandData(
+                AsyncRequest(AsyncCommandType.TOGGLE, sender),
+                LevelBoundVec3(sender.getDimension(), sender.pos),
+                AsyncCommandEventFactory
+                    .addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
+                        TpaPlusPlus.launch {
+                            if (blocked) {
+                                sender.toggleOn()
+                                sender.sendMessage(
+                                    Text.translatable("command.toggle.success.on").setStyle(TextColorPallet.primary)
+                                )
+                            } else {
+                                sender.toggleOff()
+                                sender.sendMessage(
+                                    Text.translatable("command.toggle.success.off").setStyle(TextColorPallet.primary)
+                                )
+                            }
+                            AsyncCommandHelper.addCooldown(sender.uuid, AsyncCommandType.TOGGLE)
+                        }
+                    }
+            )
+        )
         return CommandResult.NORMAL.status
     }
 }

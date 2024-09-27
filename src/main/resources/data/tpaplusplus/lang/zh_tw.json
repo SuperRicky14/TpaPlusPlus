@@ -45,6 +45,25 @@
     "command.tpa.timeout.sender": "傳送到 %s 的傳送請求超時",
     "command.tpa.timeout.receiver": "來自 %s 的傳送請求超時",
     "command.tpa.request.accept.sender": "傳送到 %s 的傳送請求已被接受，正在準備傳送",
-    "command.tpa.request.accept.receiver": "已接受來自 %s 的傳送請求"
+    "command.tpa.request.accept.receiver": "已接受來自 %s 的傳送請求",
+    "command.tpa.request.cancel.sender": "已取消傳送到 %s 的傳送請求",
+    "command.tpa.request.cancel.receiver": "來自 %s 的傳送請求已被取消",
+    "command.tpa.request.refuse.sender": "%s 拒絕了你的傳送請求",
+    "command.tpa.request.refuse.receiver": "已拒絕 %s 的傳送請求",
+
+    "command.tpahere.request.sender": "已成功向 %s 發送傳送請求",
+    "command.tpahere.request.receiver": "%s 想讓你傳送到他那裡",
+    "command.tpahere.timeout.sender": "對 %s 的傳送請求超時",
+    "command.tpahere.timeout.receiver": "來自 %s 的傳送請求超時",
+    "command.tpahere.request.accept.sender": "%s 已接受傳送請求，準備傳送到你",
+    "command.tpahere.request.accept.receiver": "你已接受傳送到 %s 的傳送請求，正在準備傳送",
+    "command.tpahere.request.cancel.sender": "已取消 %s 的傳送請求",
+    "command.tpahere.request.cancel.receiver": "來自 %s 的傳送請求已被取消",
+    "command.tpahere.request.refuse.sender": "%s 拒絕了你的傳送請求",
+    "command.tpahere.request.refuse.receiver": "已拒絕 %s 的傳送請求",
+
+    "command.back.death_not_found": "找不到最後一次死亡地點",
+    "command.back.teleporting": "正在傳送至最後一次死亡地點...",
+    "command.back.teleported": "已傳送至最後一次死亡地點"
 
 }

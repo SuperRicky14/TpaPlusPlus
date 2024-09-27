@@ -45,6 +45,25 @@
     "command.tpa.timeout.sender": "传送到 %s 的传送请求超时",
     "command.tpa.timeout.receiver": "来自 %s 的传送请求超时",
     "command.tpa.request.accept.sender": "传送到 %s 的传送请求已被接受，正在准备传送",
-    "command.tpa.request.accept.receiver": "已接受来自 %s 的传送请求"
+    "command.tpa.request.accept.receiver": "已接受来自 %s 的传送请求",
+    "command.tpa.request.cancel.sender": "已取消传送到 %s 的传送请求",
+    "command.tpa.request.cancel.receiver": "来自 %s 的传送请求已被取消",
+    "command.tpa.request.refuse.sender": "%s 拒绝了你的传送请求",
+    "command.tpa.request.refuse.receiver": "已拒绝 %s 的传送请求",
+
+    "command.tpahere.request.sender": "已成功向 %s 发送传送请求",
+    "command.tpahere.request.receiver": "%s 想让你传送到他那里",
+    "command.tpahere.timeout.sender": "对 %s 的传送请求超时",
+    "command.tpahere.timeout.receiver": "来自 %s 的传送请求超时",
+    "command.tpahere.request.accept.sender": "%s 已接受传送请求，准备传送到你",
+    "command.tpahere.request.accept.receiver": "你已接受传送到 %s 的传送请求，正在准备传送",
+    "command.tpahere.request.cancel.sender": "已取消 %s 的传送请求",
+    "command.tpahere.request.cancel.receiver": "来自 %s 的传送请求已被取消",
+    "command.tpahere.request.refuse.sender": "%s 拒绝了你的传送请求",
+    "command.tpahere.request.refuse.receiver": "已拒绝 %s 的传送请求",
+
+    "command.back.death_not_found": "找不到最后一次死亡地点",
+    "command.back.teleporting": "正在传送至最后一次死亡地点...",
+    "command.back.teleported": "已传送至最后一次死亡地点"
 
 }

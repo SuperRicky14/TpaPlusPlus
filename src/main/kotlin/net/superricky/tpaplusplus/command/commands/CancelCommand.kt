@@ -45,7 +45,7 @@ object CancelCommand : AsyncCommand(), BuildableCommand {
         receiver!!
         AsyncCommandHelper.schedule(
             AsyncCommandData(
-                AsyncRequest(sender, receiver, AsyncCommandType.CANCEL),
+                AsyncRequest(AsyncCommandType.CANCEL, sender, receiver),
                 LevelBoundVec3(sender.getDimension(), sender.pos),
                 AsyncCommandEventFactory.addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
                     if (AsyncCommandHelper.cancelRequest(sender, receiver) == AsyncCommandEvent.REQUEST_NOT_FOUND) {
@@ -63,7 +63,7 @@ object CancelCommand : AsyncCommand(), BuildableCommand {
         sender ?: return CommandResult.SENDER_NOT_EXIST.status
         AsyncCommandHelper.schedule(
             AsyncCommandData(
-                AsyncRequest(sender, null, AsyncCommandType.CANCEL),
+                AsyncRequest(AsyncCommandType.CANCEL, sender),
                 LevelBoundVec3(sender.getDimension(), sender.pos),
                 AsyncCommandEventFactory.addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
                     if (AsyncCommandHelper.cancelRequest(sender) == AsyncCommandEvent.REQUEST_NOT_FOUND) {

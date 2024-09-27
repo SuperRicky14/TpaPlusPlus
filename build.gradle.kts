@@ -76,10 +76,12 @@ tasks {
         val minecraftVersion: String by project
         val loaderVersion: String by project
         val kotlinLoaderVersion: String by project
+        val serverTranslatesApi: String by project
 
         inputs.property("version", project.version)
         inputs.property("minecraft_version", minecraftVersion)
         inputs.property("loader_version", loaderVersion)
+        inputs.property("server_translates_api", serverTranslatesApi)
         filteringCharset = "UTF-8"
 
         filesMatching("fabric.mod.json") {

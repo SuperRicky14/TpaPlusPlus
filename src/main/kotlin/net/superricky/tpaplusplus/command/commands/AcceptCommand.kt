@@ -57,7 +57,7 @@ object AcceptCommand : AsyncCommand(), BuildableCommand {
         receiver!!
         AsyncCommandHelper.schedule(
             AsyncCommandData(
-                AsyncRequest(sender, receiver, AsyncCommandType.ACCEPT),
+                AsyncRequest(AsyncCommandType.ACCEPT, sender, receiver),
                 LevelBoundVec3(sender.getDimension(), sender.pos),
                 AsyncCommandEventFactory.addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
                     if (AsyncCommandHelper.acceptRequest(sender, receiver) == AsyncCommandEvent.REQUEST_NOT_FOUND) {
@@ -75,7 +75,7 @@ object AcceptCommand : AsyncCommand(), BuildableCommand {
         sender ?: return CommandResult.SENDER_NOT_EXIST.status
         AsyncCommandHelper.schedule(
             AsyncCommandData(
-                AsyncRequest(sender, null, AsyncCommandType.ACCEPT),
+                AsyncRequest(AsyncCommandType.ACCEPT, sender),
                 LevelBoundVec3(sender.getDimension(), sender.pos),
                 AsyncCommandEventFactory.addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
                     if (AsyncCommandHelper.acceptRequest(sender) == AsyncCommandEvent.REQUEST_NOT_FOUND) {

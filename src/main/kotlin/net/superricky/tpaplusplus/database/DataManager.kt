@@ -26,6 +26,7 @@ object DataManager : DataService {
     private var playerDataMap: MutableMap<UUID, PlayerData> = Collections.synchronizedMap(HashMap())
     private val gson = GsonBuilder().setPrettyPrinting().create()
     private val dataSavePath: File = Config.getDatabasePath().resolve(PLAYER_DATA_FILE_NAME).toFile()
+    private val autoSaveInterval = Config.getConfig()[AdvancedSpec.autoSaveInterval]
 
     init {
         if (!dataSavePath.exists()) {
@@ -42,7 +43,7 @@ object DataManager : DataService {
         TpaPlusPlus.launch {
             while (isActive) {
                 saveData()
-                delay(Config.getConfig()[AdvancedSpec.autoSaveInterval] * ONE_SECOND)
+                delay(autoSaveInterval * ONE_SECOND)
             }
         }
     }
@@ -95,6 +96,8 @@ object DataManager : DataService {
         playerData.lastDeathPos.x = pos.x
         playerData.lastDeathPos.y = pos.y
         playerData.lastDeathPos.z = pos.z
+        playerData.lastDeathPos.yaw = pos.yaw
+        playerData.lastDeathPos.pitch = pos.pitch
         playerData.lastDeathPos.world = pos.serverLevel.value.toString()
         playerData.lastDeathPos.backed = false
     }

@@ -4,10 +4,14 @@ import kotlinx.atomicfu.AtomicBoolean
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.*
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.Text
 import net.superricky.tpaplusplus.GlobalConst.ONE_SECOND
 import net.superricky.tpaplusplus.GlobalConst.logger
+import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.config.CommonSpec
 import net.superricky.tpaplusplus.config.Config
+import net.superricky.tpaplusplus.utility.TextColorPallet
+import net.superricky.tpaplusplus.utility.getWorld
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
@@ -112,8 +116,9 @@ object AsyncCommandHelper : CoroutineScope {
         }
         if (!request.needDelay()) {
             request.call(AsyncCommandEvent.REQUEST_AFTER_DELAY)
-            // If request not a teleport request, then there are no necessary to consider timeout
-            if (request.getRequest().isTeleportRequest()) {
+            // If request is not acceptable, which means it do not need someone to confirm execute
+            // then there are no necessary to consider request timeout
+            if (request.getRequest().acceptable()) {
                 requests.add(request)
             }
             return
@@ -122,7 +127,7 @@ object AsyncCommandHelper : CoroutineScope {
             request,
             successCallback = {
                 it.call(AsyncCommandEvent.REQUEST_AFTER_DELAY)
-                if (it.getRequest().isTeleportRequest()) {
+                if (it.getRequest().acceptable()) {
                     requests.add(it)
                 }
             },
@@ -173,14 +178,35 @@ object AsyncCommandHelper : CoroutineScope {
         } != null
     }
 
-    private fun teleportPlayer(from: ServerPlayerEntity, to: ServerPlayerEntity) =
-        from.teleport(to.serverWorld, to.x, to.y, to.z, to.yaw, to.pitch)
+    private fun ServerPlayerEntity.backTeleport() {
+        val lastDeathPos = TpaPlusPlus.dataService.getPlayerData(this@backTeleport).lastDeathPos
+        this@backTeleport.teleport(
+            TpaPlusPlus.server.getWorld(lastDeathPos.world.getWorld()),
+            lastDeathPos.x,
+            lastDeathPos.y,
+            lastDeathPos.z,
+            lastDeathPos.yaw,
+            lastDeathPos.pitch
+        )
+        lastDeathPos.backed = true
+        this@backTeleport.sendMessage(
+            Text.translatable("command.back.teleported").setStyle(TextColorPallet.primary)
+        )
+    }
+
+    private fun ServerPlayerEntity.teleport(target: ServerPlayerEntity) {
+        this.teleport(target.serverWorld, target.x, target.y, target.z, target.yaw, target.pitch)
+    }
 
     fun teleport(asyncCommandData: AsyncCommandData) {
         launch {
             val asyncRequest = asyncCommandData.getRequest()
             if (Config.getConfig()[CommonSpec.waitTimeBeforeTp] == 0.0) {
-                teleportPlayer(asyncRequest.from!!, asyncRequest.to!!)
+                if (asyncRequest.commandType == AsyncCommandType.BACK) {
+                    asyncRequest.sender.backTeleport()
+                } else {
+                    asyncRequest.from!!.teleport(asyncRequest.to!!)
+                }
                 return@launch
             }
             asyncCommandData.updateCurrentPos()
@@ -188,7 +214,11 @@ object AsyncCommandHelper : CoroutineScope {
             asyncWindupCheck(
                 asyncCommandData,
                 successCallback = {
-                    teleportPlayer(asyncRequest.from!!, asyncRequest.to!!)
+                    if (asyncRequest.commandType == AsyncCommandType.BACK) {
+                        asyncRequest.sender.backTeleport()
+                    } else {
+                        asyncRequest.from!!.teleport(asyncRequest.to!!)
+                    }
                     it.cancel()
                 },
                 errorCallback = {

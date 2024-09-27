@@ -13,6 +13,11 @@ object LimitationHelper {
                 (sender.world.dimension == receiver.world.dimension)
     }
 
+    fun checkDimensionLimitation(sender: ServerPlayerEntity, target: ServerDimension): Boolean {
+        return Config.getConfig()[CommandLimitationsSpec.crossDimAllowed] ||
+                (sender.getDimension() == target)
+    }
+
     /**
      * Check teleport distance limitation
      * @return a double, 0.0 if legal,
@@ -27,6 +32,11 @@ object LimitationHelper {
         if (sender.world.dimension != receiver.world.dimension &&
             Config.getConfig()[CommandLimitationsSpec.crossDimAllowed] &&
             Config.getConfig()[CommandLimitationsSpec.ignoreDistanceCrossDim]
+        ) {
+            return 0.0
+        }
+        if (Config.getConfig()[CommandLimitationsSpec.maxTpDistance] <= 0.0 ||
+            Config.getConfig()[CommandLimitationsSpec.minTpDistance] <= 0.0
         ) {
             return 0.0
         }

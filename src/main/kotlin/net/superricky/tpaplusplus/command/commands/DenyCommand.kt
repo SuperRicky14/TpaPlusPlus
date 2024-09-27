@@ -45,7 +45,7 @@ object DenyCommand : AsyncCommand(), BuildableCommand {
         receiver!!
         AsyncCommandHelper.schedule(
             AsyncCommandData(
-                AsyncRequest(sender, receiver, AsyncCommandType.DENY),
+                AsyncRequest(AsyncCommandType.DENY, sender, receiver),
                 LevelBoundVec3(sender.getDimension(), sender.pos),
                 AsyncCommandEventFactory.addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
                     if (AsyncCommandHelper.refuseRequest(sender, receiver) == AsyncCommandEvent.REQUEST_NOT_FOUND) {
@@ -63,7 +63,7 @@ object DenyCommand : AsyncCommand(), BuildableCommand {
         sender ?: return CommandResult.SENDER_NOT_EXIST.status
         AsyncCommandHelper.schedule(
             AsyncCommandData(
-                AsyncRequest(sender, null, AsyncCommandType.DENY),
+                AsyncRequest(AsyncCommandType.DENY, sender),
                 LevelBoundVec3(sender.getDimension(), sender.pos),
                 AsyncCommandEventFactory.addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
                     if (AsyncCommandHelper.refuseRequest(sender) == AsyncCommandEvent.REQUEST_NOT_FOUND) {

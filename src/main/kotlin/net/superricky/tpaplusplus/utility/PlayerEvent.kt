@@ -16,7 +16,7 @@ object PlayerEvent {
         if (deathEntity !is ServerPlayerEntity) {
             return EventResult.pass()
         }
-        val deathPos = LevelBoundVec3(deathEntity.getDimension(), deathEntity.pos)
+        val deathPos = LevelBoundVec3(deathEntity.getDimension(), deathEntity.pos, deathEntity.yaw, deathEntity.pitch)
         TpaPlusPlus.launch {
             TpaPlusPlus.dataService.insertDeath(deathEntity.uuid, deathPos)
         }

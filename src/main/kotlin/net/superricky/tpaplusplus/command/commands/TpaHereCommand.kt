@@ -1,7 +1,8 @@
 package net.superricky.tpaplusplus.command.commands
 
+import net.minecraft.command.argument.EntityArgumentType
+import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
-import net.minecraft.text.Text
 import net.superricky.tpaplusplus.async.*
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper
@@ -21,7 +22,10 @@ object TpaHereCommand : AsyncCommand(), BuildableCommand {
 
     override fun build(): LiteralNode =
         literal(commandName)
-            .executes { tpaHereRequest(it) }
+            .then(
+                argument("player", EntityArgumentType.player())
+                    .executes { tpaHereRequest(it) }
+            )
             .build()
 
     override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.tpahereCooldown]
@@ -46,7 +50,7 @@ object TpaHereCommand : AsyncCommand(), BuildableCommand {
         }
         AsyncCommandHelper.schedule(
             AsyncCommandData(
-                AsyncRequest(sender, receiver, AsyncCommandType.TPAHERE, receiver, sender),
+                AsyncRequest(AsyncCommandType.TPAHERE, sender, receiver, receiver, sender),
                 LevelBoundVec3(sender.getDimension(), sender.pos),
                 AsyncCommandEventFactory
                     .addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
@@ -68,14 +72,6 @@ object TpaHereCommand : AsyncCommand(), BuildableCommand {
                     .addListener(AsyncCommandEvent.REQUEST_REFUSED) {
                         sender.sendMessageWithPlayerName("command.tpahere.request.refuse.sender", receiver)
                         receiver.sendMessageWithPlayerName("command.tpahere.request.refuse.receiver", sender)
-                    }
-                    .addListener(AsyncCommandEvent.TELEPORT_OUT_DISTANCE) {
-                        receiver.sendMessage(
-                            Text.translatable("command.teleport.out_distance").setStyle(TextColorPallet.error)
-                        )
-                    }
-                    .addListener(AsyncCommandEvent.TELEPORT_UPDATE_MESSAGE) {
-                        receiver.sendTeleportTime(it.getRequest().delay)
                     }
             )
         )

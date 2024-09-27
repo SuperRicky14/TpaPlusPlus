@@ -53,7 +53,7 @@ asyncLoopRate = 20
 # Modifying this value requires a restart of the game.
 # Default: false
 unblockingTickLoop = true
-# How long (in seconds) between autosaves, if you experience data loss, set this number lower.\
+# How long (in seconds) between autosaves, if you experience data loss, set this number lower.
 # Default: 300
 # Range: > 1
 autoSaveInterval = 300
@@ -66,7 +66,7 @@ autoSaveInterval = 300
 # Modifying this value requires a restart of the game.
 # Default: 60
 # Range: 0 ~ 153722867280911
-updateCheckInterval = 60
+updateCheckInterval = 0
 
 [database]
 # WARNING: These options are related to database config.
@@ -77,7 +77,6 @@ updateCheckInterval = 60
 # The location of the database file. Defaults to the world folder if not specified
 # It is recommended to place it in the world directory
 # Which can prevent data conflicts between different saves (single player games only).
-# Only has effect when databaseType set to sqlite
 #location = ""
 
 [command.enable]

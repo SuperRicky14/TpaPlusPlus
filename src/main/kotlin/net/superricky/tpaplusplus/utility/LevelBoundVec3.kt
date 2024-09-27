@@ -9,10 +9,20 @@ class LevelBoundVec3(
     val serverLevel: ServerDimension,
     pX: Double,
     pY: Double,
-    pZ: Double
+    pZ: Double,
+    val yaw: Float = 0.0f,
+    val pitch: Float = 0.0f
 ) : Vec3d(pX, pY, pZ) {
 
     constructor(serverLevel: ServerDimension, pos: Position) : this(serverLevel, pos.x, pos.y, pos.z)
+    constructor(serverLevel: ServerDimension, pos: Position, yaw: Float, pitch: Float) : this(
+        serverLevel,
+        pos.x,
+        pos.y,
+        pos.z,
+        yaw,
+        pitch
+    )
 
     fun distance(other: LevelBoundVec3): Double {
         if (serverLevel != other.serverLevel) {

@@ -26,6 +26,7 @@
     "depends": {
         "fabricloader": ">=${loader_version}",
         "fabric-language-kotlin": ">=${kotlin_loader_version}",
+        "server_translates": ">=${server_translates_api}",
         "fabric": "*",
         "minecraft": "${minecraft_version}"
     }

@@ -42,6 +42,17 @@ class AsyncCommandData(
                     asyncRequest.cooldown.translateTickToSecond()
                 )
             }
+        if (asyncRequest.isTeleportRequest()) {
+            asyncCommandEventFactory
+                .addListener(AsyncCommandEvent.TELEPORT_OUT_DISTANCE) {
+                    asyncRequest.from?.sendMessage(
+                        Text.translatable("command.teleport.out_distance").setStyle(TextColorPallet.error)
+                    )
+                }
+                .addListener(AsyncCommandEvent.TELEPORT_UPDATE_MESSAGE) {
+                    asyncRequest.from?.sendTeleportTime(it.getRequest().delay)
+                }
+        }
     }
 
     fun needDelay(): Boolean = asyncRequest.delay != 0.0

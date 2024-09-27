@@ -60,5 +60,9 @@
     "command.tpahere.request.cancel.sender": "Your teleport request to %s has been canceled",
     "command.tpahere.request.cancel.receiver": "Teleport request from %s has been canceled",
     "command.tpahere.request.refuse.sender": "Your teleport request to %s has been refused",
-    "command.tpahere.request.refuse.receiver": "Teleport request from %s has been refused"
+    "command.tpahere.request.refuse.receiver": "Teleport request from %s has been refused",
+
+    "command.back.death_not_found": "Could not find your latest death position",
+    "command.back.teleporting": "Teleporting you to your latest death position...",
+    "command.back.teleported": "You have been teleported"
 }

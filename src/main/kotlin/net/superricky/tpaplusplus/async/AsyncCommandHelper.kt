@@ -8,8 +8,8 @@ import net.minecraft.text.Text
 import net.superricky.tpaplusplus.GlobalConst.ONE_SECOND
 import net.superricky.tpaplusplus.GlobalConst.logger
 import net.superricky.tpaplusplus.TpaPlusPlus
-import net.superricky.tpaplusplus.config.CommonSpec
-import net.superricky.tpaplusplus.config.Config
+import net.superricky.tpaplusplus.config.config.CommonSpec
+import net.superricky.tpaplusplus.config.config.Config
 import net.superricky.tpaplusplus.utility.TextColorPallet
 import net.superricky.tpaplusplus.utility.getWorld
 import java.util.*

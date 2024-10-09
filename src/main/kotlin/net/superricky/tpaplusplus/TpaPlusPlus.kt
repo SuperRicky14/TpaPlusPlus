@@ -15,14 +15,19 @@ import net.minecraft.server.MinecraftServer
 import net.superricky.tpaplusplus.GlobalConst.CONFIG_FILE_NAME
 import net.superricky.tpaplusplus.GlobalConst.CONFIG_FILE_PATH
 import net.superricky.tpaplusplus.GlobalConst.CONFIG_FOLDER_PATH
+import net.superricky.tpaplusplus.GlobalConst.EXAMPLE_LANG_FILE_PATH
+import net.superricky.tpaplusplus.GlobalConst.LANG_FOLDER_PATH
 import net.superricky.tpaplusplus.GlobalConst.MOD_ID
 import net.superricky.tpaplusplus.GlobalConst.logger
 import net.superricky.tpaplusplus.async.AsyncCommandHelper
 import net.superricky.tpaplusplus.command.CommandRegister
-import net.superricky.tpaplusplus.config.AdvancedSpec
-import net.superricky.tpaplusplus.config.Config
-import net.superricky.tpaplusplus.database.service.DataService
+import net.superricky.tpaplusplus.config.config.AdvancedSpec
+import net.superricky.tpaplusplus.config.config.CommonSpec
+import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.language.LanguageConfig
+import net.superricky.tpaplusplus.config.language.SystemSpec
 import net.superricky.tpaplusplus.database.DataManager
+import net.superricky.tpaplusplus.database.service.DataService
 import java.nio.file.Files
 import kotlin.coroutines.CoroutineContext
 import net.superricky.tpaplusplus.utility.PlayerEvent as PlayerEventListener
@@ -58,6 +63,33 @@ object TpaPlusPlus : ModInitializer, CoroutineScope {
             logger.error("Error while loading config file", e)
             return
         }
+
+        logger.info("Checking lang file...")
+        if (!Files.exists(FabricLoader.getInstance().configDir.resolve(LANG_FOLDER_PATH))) {
+            logger.info("Lang folder not exist, Creating")
+            Files.createDirectories(FabricLoader.getInstance().configDir.resolve(LANG_FOLDER_PATH))
+        }
+
+        if (!Files.exists(
+                FabricLoader.getInstance().configDir.resolve(CONFIG_FOLDER_PATH).resolve(EXAMPLE_LANG_FILE_PATH)
+            )
+        ) {
+            logger.info("No example lang file, Creating")
+            Files.copy(
+                FabricLoader.getInstance().getModContainer(MOD_ID).get().findPath(EXAMPLE_LANG_FILE_PATH).get(),
+                FabricLoader.getInstance().configDir.resolve(CONFIG_FOLDER_PATH).resolve(EXAMPLE_LANG_FILE_PATH)
+            )
+        }
+
+        logger.info("Loading lang file...")
+        try {
+            LanguageConfig.loadLangFile(Config.getConfig()[CommonSpec.language])
+            logger.info("Language file loaded.")
+        } catch (e: Exception) {
+            logger.error("Error while loading lang file", e)
+            return
+        }
+        logger.info(LanguageConfig.getConfig()[SystemSpec.version])
 
         logger.info("Register commands...")
         CommandRegistrationEvent.EVENT.register { dispatcher, _, _ ->

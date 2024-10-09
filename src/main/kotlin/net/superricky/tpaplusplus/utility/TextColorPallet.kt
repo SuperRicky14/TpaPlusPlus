@@ -2,8 +2,8 @@ package net.superricky.tpaplusplus.utility
 
 import net.minecraft.text.Style
 import net.minecraft.text.TextColor
-import net.superricky.tpaplusplus.config.ColorSpec
-import net.superricky.tpaplusplus.config.Config
+import net.superricky.tpaplusplus.config.config.ColorSpec
+import net.superricky.tpaplusplus.config.config.Config
 import kotlin.jvm.optionals.getOrNull
 
 object TextColorPallet {

@@ -7,11 +7,11 @@ import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.async.*
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandResult
-import net.superricky.tpaplusplus.config.Config
-import net.superricky.tpaplusplus.config.command.CommandCooldownSpec
-import net.superricky.tpaplusplus.config.command.CommandDelaySpec
-import net.superricky.tpaplusplus.config.command.CommandDistanceSpec
-import net.superricky.tpaplusplus.config.command.CommandNameSpec
+import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.command.CommandCooldownSpec
+import net.superricky.tpaplusplus.config.config.command.CommandDelaySpec
+import net.superricky.tpaplusplus.config.config.command.CommandDistanceSpec
+import net.superricky.tpaplusplus.config.config.command.CommandNameSpec
 import net.superricky.tpaplusplus.utility.*
 
 object ToggleCommand : AsyncCommand(), BuildableCommand {

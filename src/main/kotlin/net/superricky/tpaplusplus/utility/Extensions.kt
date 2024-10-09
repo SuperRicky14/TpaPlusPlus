@@ -9,7 +9,7 @@ import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.superricky.tpaplusplus.TpaPlusPlus
-import net.superricky.tpaplusplus.config.Config
+import net.superricky.tpaplusplus.config.config.Config
 
 fun String.literal(): MutableText = Text.literal(this)
 fun String.translate(): MutableText = Text.translatable(this)

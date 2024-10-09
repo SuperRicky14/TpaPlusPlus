@@ -2,8 +2,8 @@ package net.superricky.tpaplusplus.utility
 
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
-import net.superricky.tpaplusplus.config.Config
-import net.superricky.tpaplusplus.config.command.CommandLimitationsSpec
+import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.command.CommandLimitationsSpec
 import kotlin.math.absoluteValue
 
 object LimitationHelper {

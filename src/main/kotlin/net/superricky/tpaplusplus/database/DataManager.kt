@@ -10,9 +10,9 @@ import net.superricky.tpaplusplus.GlobalConst.ONE_SECOND
 import net.superricky.tpaplusplus.GlobalConst.PLAYER_DATA_FILE_NAME
 import net.superricky.tpaplusplus.GlobalConst.logger
 import net.superricky.tpaplusplus.TpaPlusPlus
-import net.superricky.tpaplusplus.config.AdvancedSpec
-import net.superricky.tpaplusplus.config.CommonSpec
-import net.superricky.tpaplusplus.config.Config
+import net.superricky.tpaplusplus.config.config.AdvancedSpec
+import net.superricky.tpaplusplus.config.config.CommonSpec
+import net.superricky.tpaplusplus.config.config.Config
 import net.superricky.tpaplusplus.database.service.DataService
 import net.superricky.tpaplusplus.utility.LevelBoundVec3
 import java.io.File

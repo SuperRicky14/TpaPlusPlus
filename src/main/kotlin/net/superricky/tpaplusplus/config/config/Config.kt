@@ -1,4 +1,4 @@
-package net.superricky.tpaplusplus.config
+package net.superricky.tpaplusplus.config.config
 
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.RequiredItem
@@ -7,7 +7,7 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.util.WorldSavePath
 import net.superricky.tpaplusplus.GlobalConst
 import net.superricky.tpaplusplus.TpaPlusPlus
-import net.superricky.tpaplusplus.config.command.*
+import net.superricky.tpaplusplus.config.config.command.*
 import java.nio.file.Path
 
 object Config {

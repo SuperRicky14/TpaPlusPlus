@@ -4,8 +4,8 @@ import kotlinx.atomicfu.AtomicBoolean
 import kotlinx.atomicfu.atomic
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
-import net.superricky.tpaplusplus.config.CommonSpec
-import net.superricky.tpaplusplus.config.Config
+import net.superricky.tpaplusplus.config.config.CommonSpec
+import net.superricky.tpaplusplus.config.config.Config
 import net.superricky.tpaplusplus.utility.*
 
 class AsyncCommandData(

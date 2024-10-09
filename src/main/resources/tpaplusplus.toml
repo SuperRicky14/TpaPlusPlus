@@ -18,6 +18,15 @@ tpaTimeout = 60.0
 # Default: 5.0
 # Range: >= 0
 waitTimeBeforeTp = 5.0
+# The language file which tpaplusplus will use
+# The language files should be placed in the 'lang' folder and named with language below
+# e.g. If set language to en_us, the en_us.toml should be place under 'lang' folder
+# Of course, you can customize your language files by checking out the example.toml in the 'lang' folder
+# This option may require a restart of the game to take effect
+# Or you can execute the command '/tpaplusplus reload message' manually to make it take effect
+# Tips: Edit which language file which be used need a restart or manually execute command
+# Tips: But edit language file itself do not need a restart
+language = "en_us"
 
 [common.color]
 # Colors in hex format
@@ -34,7 +43,9 @@ errorVariant = "#fb7171"
 # WARNING: Modifying these from the defaults has a small chance to corrupt data.
 # WARNING: It is only recommended to change these values from their defaults
 # if you know how they work internally UNLESS explicitly said so in the option you are trying to modify.
-# Most options here have already been optimized for most systems, I doubt you will experience significant performance gains by changing the options below, unless you have an insane amount of players connected, in that case boosting the thread counts should help a bit.
+# Most options here have already been optimized for most systems,
+# I doubt you will experience significant performance gains by changing the options below,
+# unless you have an insane amount of players connected, in that case boosting the thread counts should help a bit.
 # Modifying these options may require a restart of the game.
 
 # How often (time per second) to update the tick loop.
@@ -74,7 +85,7 @@ updateCheckInterval = 0
 # WARNING: Modifying the configuration may cause data loss
 # Modifying these options may require a restart of the game.
 
-# The location of the database file. Defaults to the world folder if not specified
+# The location of the data file. Defaults to the world folder if not specified
 # It is recommended to place it in the world directory
 # Which can prevent data conflicts between different saves (single player games only).
 #location = ""
@@ -184,7 +195,7 @@ maxTpDistance = 0.0
 minTpDistance = 0.0
 
 # Whether to disable the range checks feature when teleporting inter-dimensionally
-# This has no affect if "Allow Inter-Dimensional Teleport" is false
+# This has no affect if "crossDimAllowed" is false
 # or if all range checks are disabled.
 # TPAPlusPlus will automatically account for the nether's coordinate system
 # ( 1 block in the nether is 8 blocks in the overworld! )

@@ -1,4 +1,4 @@
-package net.superricky.tpaplusplus.config.command
+package net.superricky.tpaplusplus.config.config.command
 
 import com.uchuhimo.konf.ConfigSpec
 

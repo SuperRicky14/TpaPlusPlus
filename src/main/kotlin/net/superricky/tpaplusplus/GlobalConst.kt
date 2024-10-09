@@ -4,8 +4,14 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
 object GlobalConst {
+    const val LANG_FOLDER_NAME = "lang"
     const val MOD_ID = "tpaplusplus"
     const val CONFIG_FOLDER_PATH = MOD_ID
+    const val LANG_FOLDER_PATH = "$CONFIG_FOLDER_PATH/$LANG_FOLDER_NAME"
+    const val DEFAULT_LANG_FILE_NAME = "en_us.toml"
+    const val DEFAULT_LANG_FILE_PATH = "$CONFIG_FOLDER_PATH/$LANG_FOLDER_PATH/$DEFAULT_LANG_FILE_NAME"
+    const val DEFAULT_LANG_FILE_SOURCE_PATH = "$LANG_FOLDER_NAME/$DEFAULT_LANG_FILE_NAME"
+    const val EXAMPLE_LANG_FILE_PATH = "$LANG_FOLDER_NAME/example.toml"
     const val CONFIG_FILE_NAME = "$MOD_ID.toml"
     const val CONFIG_FILE_PATH = "$CONFIG_FOLDER_PATH/$CONFIG_FILE_NAME"
     const val PLAYER_DATA_FILE_NAME = "$MOD_ID.json"

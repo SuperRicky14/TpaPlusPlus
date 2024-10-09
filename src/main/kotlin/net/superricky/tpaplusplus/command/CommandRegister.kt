@@ -4,9 +4,9 @@ import net.superricky.tpaplusplus.GlobalConst
 import net.superricky.tpaplusplus.GlobalConst.logger
 import net.superricky.tpaplusplus.command.commands.*
 import net.superricky.tpaplusplus.command.subcommands.RootCommand
-import net.superricky.tpaplusplus.config.Config
-import net.superricky.tpaplusplus.config.command.CommandEnableSpec
-import net.superricky.tpaplusplus.config.command.CommandNameSpec
+import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.command.CommandEnableSpec
+import net.superricky.tpaplusplus.config.config.command.CommandNameSpec
 import net.superricky.tpaplusplus.utility.Dispatcher
 
 object CommandRegister {

@@ -24,8 +24,8 @@ import net.superricky.tpaplusplus.command.CommandRegister
 import net.superricky.tpaplusplus.config.config.AdvancedSpec
 import net.superricky.tpaplusplus.config.config.CommonSpec
 import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.config.language.LanguageConfig
-import net.superricky.tpaplusplus.config.language.SystemSpec
 import net.superricky.tpaplusplus.database.DataManager
 import net.superricky.tpaplusplus.database.service.DataService
 import java.nio.file.Files
@@ -83,13 +83,12 @@ object TpaPlusPlus : ModInitializer, CoroutineScope {
 
         logger.info("Loading lang file...")
         try {
-            LanguageConfig.loadLangFile(Config.getConfig()[CommonSpec.language])
+            LanguageConfig.loadLangFile(CommonSpec.language.get())
             logger.info("Language file loaded.")
         } catch (e: Exception) {
             logger.error("Error while loading lang file", e)
             return
         }
-        logger.info(LanguageConfig.getConfig()[SystemSpec.version])
 
         logger.info("Register commands...")
         CommandRegistrationEvent.EVENT.register { dispatcher, _, _ ->
@@ -117,13 +116,13 @@ object TpaPlusPlus : ModInitializer, CoroutineScope {
         PlayerEvent.PLAYER_JOIN.register(PlayerEventListener::joinEvent)
         EntityEvent.LIVING_DEATH.register(PlayerEventListener::deathEvent)
 
-        if (Config.getConfig()[AdvancedSpec.unblockingTickLoop]) {
+        if (AdvancedSpec.unblockingTickLoop.get()) {
             logger.info("Using non blocking tick loop")
             logger.info(
                 "Initializing non blocking tick loop with rate of " +
-                        "${Config.getConfig()[AdvancedSpec.asyncLoopRate]} per second"
+                        "${AdvancedSpec.asyncLoopRate.get()} per second"
             )
-            AsyncCommandHelper.startTickLoop(Config.getConfig()[AdvancedSpec.asyncLoopRate])
+            AsyncCommandHelper.startTickLoop(AdvancedSpec.asyncLoopRate.get())
         } else {
             logger.info("Using synchronous tick loop")
             logger.info("Registering server post tick event")

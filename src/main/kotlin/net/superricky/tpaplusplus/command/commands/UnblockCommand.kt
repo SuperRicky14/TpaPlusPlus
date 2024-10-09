@@ -10,16 +10,17 @@ import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
 import net.superricky.tpaplusplus.command.CommandResult
 import net.superricky.tpaplusplus.config.config.CommonSpec
-import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.config.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.config.command.CommandNameSpec
+import net.superricky.tpaplusplus.config.language.command.UnblockSpec
 import net.superricky.tpaplusplus.utility.*
 
 object UnblockCommand : AsyncCommand(), BuildableCommand {
     init {
-        commandName = Config.getConfig()[CommandNameSpec.tpaunblockCommand]
+        commandName = CommandNameSpec.tpaunblockCommand.get()
     }
 
     override fun build(): LiteralNode =
@@ -30,11 +31,11 @@ object UnblockCommand : AsyncCommand(), BuildableCommand {
             )
             .build()
 
-    override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.unblockCooldown]
+    override fun getCooldownTime(): Double = CommandCooldownSpec.unblockCooldown.get()
 
-    override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.unblockDelay]
+    override fun getDelayTime(): Double = CommandDelaySpec.unblockDelay.get()
 
-    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.unblockDistance]
+    override fun getMinDistance(): Double = CommandDistanceSpec.unblockDistance.get()
 
     private fun unBlockPlayer(context: Context): Int {
         val (result, sender, receiver) = checkSenderReceiver(context)
@@ -48,12 +49,12 @@ object UnblockCommand : AsyncCommand(), BuildableCommand {
                 AsyncCommandEventFactory.addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
                     TpaPlusPlus.launch {
                         if (TpaPlusPlus.dataService.removeBlockPlayer(sender.uuid, receiver.uuid)) {
-                            sender.sendMessageWithPlayerName("command.unblock.success", receiver)
-                            if (Config.getConfig()[CommonSpec.showBlockedMessage]) {
-                                receiver.sendMessageWithPlayerName("command.unblock.be_unblock", sender)
+                            sender.sendMessageWithPlayerName(UnblockSpec.success, receiver)
+                            if (CommonSpec.showBlockedMessage.get()) {
+                                receiver.sendMessageWithPlayerName(UnblockSpec.unblockedPlayer, sender)
                             }
                         } else {
-                            sender.sendMessageWithPlayerName("command.unblock.fail", receiver)
+                            sender.sendMessageWithPlayerName(UnblockSpec.failure, receiver)
                         }
                     }
                 }

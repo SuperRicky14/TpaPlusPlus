@@ -8,7 +8,7 @@ import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
 import net.superricky.tpaplusplus.command.CommandResult
-import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.config.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.config.command.CommandDistanceSpec
@@ -20,7 +20,7 @@ import net.superricky.tpaplusplus.utility.getDimension
 
 object CancelCommand : AsyncCommand(), BuildableCommand {
     init {
-        commandName = Config.getConfig()[CommandNameSpec.tpacancelCommand]
+        commandName = CommandNameSpec.tpacancelCommand.get()
     }
 
     override fun build(): LiteralNode =
@@ -32,10 +32,11 @@ object CancelCommand : AsyncCommand(), BuildableCommand {
             .executes { cancelRequest(it) }
             .build()
 
-    override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.cancelCooldown]
+    override fun getCooldownTime(): Double = CommandCooldownSpec.cancelCooldown.get()
 
-    override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.cancelDelay]
-    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.cancelDistance]
+    override fun getDelayTime(): Double = CommandDelaySpec.cancelDelay.get()
+
+    override fun getMinDistance(): Double = CommandDistanceSpec.cancelDistance.get()
 
     private fun cancelRequestWithTarget(context: Context): Int {
         val source = context.source

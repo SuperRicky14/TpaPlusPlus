@@ -4,9 +4,8 @@ import net.superricky.tpaplusplus.GlobalConst
 import net.superricky.tpaplusplus.GlobalConst.logger
 import net.superricky.tpaplusplus.command.commands.*
 import net.superricky.tpaplusplus.command.subcommands.RootCommand
-import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.config.config.command.CommandEnableSpec
-import net.superricky.tpaplusplus.config.config.command.CommandNameSpec
 import net.superricky.tpaplusplus.utility.Dispatcher
 
 object CommandRegister {
@@ -16,54 +15,52 @@ object CommandRegister {
         logger.info("Register command /${GlobalConst.MOD_ID}...")
         dispatcher.root.addChild(rootNode)
 
-        val config = Config.getConfig()
-
-        if (config[CommandEnableSpec.backEnable]) {
-            logger.info("Register command /${config[CommandNameSpec.backCommand]}...")
+        if (CommandEnableSpec.backEnable.get()) {
+            logger.info("Register command /${BackCommand.getCommandName()}...")
             dispatcher.root.addChild(BackCommand.build())
         }
 
-        if (config[CommandEnableSpec.tpaunblockEnable]) {
-            logger.info("Register command /${config[CommandNameSpec.tpaunblockCommand]}...")
+        if (CommandEnableSpec.tpaunblockEnable.get()) {
+            logger.info("Register command /${UnblockCommand.getCommandName()}...")
             dispatcher.root.addChild(UnblockCommand.build())
         }
 
-        if (config[CommandEnableSpec.tpablockEnable]) {
-            logger.info("Register command /${config[CommandNameSpec.tpablockCommand]}...")
+        if (CommandEnableSpec.tpablockEnable.get()) {
+            logger.info("Register command /${BlockCommand.getCommandName()}...")
             dispatcher.root.addChild(BlockCommand.build())
         }
 
-        if (config[CommandEnableSpec.tpatoggleEnable]) {
-            logger.info("Register command /${config[CommandNameSpec.tpatoggleCommand]}...")
+        if (CommandEnableSpec.tpatoggleEnable.get()) {
+            logger.info("Register command /${ToggleCommand.getCommandName()}...")
             dispatcher.root.addChild(ToggleCommand.build())
         }
 
-        if (config[CommandEnableSpec.tpaEnable]) {
-            logger.info("Register command /${config[CommandNameSpec.tpaCommand]}...")
+        if (CommandEnableSpec.tpaEnable.get()) {
+            logger.info("Register command /${TpaCommand.getCommandName()}...")
             dispatcher.root.addChild(TpaCommand.build())
         }
 
-        if (config[CommandEnableSpec.tpahereEnable]) {
-            logger.info("Register command /${config[CommandNameSpec.tpahereCommand]}...")
+        if (CommandEnableSpec.tpahereEnable.get()) {
+            logger.info("Register command /${TpaHereCommand.getCommandName()}...")
             dispatcher.root.addChild(TpaHereCommand.build())
         }
 
-        if (!config[CommandEnableSpec.tpaEnable] && !config[CommandEnableSpec.tpahereEnable]) {
+        if (!CommandEnableSpec.tpaEnable.get() && !CommandEnableSpec.tpahereEnable.get()) {
             return
         }
 
-        if (config[CommandEnableSpec.tpacceptEnable]) {
-            logger.info("Register command /${config[CommandNameSpec.tpacceptCommand]}...")
+        if (CommandEnableSpec.tpacceptEnable.get()) {
+            logger.info("Register command /${AcceptCommand.getCommandName()}...")
             dispatcher.root.addChild(AcceptCommand.build())
         }
 
-        if (config[CommandEnableSpec.tpadenyEnable]) {
-            logger.info("Register command /${config[CommandNameSpec.tpadenyCommand]}...")
+        if (CommandEnableSpec.tpadenyEnable.get()) {
+            logger.info("Register command /${DenyCommand.getCommandName()}...")
             dispatcher.root.addChild(DenyCommand.build())
         }
 
-        if (config[CommandEnableSpec.tpacancelEnable]) {
-            logger.info("Register command /${config[CommandNameSpec.tpacancelCommand]}...")
+        if (CommandEnableSpec.tpacancelEnable.get()) {
+            logger.info("Register command /${CancelCommand.getCommandName()}...")
             dispatcher.root.addChild(CancelCommand.build())
         }
     }

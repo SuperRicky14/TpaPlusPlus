@@ -1,8 +1,11 @@
 package net.superricky.tpaplusplus.config.language
 
 import com.uchuhimo.konf.Config
+import com.uchuhimo.konf.RequiredItem
 import com.uchuhimo.konf.source.toml
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.text.MutableText
+import net.minecraft.text.TranslatableTextContent
 import net.superricky.tpaplusplus.GlobalConst.DEFAULT_LANG_FILE_SOURCE_PATH
 import net.superricky.tpaplusplus.GlobalConst.LANG_FOLDER_NAME
 import net.superricky.tpaplusplus.GlobalConst.LANG_FOLDER_PATH
@@ -19,11 +22,9 @@ object LanguageConfig {
     private val supportedLanguage = listOf("en_us", "zh_cn", "zh_tw")
     private lateinit var languageFileName: String
 
-    fun getConfig(): Config = config
-
     fun loadLangFile(language: String) {
-        checkLanguageFile(language)
         languageFileName = "$language.toml"
+        checkLanguageFile(language)
         config = Config {
             addSpec(SystemSpec)
             addSpec(ErrorSpec)
@@ -62,5 +63,9 @@ object LanguageConfig {
             )
         }
         return true
+    }
+
+    fun RequiredItem<String>.getMutableText(vararg args: Any?): MutableText {
+        return MutableText.of(TranslatableTextContent("", config[this], args))
     }
 }

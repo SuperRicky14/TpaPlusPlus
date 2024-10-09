@@ -2,19 +2,21 @@ package net.superricky.tpaplusplus.utility
 
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
-import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.config.config.command.CommandLimitationsSpec
+import net.superricky.tpaplusplus.config.language.LanguageConfig.getMutableText
+import net.superricky.tpaplusplus.config.language.error.ErrorSpec
 import kotlin.math.absoluteValue
 
 object LimitationHelper {
 
     private fun checkDimensionLimitation(sender: ServerPlayerEntity, receiver: ServerPlayerEntity): Boolean {
-        return Config.getConfig()[CommandLimitationsSpec.crossDimAllowed] ||
+        return CommandLimitationsSpec.crossDimAllowed.get() ||
                 (sender.world.dimension == receiver.world.dimension)
     }
 
     fun checkDimensionLimitation(sender: ServerPlayerEntity, target: ServerDimension): Boolean {
-        return Config.getConfig()[CommandLimitationsSpec.crossDimAllowed] ||
+        return CommandLimitationsSpec.crossDimAllowed.get() ||
                 (sender.getDimension() == target)
     }
 
@@ -30,23 +32,23 @@ object LimitationHelper {
         receiver: ServerPlayerEntity
     ): Double {
         if (sender.world.dimension != receiver.world.dimension &&
-            Config.getConfig()[CommandLimitationsSpec.crossDimAllowed] &&
-            Config.getConfig()[CommandLimitationsSpec.ignoreDistanceCrossDim]
+            CommandLimitationsSpec.crossDimAllowed.get() &&
+            CommandLimitationsSpec.ignoreDistanceCrossDim.get()
         ) {
             return 0.0
         }
-        if (Config.getConfig()[CommandLimitationsSpec.maxTpDistance] <= 0.0 ||
-            Config.getConfig()[CommandLimitationsSpec.minTpDistance] <= 0.0
+        if (CommandLimitationsSpec.maxTpDistance.get() <= 0.0 ||
+            CommandLimitationsSpec.minTpDistance.get() <= 0.0
         ) {
             return 0.0
         }
         val senderPos = LevelBoundVec3(sender.getDimension(), sender.pos)
         val receiverPos = LevelBoundVec3(receiver.getDimension(), receiver.pos)
         val distance = senderPos.distance(receiverPos)
-        if (distance > Config.getConfig()[CommandLimitationsSpec.maxTpDistance]) {
+        if (distance > CommandLimitationsSpec.maxTpDistance.get()) {
             return distance.absoluteValue
         }
-        if (distance < Config.getConfig()[CommandLimitationsSpec.minTpDistance]) {
+        if (distance < CommandLimitationsSpec.minTpDistance.get()) {
             return -distance.absoluteValue
         }
         return 0.0
@@ -56,8 +58,7 @@ object LimitationHelper {
         val crossDimension = checkDimensionLimitation(sender, receiver)
         val distance = checkDistanceLimitation(sender, receiver)
         if (!crossDimension) {
-            return Text.translatable(
-                "command.error.cross_dim",
+            return ErrorSpec.crossDim.getMutableText(
                 sender.getDimension().value.toString().literal().setStyle(TextColorPallet.errorVariant),
                 receiver.getDimension().value.toString().literal().setStyle(TextColorPallet.errorVariant)
             ).setStyle(TextColorPallet.error)
@@ -66,16 +67,14 @@ object LimitationHelper {
             return null
         }
         if (distance > 0) {
-            return Text.translatable(
-                "command.error.distance.too_far",
-                Config.getConfig()[CommandLimitationsSpec.maxTpDistance].toString().literal()
+            return ErrorSpec.tooFar.getMutableText(
+                CommandLimitationsSpec.maxTpDistance.get().toString().literal()
                     .setStyle(TextColorPallet.errorVariant),
                 String.format("%.2f", distance).literal().setStyle(TextColorPallet.errorVariant)
             ).setStyle(TextColorPallet.error)
         }
-        return Text.translatable(
-            "command.error.distance.too_close",
-            Config.getConfig()[CommandLimitationsSpec.minTpDistance].toString().literal()
+        return ErrorSpec.tooClose.getMutableText(
+            CommandLimitationsSpec.minTpDistance.get().toString().literal()
                 .setStyle(TextColorPallet.errorVariant),
             String.format("%.2f", distance.absoluteValue).literal().setStyle(TextColorPallet.errorVariant)
         ).setStyle(TextColorPallet.error)

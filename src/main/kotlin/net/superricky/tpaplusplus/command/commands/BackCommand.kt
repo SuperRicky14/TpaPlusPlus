@@ -1,21 +1,23 @@
 package net.superricky.tpaplusplus.command.commands
 
 import net.minecraft.server.command.CommandManager.literal
-import net.minecraft.text.Text
 import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.async.*
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandResult
-import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.config.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.config.command.CommandNameSpec
+import net.superricky.tpaplusplus.config.language.LanguageConfig.getMutableText
+import net.superricky.tpaplusplus.config.language.command.BackSpec
+import net.superricky.tpaplusplus.config.language.error.ErrorSpec
 import net.superricky.tpaplusplus.utility.*
 
 object BackCommand : AsyncCommand(), BuildableCommand {
     init {
-        commandName = Config.getConfig()[CommandNameSpec.backCommand]
+        commandName = CommandNameSpec.backCommand.get()
     }
 
     override fun build(): LiteralNode =
@@ -23,11 +25,11 @@ object BackCommand : AsyncCommand(), BuildableCommand {
             .executes { backRequest(it) }
             .build()
 
-    override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.backCooldown]
+    override fun getCooldownTime(): Double = CommandCooldownSpec.backCooldown.get()
 
-    override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.backDelay]
+    override fun getDelayTime(): Double = CommandDelaySpec.backDelay.get()
 
-    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.backDistance]
+    override fun getMinDistance(): Double = CommandDistanceSpec.backDistance.get()
 
     private fun backRequest(context: Context): Int {
         val source = context.source
@@ -37,14 +39,13 @@ object BackCommand : AsyncCommand(), BuildableCommand {
         val lastDeathPos = playerData.lastDeathPos
         if (lastDeathPos.backed) {
             sender.sendMessage(
-                Text.translatable("command.back.death_not_found").setStyle(TextColorPallet.error)
+                BackSpec.deathNotFound.getMutableText().setStyle(TextColorPallet.error)
             )
             return CommandResult.NORMAL.status
         }
         if (!LimitationHelper.checkDimensionLimitation(sender, lastDeathPos.world.getWorld())) {
             sender.sendMessage(
-                Text.translatable(
-                    "command.error.cross_dim",
+                ErrorSpec.crossDim.getMutableText(
                     sender.getDimension().value.toString().literal().setStyle(TextColorPallet.errorVariant),
                     lastDeathPos.world.getWorld().value.toString().literal().setStyle(TextColorPallet.errorVariant)
                 ).setStyle(TextColorPallet.error)
@@ -58,7 +59,7 @@ object BackCommand : AsyncCommand(), BuildableCommand {
                 AsyncCommandEventFactory
                     .addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
                         sender.sendMessage(
-                            Text.translatable("command.back.teleporting").setStyle(TextColorPallet.primary)
+                            BackSpec.teleporting.getMutableText().setStyle(TextColorPallet.primary)
                         )
                         AsyncCommandHelper.teleport(it)
                     }

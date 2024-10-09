@@ -8,7 +8,7 @@ import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
 import net.superricky.tpaplusplus.command.CommandResult
-import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.config.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.config.command.CommandDistanceSpec
@@ -20,7 +20,7 @@ import net.superricky.tpaplusplus.utility.getDimension
 
 object DenyCommand : AsyncCommand(), BuildableCommand {
     init {
-        commandName = Config.getConfig()[CommandNameSpec.tpadenyCommand]
+        commandName = CommandNameSpec.tpadenyCommand.get()
     }
 
     override fun build(): LiteralNode =
@@ -32,10 +32,11 @@ object DenyCommand : AsyncCommand(), BuildableCommand {
             .executes { refuseRequest(it) }
             .build()
 
-    override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.denyCooldown]
+    override fun getCooldownTime(): Double = CommandCooldownSpec.denyCooldown.get()
 
-    override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.denyDelay]
-    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.denyDistance]
+    override fun getDelayTime(): Double = CommandDelaySpec.denyDelay.get()
+
+    override fun getMinDistance(): Double = CommandDistanceSpec.denyDistance.get()
 
     private fun refuseRequestWithTarget(context: Context): Int {
         val source = context.source

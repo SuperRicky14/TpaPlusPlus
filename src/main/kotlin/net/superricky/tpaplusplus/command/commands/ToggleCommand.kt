@@ -2,21 +2,22 @@ package net.superricky.tpaplusplus.command.commands
 
 import kotlinx.coroutines.launch
 import net.minecraft.server.command.CommandManager.literal
-import net.minecraft.text.Text
 import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.async.*
 import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandResult
-import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.config.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.config.command.CommandNameSpec
+import net.superricky.tpaplusplus.config.language.LanguageConfig.getMutableText
+import net.superricky.tpaplusplus.config.language.command.ToggleSpec
 import net.superricky.tpaplusplus.utility.*
 
 object ToggleCommand : AsyncCommand(), BuildableCommand {
     init {
-        commandName = Config.getConfig()[CommandNameSpec.tpatoggleCommand]
+        commandName = CommandNameSpec.tpatoggleCommand.get()
     }
 
     override fun build(): LiteralNode =
@@ -32,11 +33,11 @@ object ToggleCommand : AsyncCommand(), BuildableCommand {
             .executes { switchToggle(it) }
             .build()
 
-    override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.toggleCooldown]
+    override fun getCooldownTime(): Double = CommandCooldownSpec.toggleCooldown.get()
 
-    override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.toggleDelay]
+    override fun getDelayTime(): Double = CommandDelaySpec.toggleDelay.get()
 
-    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.toggleDistance]
+    override fun getMinDistance(): Double = CommandDistanceSpec.toggleDistance.get()
 
     private fun switchToggle(context: Context): Int {
         val source = context.source
@@ -52,11 +53,11 @@ object ToggleCommand : AsyncCommand(), BuildableCommand {
                             val blocked = TpaPlusPlus.dataService.playerSwitchToggle(sender.uuid)
                             if (blocked) {
                                 sender.sendMessage(
-                                    Text.translatable("command.toggle.success.on").setStyle(TextColorPallet.primary)
+                                    ToggleSpec.on.getMutableText().setStyle(TextColorPallet.primary)
                                 )
                             } else {
                                 sender.sendMessage(
-                                    Text.translatable("command.toggle.success.off").setStyle(TextColorPallet.primary)
+                                    ToggleSpec.off.getMutableText().setStyle(TextColorPallet.primary)
                                 )
                             }
                             AsyncCommandHelper.addCooldown(sender.uuid, AsyncCommandType.TOGGLE)
@@ -81,12 +82,12 @@ object ToggleCommand : AsyncCommand(), BuildableCommand {
                             if (blocked) {
                                 sender.toggleOn()
                                 sender.sendMessage(
-                                    Text.translatable("command.toggle.success.on").setStyle(TextColorPallet.primary)
+                                    ToggleSpec.on.getMutableText().setStyle(TextColorPallet.primary)
                                 )
                             } else {
                                 sender.toggleOff()
                                 sender.sendMessage(
-                                    Text.translatable("command.toggle.success.off").setStyle(TextColorPallet.primary)
+                                    ToggleSpec.off.getMutableText().setStyle(TextColorPallet.primary)
                                 )
                             }
                             AsyncCommandHelper.addCooldown(sender.uuid, AsyncCommandType.TOGGLE)

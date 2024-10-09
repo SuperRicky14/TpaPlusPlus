@@ -8,16 +8,17 @@ import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
 import net.superricky.tpaplusplus.command.CommandResult
-import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.config.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.config.command.CommandNameSpec
+import net.superricky.tpaplusplus.config.language.command.TpaHereSpec
 import net.superricky.tpaplusplus.utility.*
 
 object TpaHereCommand : AsyncCommand(), BuildableCommand {
     init {
-        commandName = Config.getConfig()[CommandNameSpec.tpahereCommand]
+        commandName = CommandNameSpec.tpahereCommand.get()
     }
 
     override fun build(): LiteralNode =
@@ -28,10 +29,10 @@ object TpaHereCommand : AsyncCommand(), BuildableCommand {
             )
             .build()
 
-    override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.tpahereCooldown]
-    override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.tpahereDelay]
+    override fun getCooldownTime(): Double = CommandCooldownSpec.tpahereCooldown.get()
+    override fun getDelayTime(): Double = CommandDelaySpec.tpahereDelay.get()
 
-    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.tpahereDistance]
+    override fun getMinDistance(): Double = CommandDistanceSpec.tpahereDistance.get()
 
     private fun tpaHereRequest(context: Context): Int {
         val (result, sender, receiver) = checkSenderReceiver(context)
@@ -54,24 +55,24 @@ object TpaHereCommand : AsyncCommand(), BuildableCommand {
                 LevelBoundVec3(sender.getDimension(), sender.pos),
                 AsyncCommandEventFactory
                     .addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
-                        sender.sendMessageWithPlayerName("command.tpahere.request.sender", receiver)
-                        receiver.sendMessageWithPlayerName("command.tpahere.request.receiver", sender)
+                        sender.sendMessageWithPlayerName(TpaHereSpec.requestSender, receiver)
+                        receiver.sendMessageWithPlayerName(TpaHereSpec.requestReceiver, sender)
                     }
                     .addListener(AsyncCommandEvent.REQUEST_TIMEOUT) {
-                        sender.sendMessageWithPlayerName("command.tpahere.timeout.sender", receiver)
-                        receiver.sendMessageWithPlayerName("command.tpahere.timeout.receiver", sender)
+                        sender.sendMessageWithPlayerName(TpaHereSpec.timeoutSender, receiver)
+                        receiver.sendMessageWithPlayerName(TpaHereSpec.timeoutReceiver, sender)
                     }
                     .addListener(AsyncCommandEvent.REQUEST_ACCEPTED) {
-                        sender.sendMessageWithPlayerName("command.tpahere.request.accept.sender", receiver)
-                        receiver.sendMessageWithPlayerName("command.tpahere.request.accept.receiver", sender)
+                        sender.sendMessageWithPlayerName(TpaHereSpec.acceptSender, receiver)
+                        receiver.sendMessageWithPlayerName(TpaHereSpec.acceptReceiver, sender)
                         AsyncCommandHelper.teleport(it)
                     }.addListener(AsyncCommandEvent.REQUEST_CANCELED) {
-                        sender.sendMessageWithPlayerName("command.tpahere.request.cancel.sender", receiver)
-                        receiver.sendMessageWithPlayerName("command.tpahere.request.cancel.receiver", sender)
+                        sender.sendMessageWithPlayerName(TpaHereSpec.cancelSender, receiver)
+                        receiver.sendMessageWithPlayerName(TpaHereSpec.cancelReceiver, sender)
                     }
                     .addListener(AsyncCommandEvent.REQUEST_REFUSED) {
-                        sender.sendMessageWithPlayerName("command.tpahere.request.refuse.sender", receiver)
-                        receiver.sendMessageWithPlayerName("command.tpahere.request.refuse.receiver", sender)
+                        sender.sendMessageWithPlayerName(TpaHereSpec.refuseSender, receiver)
+                        receiver.sendMessageWithPlayerName(TpaHereSpec.refuseReceiver, sender)
                     }
             )
         )

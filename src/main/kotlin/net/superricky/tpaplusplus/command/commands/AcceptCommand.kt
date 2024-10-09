@@ -8,7 +8,7 @@ import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
 import net.superricky.tpaplusplus.command.CommandResult
-import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.config.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.config.command.CommandDistanceSpec
@@ -20,7 +20,7 @@ import net.superricky.tpaplusplus.utility.getDimension
 
 object AcceptCommand : AsyncCommand(), BuildableCommand {
     init {
-        commandName = Config.getConfig()[CommandNameSpec.tpacceptCommand]
+        commandName = CommandNameSpec.tpacceptCommand.get()
     }
 
     override fun build(): LiteralNode =
@@ -32,11 +32,11 @@ object AcceptCommand : AsyncCommand(), BuildableCommand {
             .executes { acceptCommand(it) }
             .build()
 
-    override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.acceptCooldown]
+    override fun getCooldownTime(): Double = CommandCooldownSpec.acceptCooldown.get()
 
-    override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.acceptDelay]
+    override fun getDelayTime(): Double = CommandDelaySpec.acceptDelay.get()
 
-    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.acceptDistance]
+    override fun getMinDistance(): Double = CommandDistanceSpec.acceptDistance.get()
 
     private fun acceptCommandWithTarget(context: Context): Int {
         fun asyncCommandCallback(result: AsyncCommandEvent, asyncCommandData: AsyncCommandData) {

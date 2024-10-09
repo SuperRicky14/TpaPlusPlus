@@ -6,6 +6,9 @@ import net.minecraft.text.Text
 import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.async.AsyncCommandHelper
 import net.superricky.tpaplusplus.async.AsyncCommandType
+import net.superricky.tpaplusplus.config.language.LanguageConfig.getMutableText
+import net.superricky.tpaplusplus.config.language.error.ErrorRequestSpec
+import net.superricky.tpaplusplus.config.language.error.ErrorSpec
 import net.superricky.tpaplusplus.utility.Context
 import net.superricky.tpaplusplus.utility.TextColorPallet
 import net.superricky.tpaplusplus.utility.sendMessageWithPlayerName
@@ -27,17 +30,17 @@ object CommandHelper {
         val result = checkSenderReceiver(sender, receiver)
         return when (result) {
             CommandResult.SELF_CHECK_ERROR -> {
-                source.sendError(Text.translatable("command.error.self"))
+                source.sendError(ErrorSpec.selfCommand.getMutableText())
                 Triple(CommandResult.SELF_CHECK_ERROR, null, null)
             }
 
             CommandResult.SENDER_NOT_EXIST -> {
-                source.sendError(Text.translatable("command.error.sender.not_exist"))
+                source.sendError(ErrorSpec.senderNotExist.getMutableText())
                 Triple(CommandResult.SENDER_NOT_EXIST, null, null)
             }
 
             CommandResult.RECEIVER_NOT_EXIST -> {
-                source.sendError(Text.translatable("command.error.target.not_exist"))
+                source.sendError(ErrorSpec.receiverNotExist.getMutableText())
                 Triple(CommandResult.RECEIVER_NOT_EXIST, null, null)
             }
 
@@ -58,11 +61,11 @@ object CommandHelper {
 
     fun checkBlocked(sender: ServerPlayerEntity, receiver: ServerPlayerEntity): Boolean {
         if (TpaPlusPlus.dataService.checkPlayerBlocked(receiver.uuid, sender.uuid)) {
-            sender.sendMessageWithPlayerName("command.error.request.blocked.sender", receiver)
+            sender.sendMessageWithPlayerName(ErrorRequestSpec.blockedSender, receiver)
             return true
         }
         if (TpaPlusPlus.dataService.checkPlayerBlocked(sender.uuid, receiver.uuid)) {
-            sender.sendMessageWithPlayerName("command.error.request.blocked.receiver", receiver)
+            sender.sendMessageWithPlayerName(ErrorRequestSpec.blockedReceiver, receiver)
             return true
         }
         return false
@@ -71,12 +74,13 @@ object CommandHelper {
     fun checkToggled(sender: ServerPlayerEntity, receiver: ServerPlayerEntity): Boolean {
         if (TpaPlusPlus.dataService.checkPlayerToggle(sender.uuid)) {
             sender.sendMessage(
-                Text.translatable("command.error.request.toggled.sender").setStyle(TextColorPallet.error)
+                ErrorRequestSpec.toggledSender.getMutableText()
+                    .setStyle(TextColorPallet.error)
             )
             return true
         }
         if (TpaPlusPlus.dataService.checkPlayerToggle(receiver.uuid)) {
-            sender.sendMessageWithPlayerName("command.error.request.toggled.receiver", receiver)
+            sender.sendMessageWithPlayerName(ErrorRequestSpec.toggledReceiver, receiver)
             return true
         }
         return false
@@ -88,7 +92,7 @@ object CommandHelper {
         commandType: AsyncCommandType
     ): Boolean {
         if (AsyncCommandHelper.checkRequestExist(sender, receiver, commandType)) {
-            sender.sendMessageWithPlayerName("command.error.request.exist", receiver)
+            sender.sendMessageWithPlayerName(ErrorRequestSpec.requestExist, receiver)
             return true
         }
         return false

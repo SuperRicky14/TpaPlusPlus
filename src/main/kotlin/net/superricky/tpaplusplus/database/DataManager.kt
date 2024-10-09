@@ -13,6 +13,7 @@ import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.config.config.AdvancedSpec
 import net.superricky.tpaplusplus.config.config.CommonSpec
 import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.database.service.DataService
 import net.superricky.tpaplusplus.utility.LevelBoundVec3
 import java.io.File
@@ -26,7 +27,7 @@ object DataManager : DataService {
     private var playerDataMap: MutableMap<UUID, PlayerData> = Collections.synchronizedMap(HashMap())
     private val gson = GsonBuilder().setPrettyPrinting().create()
     private val dataSavePath: File = Config.getDatabasePath().resolve(PLAYER_DATA_FILE_NAME).toFile()
-    private val autoSaveInterval = Config.getConfig()[AdvancedSpec.autoSaveInterval]
+    private val autoSaveInterval = AdvancedSpec.autoSaveInterval.get()
 
     init {
         if (!dataSavePath.exists()) {
@@ -106,7 +107,7 @@ object DataManager : DataService {
         playerDataMap[srcUUID]!!.blockPlayers.contains(destUuid)
 
     override fun checkPlayerToggle(uuid: UUID): Boolean =
-        playerDataMap[uuid]!!.toggle && !Config.getConfig()[CommonSpec.toggledPlayerCommand]
+        playerDataMap[uuid]!!.toggle && !CommonSpec.toggledPlayerCommand.get()
 
     override fun saveData() {
         try {

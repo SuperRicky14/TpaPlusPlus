@@ -10,16 +10,17 @@ import net.superricky.tpaplusplus.command.BuildableCommand
 import net.superricky.tpaplusplus.command.CommandHelper.checkSenderReceiver
 import net.superricky.tpaplusplus.command.CommandResult
 import net.superricky.tpaplusplus.config.config.CommonSpec
-import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.config.config.command.CommandCooldownSpec
 import net.superricky.tpaplusplus.config.config.command.CommandDelaySpec
 import net.superricky.tpaplusplus.config.config.command.CommandDistanceSpec
 import net.superricky.tpaplusplus.config.config.command.CommandNameSpec
+import net.superricky.tpaplusplus.config.language.command.BlockSpec
 import net.superricky.tpaplusplus.utility.*
 
 object BlockCommand : AsyncCommand(), BuildableCommand {
     init {
-        commandName = Config.getConfig()[CommandNameSpec.tpablockCommand]
+        commandName = CommandNameSpec.tpablockCommand.get()
     }
 
     override fun build(): LiteralNode =
@@ -30,10 +31,11 @@ object BlockCommand : AsyncCommand(), BuildableCommand {
             )
             .build()
 
-    override fun getCooldownTime(): Double = Config.getConfig()[CommandCooldownSpec.blockCooldown]
+    override fun getCooldownTime(): Double = CommandCooldownSpec.blockCooldown.get()
 
-    override fun getDelayTime(): Double = Config.getConfig()[CommandDelaySpec.blockDelay]
-    override fun getMinDistance(): Double = Config.getConfig()[CommandDistanceSpec.blockDistance]
+    override fun getDelayTime(): Double = CommandDelaySpec.blockDelay.get()
+
+    override fun getMinDistance(): Double = CommandDistanceSpec.blockDistance.get()
 
     private fun blockPlayer(context: Context): Int {
         val (result, sender, receiver) = checkSenderReceiver(context)
@@ -48,12 +50,12 @@ object BlockCommand : AsyncCommand(), BuildableCommand {
                     .addListener(AsyncCommandEvent.REQUEST_AFTER_DELAY) {
                         TpaPlusPlus.launch {
                             if (TpaPlusPlus.dataService.addBlockPlayer(sender.uuid, receiver.uuid)) {
-                                sender.sendMessageWithPlayerName("command.block.success", receiver)
-                                if (Config.getConfig()[CommonSpec.showBlockedMessage]) {
-                                    receiver.sendMessageWithPlayerName("command.block.be_blocked", sender)
+                                sender.sendMessageWithPlayerName(BlockSpec.success, receiver)
+                                if (CommonSpec.showBlockedMessage.get()) {
+                                    receiver.sendMessageWithPlayerName(BlockSpec.blockedPlayer, sender)
                                 }
                             } else {
-                                sender.sendMessageWithPlayerName("command.block.fail", receiver)
+                                sender.sendMessageWithPlayerName(BlockSpec.failure, receiver)
                             }
                         }
                     }

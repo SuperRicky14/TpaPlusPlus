@@ -4,12 +4,13 @@ import kotlinx.atomicfu.AtomicBoolean
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.*
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
 import net.superricky.tpaplusplus.GlobalConst.ONE_SECOND
 import net.superricky.tpaplusplus.GlobalConst.logger
 import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.config.config.CommonSpec
-import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
+import net.superricky.tpaplusplus.config.language.LanguageConfig.getMutableText
+import net.superricky.tpaplusplus.config.language.command.BackSpec
 import net.superricky.tpaplusplus.utility.TextColorPallet
 import net.superricky.tpaplusplus.utility.getWorld
 import java.util.*
@@ -190,7 +191,7 @@ object AsyncCommandHelper : CoroutineScope {
         )
         lastDeathPos.backed = true
         this@backTeleport.sendMessage(
-            Text.translatable("command.back.teleported").setStyle(TextColorPallet.primary)
+            BackSpec.teleported.getMutableText().setStyle(TextColorPallet.primary)
         )
     }
 
@@ -201,7 +202,7 @@ object AsyncCommandHelper : CoroutineScope {
     fun teleport(asyncCommandData: AsyncCommandData) {
         launch {
             val asyncRequest = asyncCommandData.getRequest()
-            if (Config.getConfig()[CommonSpec.waitTimeBeforeTp] == 0.0) {
+            if (CommonSpec.waitTimeBeforeTp.get() == 0.0) {
                 if (asyncRequest.commandType == AsyncCommandType.BACK) {
                     asyncRequest.sender.backTeleport()
                 } else {
@@ -228,7 +229,7 @@ object AsyncCommandHelper : CoroutineScope {
                 progressCallback = {
                     it.call(AsyncCommandEvent.TELEPORT_UPDATE_MESSAGE)
                 },
-                Config.getConfig()[CommonSpec.waitTimeBeforeTp]
+                CommonSpec.waitTimeBeforeTp.get()
             )
         }
     }

@@ -3,9 +3,11 @@ package net.superricky.tpaplusplus.async
 import kotlinx.atomicfu.AtomicBoolean
 import kotlinx.atomicfu.atomic
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
 import net.superricky.tpaplusplus.config.config.CommonSpec
-import net.superricky.tpaplusplus.config.config.Config
+import net.superricky.tpaplusplus.config.config.Config.get
+import net.superricky.tpaplusplus.config.language.LanguageConfig.getMutableText
+import net.superricky.tpaplusplus.config.language.TeleportSpec
+import net.superricky.tpaplusplus.config.language.WindupSpec
 import net.superricky.tpaplusplus.utility.*
 
 class AsyncCommandData(
@@ -14,7 +16,7 @@ class AsyncCommandData(
     private val asyncCommandEventFactory: AsyncCommandEventFactory
 ) {
     private var canceled: AtomicBoolean = atomic(false)
-    private var timeout = Config.getConfig()[CommonSpec.tpaTimeout].translateSecondToTick()
+    private var timeout = CommonSpec.tpaTimeout.get().translateSecondToTick()
     private var checkTarget = asyncRequest.sender
 
     init {
@@ -27,8 +29,7 @@ class AsyncCommandData(
             }
             .addListener(AsyncCommandEvent.REQUEST_OUT_DISTANCE) {
                 asyncRequest.sender.sendMessage(
-                    Text.translatable(
-                        "command.windup.error.out_distance",
+                    WindupSpec.outDistance.getMutableText(
                         asyncRequest.commandType.handler.getCommandName()
                     ).setStyle(TextColorPallet.error)
                 )
@@ -46,7 +47,7 @@ class AsyncCommandData(
             asyncCommandEventFactory
                 .addListener(AsyncCommandEvent.TELEPORT_OUT_DISTANCE) {
                     asyncRequest.from?.sendMessage(
-                        Text.translatable("command.teleport.out_distance").setStyle(TextColorPallet.error)
+                        TeleportSpec.outDistance.getMutableText().setStyle(TextColorPallet.error)
                     )
                 }
                 .addListener(AsyncCommandEvent.TELEPORT_UPDATE_MESSAGE) {

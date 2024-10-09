@@ -28,13 +28,6 @@ object Config {
         .from.env()
 
     /**
-     * @return Config instance
-     */
-    fun getConfig(): Config {
-        return config
-    }
-
-    /**
      * Load and check config file.
      * Please call this function before use config.
      */
@@ -64,10 +57,14 @@ object Config {
     }
 
     fun getTickRate(): Double {
-        return if (getConfig()[AdvancedSpec.unblockingTickLoop]) {
-            getConfig()[AdvancedSpec.asyncLoopRate].toDouble()
+        return if (AdvancedSpec.unblockingTickLoop.get()) {
+            AdvancedSpec.asyncLoopRate.get().toDouble()
         } else {
             GlobalConst.SERVER_TICK_RATE
         }
+    }
+
+    fun <T> RequiredItem<T>.get(): T {
+        return config[this]
     }
 }

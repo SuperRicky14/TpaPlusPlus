@@ -2,11 +2,15 @@ package net.superricky.tpaplusplus.command.subcommands
 
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.text.ClickEvent
-import net.minecraft.text.Text
 import net.superricky.tpaplusplus.GlobalConst
 import net.superricky.tpaplusplus.TpaPlusPlus
 import net.superricky.tpaplusplus.command.BuildableCommand
-import net.superricky.tpaplusplus.utility.*
+import net.superricky.tpaplusplus.config.language.LanguageConfig.getMutableText
+import net.superricky.tpaplusplus.config.language.SystemSpec
+import net.superricky.tpaplusplus.utility.Context
+import net.superricky.tpaplusplus.utility.LiteralNode
+import net.superricky.tpaplusplus.utility.TextColorPallet
+import net.superricky.tpaplusplus.utility.literal
 
 object RootCommand : BuildableCommand {
     override fun build(): LiteralNode =
@@ -19,19 +23,16 @@ object RootCommand : BuildableCommand {
         val source = context.source
         source.sendFeedback(
             {
-                Text.translatable(
-                    "system.version",
-                    TpaPlusPlus.version.friendlyString.literal()
-                        .setStyle(TextColorPallet.secondaryVariant)
+                SystemSpec.version.getMutableText(
+                    TpaPlusPlus.version.friendlyString.literal().setStyle(TextColorPallet.secondaryVariant)
                 ).setStyle(TextColorPallet.primaryVariant)
             },
             false
         )
         source.sendFeedback(
             {
-                Text.translatable(
-                    "system.github",
-                    "system.github.view".translate()
+                SystemSpec.githubBase.getMutableText(
+                    SystemSpec.githubView.getMutableText()
                         .setStyle(TextColorPallet.secondaryVariant)
                         .styled {
                             it.withClickEvent(
@@ -44,33 +45,29 @@ object RootCommand : BuildableCommand {
         )
         source.sendFeedback(
             {
-                Text.translatable(
-                    "system.modrinth",
-                    "system.modrinth.view".translate()
+                SystemSpec.modrinthBase.getMutableText(
+                    SystemSpec.modrinthView.getMutableText()
                         .setStyle(TextColorPallet.secondaryVariant)
                         .styled {
                             it.withClickEvent(
                                 ClickEvent(ClickEvent.Action.OPEN_URL, GlobalConst.MODRINTH_URL)
                             )
                         }
-                )
-                    .setStyle(TextColorPallet.primaryVariant)
+                ).setStyle(TextColorPallet.primaryVariant)
             },
             false
         )
         source.sendFeedback(
             {
-                Text.translatable(
-                    "system.courseforge",
-                    "system.courseforge.view".translate()
+                SystemSpec.courseforgeBase.getMutableText(
+                    SystemSpec.courseforgeView.getMutableText()
                         .setStyle(TextColorPallet.secondaryVariant)
                         .styled {
                             it.withClickEvent(
                                 ClickEvent(ClickEvent.Action.OPEN_URL, GlobalConst.COURSE_FORGE_URL)
                             )
                         }
-                )
-                    .setStyle(TextColorPallet.primaryVariant)
+                ).setStyle(TextColorPallet.primaryVariant)
             },
             false
         )

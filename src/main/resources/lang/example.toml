@@ -1,0 +1,129 @@
+# Don't know how Minecrafts §<color code> formatting works? Check out: https://www.digminecraft.com/lists/color_list_pc.php
+[system]
+version = "Version: %s"
+githubBase = "Github: %s"
+githubView = "View on Github"
+modrinthBase = "Modrinth: %s"
+modrinthView = "View on Modrinth"
+courseforgeBase = "CourseForge: %s"
+courseforgeView = "View on CourseForge"
+
+[error]
+# A message sent when the sender player is not exist ( Only happened when command block run command )
+senderNotExist = "Sender player not exist"
+# A message sent when the target player is not exist
+receiverNotExist = "Target player not exist"
+# The message for when a player attempts to use /tpa or /tpahere on themselves
+selfCommand = "You cannot use this command on yourself"
+# The message displayed to the other player, when the TPA request is from another dimension.
+crossDim = "Cannot teleport between dimensions: %s and %s, set config 'crossDimAllowed' to true to enable cross-dimension teleport"
+# The message displayed when the player accepting or sending a TPA request, is too far away.
+tooFar = "Cannot teleport, distance too far, expect less then %s, but now is %s"
+# The message displayed when the player accepting or sending a TPA request, is too close.
+tooClose = "Cannot teleport, distance too close, expect large then %s, but now is %s"
+
+[error.request]
+# A message sent when your teleport request could not be found.
+notfoundAll = "Could not find your teleport request"
+# A message sent when your teleport request could not be found for someone.
+notfoundTarget = "Could not find your teleport request to %s"
+# A message sent when a player tries to send a teleport request to a player who has blocked them
+blockedSender = "You have been blocked by %s"
+# A message sent when a player tries to send a teleport request to a player they have blocked
+blockedReceiver = "You have blocked %s"
+# A message sent when a player who has blocked all requests tries to send a teleport request
+toggledSender = "You have rejected all external teleport requests, if you want to send a teleport request, please set config 'toggledPlayerCommand' to true"
+# A message sent when a player tries to send a teleport request to a player who has blocked all teleport requests
+toggledReceiver = "%s has rejected all external teleport request"
+# A message sent when a teleport request already exists
+requestExist = "Teleport request to %s already exist"
+
+[windup]
+# A message sent when a command is waiting to be executed
+remain = "The command is executing, please wait %s s"
+# A message sent when waiting for the command to be executed, move out of limit
+outDistance = "You moved too much while trying to execute /%s, so it was cancelled"
+
+[teleport]
+# A message sent when player is waiting to be teleported
+remain = "Teleporting, please wait %s s"
+# A message sent when waiting for being teleported, move out of limit
+outDistance = "You moved too much while teleport, so it was cancelled"
+
+[cooldown]
+# A message sent while the command is cooling
+underCooldown = "Command /%s is currently on cooldown, please wait %s s!"
+
+[toggle]
+# A message sent when player be toggled
+on = "Automatically blocks all TPA requests"
+# A message sent when player not be toggled
+off = "Turn off automatically blocking all TPA requests"
+
+[block]
+# A message sent when player success block someone
+success = "All TPA requests come from %s have been set to be blocked"
+# A message sent when player fail block someone
+failure = "Blocked all TPA requests come from %s fail"
+# A message sent to someone be blocked
+blockedPlayer = "You have been blacklisted by %s"
+
+[unblock]
+# A message sent when player success unblock someone
+success = "All TPA requests come from %s have been unblocked"
+# A message sent when player fail unblock someone
+failure = "You have not been blacklisted by %s"
+# A message sent to someone be unblocked
+unblockedPlayer = "Unblocked all TPA requests come from %s fail"
+
+[back]
+# A message sent when can not find player last death position
+deathNotFound = "Could not find your latest death position"
+# A message sent when player under teleporting
+teleporting = "Teleporting you to your latest death position..."
+# A message sent when player has been teleported
+teleported = "You have been teleported"
+
+[tpa]
+# A message sent to sender
+requestSender = "Successfully sent teleport request to %s"
+# A message sent to receiver
+requestReceiver = "%s wants to teleport to you!"
+# A message sent to sender when request timeout
+timeoutSender = "Your teleport request to %s timed out"
+# A message sent to receiver when request timeout
+timeoutReceiver = "Your teleport request from %s timed out"
+# A message sent to sender when prepare for teleporting
+acceptSender = "Teleport request to %s has been accepted, preparing for teleport"
+# A message sent to receiver when accept request
+acceptReceiver = "You have accepted teleport request from %s"
+# A message sent to sender when request canceled
+cancelSender = "Your teleport request to %s has been canceled"
+# A message sent to receiver when cancel request
+cancelReceiver = "Teleport request from %s has been canceled"
+# A message sent to sender when request refused
+refuseSender = "Your teleport request to %s has been refused"
+# A message sent to receiver when refuse request
+refuseReceiver = "Teleport request from %s has been refused"
+
+[tpaHere]
+# A message sent to sender
+requestSender = "Successfully sent teleport request to %s"
+# A message sent to receiver
+requestReceiver = "%s wants you to teleport to them!"
+# A message sent to sender when request timeout
+timeoutSender = "Your teleport request to %s timed out"
+# A message sent to receiver when request timeout
+timeoutReceiver = "Your teleport request from %s timed out"
+# A message sent to sender when prepare for teleporting
+acceptSender = "The teleport request to you has been accepted by %s"
+# A message sent to receiver when accept request
+acceptReceiver = "You have accepted teleport request to %s, preparing for teleport"
+# A message sent to sender when request canceled
+cancelSender = "Your teleport request to %s has been canceled"
+# A message sent to receiver when cancel request
+cancelReceiver = "Teleport request from %s has been canceled"
+# A message sent to sender when request refused
+refuseSender = "Your teleport request to %s has been refused"
+# A message sent to receiver when refuse request
+refuseReceiver = "Teleport request from %s has been refused"

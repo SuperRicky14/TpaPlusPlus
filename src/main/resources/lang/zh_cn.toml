@@ -1,0 +1,129 @@
+# Don't know how Minecrafts §<color code> formatting works? Check out: https://www.digminecraft.com/lists/color_list_pc.php
+[system]
+version = "版本: %s"
+githubBase = "Github: %s"
+githubView = "在 Github 上查看"
+modrinthBase = "Modrinth: %s"
+modrinthView = "在 Modrinth 上查看"
+courseforgeBase = "CourseForge: %s"
+courseforgeView = "在 CourseForge 上查看"
+
+[error]
+# A message sent when the sender player is not exist ( Only happened when command block run command )
+senderNotExist = "玩家不存在"
+# A message sent when the target player is not exist
+receiverNotExist = "目标玩家不存在"
+# The message for when a player attempts to use /tpa or /tpahere on themselves
+selfCommand = "你不能对自己使用此命令"
+# The message displayed to the other player, when the TPA request is from another dimension.
+crossDim = "无法在维度之间传送：%s 和 %s，将配置 'crossDimAllowed' 设置为 true 以启用跨维度传送"
+# The message displayed when the player accepting or sending a TPA request, is too far away.
+tooFar = "传送距离超出限制,最大传送距离为：%s 格，当前距离传送目标的距离为 %s 格"
+# The message displayed when the player accepting or sending a TPA request, is too close.
+tooClose = "传送距离小于限制，最小传送距离为：%s 格，当前距离传送目标的距离为 %s 格"
+
+[error.request]
+# A message sent when your teleport request could not be found.
+notfoundAll = "找不到传送请求"
+# A message sent when your teleport request could not be found for someone.
+notfoundTarget = "找不到传送到 %s 的传送请求"
+# A message sent when a player tries to send a teleport request to a player who has blocked them
+blockedSender = "你已被 %s 屏蔽"
+# A message sent when a player tries to send a teleport request to a player they have blocked
+blockedReceiver = "你已屏蔽了 %s"
+# A message sent when a player who has blocked all requests tries to send a teleport request
+toggledSender = "你已经拒绝所有传送请求，如果你想发出传送请求，请将配置 'toggledPlayerCommand' 设置为 true"
+# A message sent when a player tries to send a teleport request to a player who has blocked all teleport requests
+toggledReceiver = "%s 拒绝所有传送请求"
+# A message sent when a teleport request already exists
+requestExist = "传送到 %s 的传送请求已存在"
+
+[windup]
+# A message sent when a command is waiting to be executed
+remain = "正在执行命令，请等待 %s 秒"
+# A message sent when waiting for the command to be executed, move out of limit
+outDistance = "执行 /%s 的时候移动幅度过大, 取消执行"
+
+[teleport]
+# A message sent when player is waiting to be teleported
+remain = "正在传送,请等待 %s 秒"
+# A message sent when waiting for being teleported, move out of limit
+outDistance = "在传送过程中移动幅度过大"
+
+[cooldown]
+# A message sent while the command is cooling
+underCooldown = "/%s 当前正在冷却，请在%s秒后重试！"
+
+[toggle]
+# A message sent when player be toggled
+on = "自动阻止所有 TPA 请求"
+# A message sent when player not be toggled
+off = "取消阻止所有 TPA 请求"
+
+[block]
+# A message sent when player success block someone
+success = "已阻止所有来自 %s 的 TPA 请求"
+# A message sent when player fail block someone
+failure = "在阻止所有来自 %s 的 TPA 请求时发生错误"
+# A message sent to someone be blocked
+blockedPlayer = "你已被 %s 拉入请求黑名单"
+
+[unblock]
+# A message sent when player success unblock someone
+success = "已允许所有来自 %s 的 TPA 请求"
+# A message sent when player fail unblock someone
+failure = "在允许所有来自 %s 的 TPA 请求时发生错误"
+# A message sent to someone be unblocked
+unblockedPlayer = "你已被 %s 移出请求黑名单"
+
+[back]
+# A message sent when can not find player last death position
+deathNotFound = "找不到最后一次死亡地点"
+# A message sent when player under teleporting
+teleporting = "正在传送至最后一次死亡地点..."
+# A message sent when player has been teleported
+teleported = "已传送至最后一次死亡地点"
+
+[tpa]
+# A message sent to sender
+requestSender = "成功向 %s 发送传送请求"
+# A message sent to receiver
+requestReceiver = "%s 想传送到你身边！"
+# A message sent to sender when request timeout
+timeoutSender = "传送到 %s 的传送请求超时"
+# A message sent to receiver when request timeout
+timeoutReceiver = "来自 %s 的传送请求超时"
+# A message sent to sender when prepare for teleporting
+acceptSender = "传送到 %s 的传送请求已被接受，正在准备传送"
+# A message sent to receiver when accept request
+acceptReceiver = "已接受来自 %s 的传送请求"
+# A message sent to sender when request canceled
+cancelSender = "已取消传送到 %s 的传送请求"
+# A message sent to receiver when cancel request
+cancelReceiver = "来自 %s 的传送请求已被取消"
+# A message sent to sender when request refused
+refuseSender = "%s 拒绝了你的传送请求"
+# A message sent to receiver when refuse request
+refuseReceiver = "已拒绝 %s 的传送请求"
+
+[tpaHere]
+# A message sent to sender
+requestSender = "已成功向 %s 发送传送请求"
+# A message sent to receiver
+requestReceiver = "%s 想让你传送到他那里"
+# A message sent to sender when request timeout
+timeoutSender = "对 %s 的传送请求超时"
+# A message sent to receiver when request timeout
+timeoutReceiver = "来自 %s 的传送请求超时"
+# A message sent to sender when prepare for teleporting
+acceptSender = "%s 已接受传送请求，准备传送到你"
+# A message sent to receiver when accept request
+acceptReceiver = "你已接受传送到 %s 的传送请求，正在准备传送"
+# A message sent to sender when request canceled
+cancelSender = "已取消 %s 的传送请求"
+# A message sent to receiver when cancel request
+cancelReceiver = "来自 %s 的传送请求已被取消"
+# A message sent to sender when request refused
+refuseSender = "%s 拒绝了你的传送请求"
+# A message sent to receiver when refuse request
+refuseReceiver = "已拒绝 %s 的传送请求"

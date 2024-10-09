@@ -38,7 +38,6 @@ dependencies {
 
     modImplementation(libs.bundles.fabric)
     modImplementation(libs.architectury)
-    modImplementation(libs.translations)
 
     // For debug
     modImplementation(libs.bundles.konf)
@@ -76,7 +75,6 @@ tasks {
         val minecraftVersion: String by project
         val loaderVersion: String by project
         val kotlinLoaderVersion: String by project
-        val serverTranslatesApi: String by project
 
         inputs.property("version", project.version)
         inputs.property("minecraft_version", minecraftVersion)
@@ -88,8 +86,7 @@ tasks {
                 "version" to project.version,
                 "minecraft_version" to minecraftVersion,
                 "loader_version" to loaderVersion,
-                "kotlin_loader_version" to kotlinLoaderVersion,
-                "server_translates_api" to serverTranslatesApi
+                "kotlin_loader_version" to kotlinLoaderVersion
             )
         }
     }

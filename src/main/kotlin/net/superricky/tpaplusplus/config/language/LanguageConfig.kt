@@ -6,6 +6,7 @@ import com.uchuhimo.konf.source.toml
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.text.MutableText
 import net.minecraft.text.TranslatableTextContent
+import net.superricky.tpaplusplus.GlobalConst.DEFAULT_LANG_FILE_NAME
 import net.superricky.tpaplusplus.GlobalConst.DEFAULT_LANG_FILE_SOURCE_PATH
 import net.superricky.tpaplusplus.GlobalConst.LANG_FOLDER_NAME
 import net.superricky.tpaplusplus.GlobalConst.LANG_FOLDER_PATH
@@ -24,7 +25,9 @@ object LanguageConfig {
 
     fun loadLangFile(language: String) {
         languageFileName = "$language.toml"
-        checkLanguageFile(language)
+        if (!checkLanguageFile(language)) {
+            languageFileName = DEFAULT_LANG_FILE_NAME
+        }
         config = Config {
             addSpec(SystemSpec)
             addSpec(ErrorSpec)
@@ -41,8 +44,7 @@ object LanguageConfig {
         }
             .from.toml.resource(DEFAULT_LANG_FILE_SOURCE_PATH)
             .from.toml.watchFile(
-                FabricLoader.getInstance().configDir.resolve(LANG_FOLDER_PATH).resolve(languageFileName)
-                    .toFile()
+                FabricLoader.getInstance().configDir.resolve(LANG_FOLDER_PATH).resolve(languageFileName).toFile()
             )
             .from.env()
     }
@@ -50,17 +52,23 @@ object LanguageConfig {
     private fun checkLanguageFile(language: String): Boolean {
         val languageFilePath = Path(LANG_FOLDER_PATH).resolve(languageFileName)
         val languageSourcePath = Path(LANG_FOLDER_NAME).resolve(languageFileName).toString()
-        if (supportedLanguage.contains(language) && !Files.exists(
-                FabricLoader.getInstance().configDir.resolve(
-                    languageFilePath
-                )
-            )
-        ) {
-            logger.info("No $language lang file, Creating")
-            Files.copy(
-                FabricLoader.getInstance().getModContainer(MOD_ID).get().findPath(languageSourcePath).get(),
-                FabricLoader.getInstance().configDir.resolve(languageFilePath)
-            )
+        if (!Files.exists(FabricLoader.getInstance().configDir.resolve(languageFilePath))) {
+            // If language has been supported
+            if (supportedLanguage.contains(language)) {
+                logger.info("No $languageFileName file, Creating")
+                try {
+                    Files.copy(
+                        FabricLoader.getInstance().getModContainer(MOD_ID).get().findPath(languageSourcePath).get(),
+                        FabricLoader.getInstance().configDir.resolve(languageFilePath)
+                    )
+                } catch (e: Exception) {
+                    logger.error(e)
+                    return false
+                }
+                return true
+            }
+            logger.info("No $languageFileName file found, use default language")
+            return false
         }
         return true
     }

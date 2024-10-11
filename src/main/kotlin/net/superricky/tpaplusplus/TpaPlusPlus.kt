@@ -83,7 +83,7 @@ object TpaPlusPlus : ModInitializer, CoroutineScope {
 
         logger.info("Loading lang file...")
         try {
-            LanguageConfig.loadLangFile(CommonSpec.language.get())
+            LanguageConfig.loadLangFile(CommonSpec.language.get().lowercase())
             logger.info("Language file loaded.")
         } catch (e: Exception) {
             logger.error("Error while loading lang file", e)

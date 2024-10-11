@@ -1,16 +1,11 @@
 package net.superricky.tpaplusplus
 
 import dev.architectury.event.events.common.CommandRegistrationEvent
-import dev.architectury.event.events.common.EntityEvent
-import dev.architectury.event.events.common.PlayerEvent
-import dev.architectury.event.events.common.TickEvent
+import dev.architectury.event.events.common.LifecycleEvent
+import dev.architectury.platform.Platform
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import net.fabricmc.api.ModInitializer
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
-import net.fabricmc.loader.api.FabricLoader
-import net.fabricmc.loader.api.Version
 import net.minecraft.server.MinecraftServer
 import net.superricky.tpaplusplus.GlobalConst.CONFIG_FILE_NAME
 import net.superricky.tpaplusplus.GlobalConst.CONFIG_FILE_PATH
@@ -19,39 +14,40 @@ import net.superricky.tpaplusplus.GlobalConst.EXAMPLE_LANG_FILE_PATH
 import net.superricky.tpaplusplus.GlobalConst.LANG_FOLDER_PATH
 import net.superricky.tpaplusplus.GlobalConst.MOD_ID
 import net.superricky.tpaplusplus.GlobalConst.logger
-import net.superricky.tpaplusplus.async.AsyncCommandHelper
 import net.superricky.tpaplusplus.command.CommandRegister
-import net.superricky.tpaplusplus.config.config.AdvancedSpec
 import net.superricky.tpaplusplus.config.config.CommonSpec
 import net.superricky.tpaplusplus.config.config.Config
 import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.config.language.LanguageConfig
-import net.superricky.tpaplusplus.database.DataManager
 import net.superricky.tpaplusplus.database.service.DataService
+import net.superricky.tpaplusplus.event.ServerEvent
 import java.nio.file.Files
 import kotlin.coroutines.CoroutineContext
-import net.superricky.tpaplusplus.utility.PlayerEvent as PlayerEventListener
 
 object TpaPlusPlus : ModInitializer, CoroutineScope {
     lateinit var server: MinecraftServer
     override val coroutineContext: CoroutineContext = Dispatchers.IO
-    val version: Version = FabricLoader.getInstance().getModContainer(MOD_ID).get().metadata.version
+    val version: String = Platform.getMod(MOD_ID).version.toString()
     lateinit var dataService: DataService
 
     override fun onInitialize() {
-        logger.info("Initializing TPA++ ${version.friendlyString}")
+        init()
+    }
+
+    fun init() {
+        logger.info("Initializing TPA++ $version")
 
         logger.info("Checking config...")
-        if (!Files.isDirectory(FabricLoader.getInstance().configDir.resolve(CONFIG_FOLDER_PATH))) {
+        if (!Files.isDirectory(Platform.getConfigFolder().resolve(CONFIG_FOLDER_PATH))) {
             logger.info("Config folder not exist, Creating.")
-            Files.createDirectories(FabricLoader.getInstance().configDir.resolve(CONFIG_FOLDER_PATH))
+            Files.createDirectories(Platform.getConfigFolder().resolve(CONFIG_FOLDER_PATH))
         }
 
-        if (!Files.exists(FabricLoader.getInstance().configDir.resolve(CONFIG_FILE_PATH))) {
+        if (!Files.exists(Platform.getConfigFolder().resolve(CONFIG_FILE_PATH))) {
             logger.info("No config file, Creating")
             Files.copy(
-                FabricLoader.getInstance().getModContainer(MOD_ID).get().findPath(CONFIG_FILE_NAME).get(),
-                FabricLoader.getInstance().configDir.resolve(CONFIG_FILE_PATH)
+                Platform.getMod(MOD_ID).findResource(CONFIG_FILE_NAME).get(),
+                Platform.getConfigFolder().resolve(CONFIG_FILE_PATH)
             )
         }
 
@@ -65,19 +61,19 @@ object TpaPlusPlus : ModInitializer, CoroutineScope {
         }
 
         logger.info("Checking lang file...")
-        if (!Files.exists(FabricLoader.getInstance().configDir.resolve(LANG_FOLDER_PATH))) {
+        if (!Files.exists(Platform.getConfigFolder().resolve(LANG_FOLDER_PATH))) {
             logger.info("Lang folder not exist, Creating")
-            Files.createDirectories(FabricLoader.getInstance().configDir.resolve(LANG_FOLDER_PATH))
+            Files.createDirectories(Platform.getConfigFolder().resolve(LANG_FOLDER_PATH))
         }
 
         if (!Files.exists(
-                FabricLoader.getInstance().configDir.resolve(CONFIG_FOLDER_PATH).resolve(EXAMPLE_LANG_FILE_PATH)
+                Platform.getConfigFolder().resolve(CONFIG_FOLDER_PATH).resolve(EXAMPLE_LANG_FILE_PATH)
             )
         ) {
             logger.info("No example lang file, Creating")
             Files.copy(
-                FabricLoader.getInstance().getModContainer(MOD_ID).get().findPath(EXAMPLE_LANG_FILE_PATH).get(),
-                FabricLoader.getInstance().configDir.resolve(CONFIG_FOLDER_PATH).resolve(EXAMPLE_LANG_FILE_PATH)
+                Platform.getMod(MOD_ID).findResource(EXAMPLE_LANG_FILE_PATH).get(),
+                Platform.getConfigFolder().resolve(CONFIG_FOLDER_PATH).resolve(EXAMPLE_LANG_FILE_PATH)
             )
         }
 
@@ -98,42 +94,8 @@ object TpaPlusPlus : ModInitializer, CoroutineScope {
         }
 
         logger.info("Add lifecycle event listener")
-        ServerLifecycleEvents.SERVER_STARTING.register(::serverStarting)
-        ServerLifecycleEvents.SERVER_STOPPED.register(::serverStopped)
+        LifecycleEvent.SERVER_BEFORE_START.register(ServerEvent::serverStartingEvent)
+        LifecycleEvent.SERVER_STOPPED.register(ServerEvent::serverStoppedEvent)
         logger.info("Basic component initialization is complete")
-    }
-
-    private fun serverStarting(server: MinecraftServer) {
-        logger.info("Server starting...")
-        logger.info("Main logic initializing...")
-        this.server = server
-        this.dataService = DataManager
-
-        logger.info("Data service initializing...")
-        dataService.initDataService()
-
-        logger.info("Add player event listener...")
-        PlayerEvent.PLAYER_JOIN.register(PlayerEventListener::joinEvent)
-        EntityEvent.LIVING_DEATH.register(PlayerEventListener::deathEvent)
-
-        if (AdvancedSpec.unblockingTickLoop.get()) {
-            logger.info("Using non blocking tick loop")
-            logger.info(
-                "Initializing non blocking tick loop with rate of " +
-                        "${AdvancedSpec.asyncLoopRate.get()} per second"
-            )
-            AsyncCommandHelper.startTickLoop(AdvancedSpec.asyncLoopRate.get())
-        } else {
-            logger.info("Using synchronous tick loop")
-            logger.info("Registering server post tick event")
-            TickEvent.SERVER_POST.register { AsyncCommandHelper.runTick() }
-        }
-    }
-
-    private fun serverStopped(ignored: MinecraftServer) {
-        logger.info("Shutting down TPA++")
-        AsyncCommandHelper.stopTickLoop()
-        coroutineContext.cancel()
-        dataService.saveData()
     }
 }

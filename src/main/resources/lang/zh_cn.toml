@@ -9,6 +9,8 @@ courseforgeBase = "CourseForge: %s"
 courseforgeView = "在 CourseForge 上查看"
 reloadStart = "正在重载语言文件"
 reloadFinish = "语言文件重载完成"
+configChange = "配置文件被修改，正在重载"
+languageChange = "语言文件被修改，正在重载"
 
 [error]
 # A message sent when the sender player is not exist ( Only happened when command block run command )

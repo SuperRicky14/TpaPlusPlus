@@ -27,7 +27,7 @@ object RootCommand : BuildableCommand {
         source.sendFeedback(
             {
                 SystemSpec.version.getMutableText(
-                    TpaPlusPlus.version.friendlyString.literal().setStyle(TextColorPallet.secondaryVariant)
+                    TpaPlusPlus.version.literal().setStyle(TextColorPallet.secondaryVariant)
                 ).setStyle(TextColorPallet.primaryVariant)
             },
             false

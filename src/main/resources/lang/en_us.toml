@@ -9,6 +9,8 @@ courseforgeBase = "CourseForge: %s"
 courseforgeView = "View on CourseForge"
 reloadStart = "Reloading language file..."
 reloadFinish = "Language file reload complete"
+configChange = "The config file is modified and is being overloaded"
+languageChange = "The language file is modified and is being overloaded"
 
 [error]
 # A message sent when the sender player is not exist ( Only happened when command block run command )

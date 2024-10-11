@@ -37,18 +37,17 @@ object LimitationHelper {
         ) {
             return 0.0
         }
-        if (CommandLimitationsSpec.maxTpDistance.get() <= 0.0 ||
-            CommandLimitationsSpec.minTpDistance.get() <= 0.0
-        ) {
-            return 0.0
-        }
         val senderPos = LevelBoundVec3(sender.getDimension(), sender.pos)
         val receiverPos = LevelBoundVec3(receiver.getDimension(), receiver.pos)
         val distance = senderPos.distance(receiverPos)
-        if (distance > CommandLimitationsSpec.maxTpDistance.get()) {
+        if (CommandLimitationsSpec.maxTpDistance.get() > 0.0 &&
+            distance > CommandLimitationsSpec.maxTpDistance.get()
+        ) {
             return distance.absoluteValue
         }
-        if (distance < CommandLimitationsSpec.minTpDistance.get()) {
+        if (CommandLimitationsSpec.minTpDistance.get() > 0.0 &&
+            distance < CommandLimitationsSpec.minTpDistance.get()
+        ) {
             return -distance.absoluteValue
         }
         return 0.0

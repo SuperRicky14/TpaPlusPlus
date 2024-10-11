@@ -12,4 +12,6 @@ object SystemSpec : ConfigSpec("system") {
     val courseforgeView by required<String>()
     val reloadStart by required<String>()
     val reloadFinish by required<String>()
+    val configChange by required<String>()
+    val languageChange by required<String>()
 }

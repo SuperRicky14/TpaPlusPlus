@@ -180,7 +180,7 @@ tpaDistance = 0.0
 # Modifying any of these commands can take effect without a restart.
 # Whether to allow sending TPA requests if the player(s) are not in the same dimension
 # Set this to false if you wish to disable this limitation
-crossDimAllowed = true
+crossDimAllowed = false
 
 # How far away a player can be from another player in order to teleport
 # This is measured in blocks.
@@ -200,4 +200,4 @@ minTpDistance = 0.0
 # TPAPlusPlus will automatically account for the nether's coordinate system
 # ( 1 block in the nether is 8 blocks in the overworld! )
 # Set this to false if you wish to disable this limitation
-ignoreDistanceCrossDim = true
+ignoreDistanceCrossDim = false

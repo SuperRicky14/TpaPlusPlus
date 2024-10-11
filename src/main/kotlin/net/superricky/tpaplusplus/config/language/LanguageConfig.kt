@@ -2,8 +2,9 @@ package net.superricky.tpaplusplus.config.language
 
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.RequiredItem
+import com.uchuhimo.konf.source.Source
 import com.uchuhimo.konf.source.toml
-import net.fabricmc.loader.api.FabricLoader
+import dev.architectury.platform.Platform
 import net.minecraft.text.MutableText
 import net.minecraft.text.TranslatableTextContent
 import net.superricky.tpaplusplus.GlobalConst.DEFAULT_LANG_FILE_NAME
@@ -44,23 +45,27 @@ object LanguageConfig {
         }
             .from.toml.resource(DEFAULT_LANG_FILE_SOURCE_PATH)
             .from.toml.watchFile(
-                FabricLoader.getInstance().configDir.resolve(LANG_FOLDER_PATH).resolve(languageFileName).toFile()
+                Platform.getConfigFolder().resolve(LANG_FOLDER_PATH).resolve(languageFileName).toFile()
             )
             .from.env()
         config.validateRequired()
     }
 
+    fun addLoadListener(listener: Function1<Source, Unit>) {
+        config.beforeLoad { listener(it) }
+    }
+
     private fun checkLanguageFile(language: String): Boolean {
         val languageFilePath = Path(LANG_FOLDER_PATH).resolve(languageFileName)
         val languageSourcePath = Path(LANG_FOLDER_NAME).resolve(languageFileName).toString()
-        if (!Files.exists(FabricLoader.getInstance().configDir.resolve(languageFilePath))) {
+        if (!Files.exists(Platform.getConfigFolder().resolve(languageFilePath))) {
             // If language has been supported
             if (supportedLanguage.contains(language)) {
                 logger.info("No $languageFileName file, Creating")
                 try {
                     Files.copy(
-                        FabricLoader.getInstance().getModContainer(MOD_ID).get().findPath(languageSourcePath).get(),
-                        FabricLoader.getInstance().configDir.resolve(languageFilePath)
+                        Platform.getMod(MOD_ID).findResource(languageSourcePath).get(),
+                        Platform.getConfigFolder().resolve(languageFilePath)
                     )
                 } catch (e: Exception) {
                     logger.error(e)

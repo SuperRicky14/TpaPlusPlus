@@ -24,5 +24,7 @@ object GlobalConst {
     const val SERVER_TICK_RATE = 20.0
     const val ONE_SECOND = 1000L
 
+    const val PERMISSION_LEVEL = 3
+
     val logger: Logger = LogManager.getLogger(MOD_ID)
 }

@@ -10,4 +10,6 @@ object SystemSpec : ConfigSpec("system") {
     val modrinthView by required<String>()
     val courseforgeBase by required<String>()
     val courseforgeView by required<String>()
+    val reloadStart by required<String>()
+    val reloadFinish by required<String>()
 }

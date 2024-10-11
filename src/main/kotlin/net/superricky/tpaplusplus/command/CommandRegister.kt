@@ -3,6 +3,7 @@ package net.superricky.tpaplusplus.command
 import net.superricky.tpaplusplus.GlobalConst
 import net.superricky.tpaplusplus.GlobalConst.logger
 import net.superricky.tpaplusplus.command.commands.*
+import net.superricky.tpaplusplus.command.subcommands.ReloadCommand
 import net.superricky.tpaplusplus.command.subcommands.RootCommand
 import net.superricky.tpaplusplus.config.config.Config.get
 import net.superricky.tpaplusplus.config.config.command.CommandEnableSpec
@@ -11,6 +12,7 @@ import net.superricky.tpaplusplus.utility.Dispatcher
 object CommandRegister {
     fun registerCommands(dispatcher: Dispatcher) {
         val rootNode = RootCommand.build()
+        rootNode.addChild(ReloadCommand.build())
 
         logger.info("Register command /${GlobalConst.MOD_ID}...")
         dispatcher.root.addChild(rootNode)

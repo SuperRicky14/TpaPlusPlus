@@ -47,6 +47,7 @@ object LanguageConfig {
                 FabricLoader.getInstance().configDir.resolve(LANG_FOLDER_PATH).resolve(languageFileName).toFile()
             )
             .from.env()
+        config.validateRequired()
     }
 
     private fun checkLanguageFile(language: String): Boolean {

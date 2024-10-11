@@ -15,6 +15,9 @@ import net.superricky.tpaplusplus.utility.literal
 object RootCommand : BuildableCommand {
     override fun build(): LiteralNode =
         literal(GlobalConst.MOD_ID)
+            .then(
+                literal("version").executes { showMetaData(it) }
+            )
             .executes { showMetaData(it) }
             .build()
 

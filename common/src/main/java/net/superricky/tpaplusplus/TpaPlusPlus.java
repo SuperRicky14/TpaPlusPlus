@@ -1,6 +1,6 @@
 package net.superricky.tpaplusplus;
 
-public final class ExampleMod {
+public final class TpaPlusPlus {
     public static final String MOD_ID = "tpaplusplus";
 
     public static void init() {

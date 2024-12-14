@@ -1,15 +1,15 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
 #issueTrackerURL = ""
-license = "Insert License Here"
+license = "MIT"
 
 [[mods]]
 modId = "tpaplusplus"
 version = "${version}"
 displayName = "TPAPlusPlus"
-authors = "Me!"
+authors = ["SuperRicky14", "Half-Nothing"]
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Compatible, customisable, user friendly TPA mod for NeoForge, Fabric, and Quilt.
 '''
 #logoFile = ""
 

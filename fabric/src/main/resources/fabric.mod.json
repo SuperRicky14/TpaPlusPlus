@@ -3,24 +3,24 @@
   "id": "tpaplusplus",
   "version": "${version}",
   "name": "TPAPlusPlus",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "Compatible, customisable, user friendly TPA mod for NeoForge, Fabric, and Quilt.",
   "authors": [
-    "Me!"
+    "SuperRicky14",
+    "Half-Nothing"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "modrinth": "https://modrinth.com/mod/tpa++",
+    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/tpaplusplus",
+    "sources": "https://github.com/SuperRicky14/TpaPlusPlus"
   },
-  "license": "CC0-1.0",
+  "license": "MIT",
   "icon": "assets/tpaplusplus/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.superricky.tpaplusplus.fabric.ExampleModFabric"
+      "net.superricky.tpaplusplus.fabric.TpaPlusPlusFabric"
     ],
-    "client": [
-      "net.superricky.tpaplusplus.fabric.client.ExampleModFabricClient"
-    ]
+    "client": []
   },
   "mixins": [
     "tpaplusplus.mixins.json"

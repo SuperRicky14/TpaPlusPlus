@@ -21,5 +21,5 @@ Remove SonarQube
 * Might speed up builds
 
 **Negative:**
-* Inconsistent code style than a properly integrated, documented config of SonarQube. Why I am still removing it:
+* Inconsistent code style than a proper setup of SonarQube. Why I am still removing it:
   * Code style just isn't a priority for TPA++ right now. The mod is undergoing major refactoring, and a lot of code is likely to be thrown out anyways.

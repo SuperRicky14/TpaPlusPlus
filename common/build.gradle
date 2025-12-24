@@ -1,48 +1,39 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.9.23'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.23'
+    id 'org.jetbrains.kotlin.jvm'
 }
 architectury {
-    common(rootProject.enabled_platforms.split(","))
-}
-
-loom {
-    accessWidenerPath = file("src/main/resources/tpaplusplus.accesswidener")
+    common rootProject.enabled_platforms.split(',')
 }
 
 dependencies {
-    // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
-    // Do NOT use other classes from fabric loader
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    // Remove the next line if you don't want to depend on the API
-    modApi "dev.architectury:architectury:${rootProject.architectury_version}"
+    // We depend on Fabric Loader here to use the Fabric @Environment annotations,
+    // which get remapped to the correct annotations on each platform.
+    // Do NOT use other classes from Fabric Loader.
+    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
 
-    // We implement fabric language kotlin here, simply to get access to all the libraries provided with it.
-    // On forge, this should be the same for the "Kotlin for Forge" mod
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.19+kotlin.1.9.23")
+    // Architectury API. This is optional, and you can comment it out if you don't need it.
+    modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
 
-    testImplementation "org.junit.jupiter:junit-jupiter:5.11.0"
+    // Depend on fabric language kotlin. Without this, we can't use Kotlinx libraries which are provided by both Kotlin for forge and Fabric language kotlin.
+    // This is why it's (relatively) important for our mod to depend on versions of Kotlin for forge that bundle the same Kotlin version as Fabric language kotlin.
+    // If they were different versions, our mod might call methods that have been refactored/deprecated in one but not the other, causing issues.
+    implementation "net.fabricmc:fabric-language-kotlin:$rootProject.fabric_language_kotlin_version"
+
+    api "fuzs.forgeconfigapiport:forgeconfigapiport-common:$rootProject.forge_config_api_port_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    // We use junit for unit testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter:6.0.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // JUnit really does NOT like when this line is removed
 }
 
-publishing {
-    publications {
-        mavenCommon(MavenPublication) {
-            artifactId = rootProject.archives_base_name
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-    }
+test {
+    useJUnitPlatform()
 }
+
 repositories {
     mavenCentral()
 }
 kotlin {
     jvmToolchain(17)
-}
-test {
-    useJUnitPlatform()
 }

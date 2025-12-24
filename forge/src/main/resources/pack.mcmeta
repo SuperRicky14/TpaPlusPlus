@@ -1,6 +1,7 @@
 {
   "pack": {
-    "description": "TPA++ built-in",
+    "description": "TPA++",
+    "forge:server_data_pack_format": 15,
     "pack_format": 15
   }
 }

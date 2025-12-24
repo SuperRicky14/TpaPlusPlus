@@ -8,9 +8,8 @@
     "SuperRicky14"
   ],
   "contact": {
-    "modrinth": "https://modrinth.com/mod/tpa++",
-    "curseforge": "https://www.curseforge.com/minecraft/mc-mods/tpaplusplus",
-    "sources": "https://github.com/SuperRicky14/TpaPlusPlus"
+    "homepage": "https://modrinth.com/mod/tpa++",
+    "sources": "https://github.com/SuperRicky14/TpaPlusPlus/tree/main"
   },
   "license": "MIT",
   "icon": "assets/tpaplusplus/icon.png",
@@ -18,13 +17,22 @@
   "entrypoints": {
     "main": [
       "net.superricky.tpaplusplus.fabric.TPAPlusPlusFabric"
-    ]
+    ],
+    "client": []
   },
+  "mixins": [
+    "tpaplusplus.mixins.json"
+  ],
   "depends": {
-    "fabric": "*",
-    "minecraft": ">=1.20",
-    "architectury": ">=9.1.12",
-    "fabric-language-kotlin": ">=1.10.19+kotlin.1.9.23",
-    "forgeconfigapiport": ">=7.0.0"
+    "fabricloader": ">=0.18.3",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "architectury": ">=9.2.14",
+    "forgeconfigapiport": ">=8.0.0",
+    "fabric-language-kotlin": ">=1.13.7+kotlin.2.2.21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "fabric-language-kotlin": "~1.13.7+kotlin.2.2.21"
   }
 }

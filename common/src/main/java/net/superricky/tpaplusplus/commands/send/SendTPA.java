@@ -15,7 +15,7 @@ import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.impl.TPAHereWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.impl.TPAWindup;
 
@@ -72,7 +72,7 @@ public class SendTPA {
             if (Config.TPAHERE_WINDUP.get() == 0) {
                 absoluteSendTeleportRequest(sender, receiver, isHereRequest);
             } else {
-                AsyncWindupKt.schedule(new TPAHereWindup(sender, receiver));
+                AsyncWindup.INSTANCE.schedule(new TPAHereWindup(sender, receiver));
             }
         } else {
             if (AsyncCooldownHelper.checkCommandCooldownAndNotify(sender, sender.getUUID(), CommandType.TPA))
@@ -84,7 +84,7 @@ public class SendTPA {
             if (Config.TPA_WINDUP.get() == 0) {
                 absoluteSendTeleportRequest(sender, receiver, isHereRequest);
             } else {
-                AsyncWindupKt.schedule(new TPAWindup(sender, receiver));
+                AsyncWindup.INSTANCE.schedule(new TPAWindup(sender, receiver));
             }
         }
     }

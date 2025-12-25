@@ -11,7 +11,7 @@ import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.impl.CancelWindup;
 
 import java.util.Map;
@@ -34,7 +34,7 @@ public class CancelTPA {
         if (Config.CANCEL_WINDUP.get() == 0) {
             absoluteCancel(request);
         } else {
-            AsyncWindupKt.schedule(new CancelWindup(request));
+            AsyncWindup.INSTANCE.schedule(new CancelWindup(request));
         }
     }
 

@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      checks: write # for test result uploading
+      pull-requests: write # for test result uploading
 
     steps:
     - uses: actions/checkout@v4
@@ -33,7 +35,14 @@ jobs:
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew assemble # Don't want it to run tests yet
+      run: ./gradlew build
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always() # Run if gradlew build fails
+      with:
+        files: | # Add more directories if adding tests in other subprojects
+          common/build/test-results/**/*.xml
 
   dependency-submission:
     runs-on: ubuntu-latest

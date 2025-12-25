@@ -8,7 +8,7 @@ plugins {
 // We use Forgix (https://github.com/PacifistMC/Forgix) for creating "universal" jars that can be run on any modloader (that the code supports)
 // No more downloading the wrong jar!
 forgix {
-    destinationDirectory = layout.projectDirectory.dir("build/forgix")
+    destinationDirectory = layout.projectDirectory.dir("Merged")
     archiveClassifier = "universal"
     archiveVersion = rootProject.mod_version
 }

@@ -46,6 +46,7 @@ jobs:
 
   dependency-submission:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' # Running dependabot on pr's is excruciatingly slow, it should only run on commits to main
     permissions:
       contents: write
 

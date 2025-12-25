@@ -37,6 +37,17 @@ jobs:
     - name: Build with Gradle Wrapper
       run: ./gradlew build
 
+    - name: Run Forgix
+      if: github.ref == 'refs/heads/main' # Forgix should only be used on main
+      run: ./gradlew mergeJars
+
+    - name: Create Github Artifact
+      if: github.ref == 'refs/heads/main' # Artifacts should only be created for main
+      uses: actions/upload-artifact@v6
+      with:
+        name: Mod Jar
+        path: Merged/
+
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always() # Run if gradlew build fails

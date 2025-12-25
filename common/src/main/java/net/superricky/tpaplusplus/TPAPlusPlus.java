@@ -20,7 +20,7 @@ import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.timeout.RequestTimeoutEvent;
 import net.superricky.tpaplusplus.timeout.TimeoutManagerKt;
 import net.superricky.tpaplusplus.util.MsgFmt;
-import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcherKt;
+import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,11 +67,11 @@ public class TPAPlusPlus {
         if (Config.USE_NON_BLOCKING_ASYNC_TICK_LOOP.get()) {
             LOGGER.warn("USING EXPERIMENTAL NON BLOCKING TICK LOOP");
             LOGGER.info(MsgFmt.fmt("INITIALIZING TICK LOOP WITH RATE OF ${tick_rate}...", Map.of("tick_rate", Config.ASYNC_TICK_LOOP_UPDATE_RATE.get())));
-            WindupWatcherKt.startAsyncTickLoop(Config.ASYNC_TICK_LOOP_UPDATE_RATE.get());
+            WindupWatcher.INSTANCE.startAsyncTickLoop(Config.ASYNC_TICK_LOOP_UPDATE_RATE.get());
         } else {
             LOGGER.info("USING SYNCHRONOUS TICK LOOP");
             LOGGER.info("REGISTERING \"TickEvent.SERVER_POST\"...");
-            TickEvent.SERVER_POST.register(server -> WindupWatcherKt.runTick());
+            TickEvent.SERVER_POST.register(server -> WindupWatcher.INSTANCE.runTick());
         }
 
         LOGGER.info("INITIALIZING VERSION CHECKING...");

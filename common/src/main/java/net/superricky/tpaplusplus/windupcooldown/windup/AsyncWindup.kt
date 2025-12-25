@@ -13,7 +13,7 @@ object AsyncWindup {
         require(!abstractWindup.cancelled.get()) { "Tried to schedule a windupData that has already been cancelled." }
 
         // Request is a valid request.
-        addWindupData(abstractWindup) // Add it to the tracked windupData.
+        WindupWatcher.addWindupData(abstractWindup) // Add it to the tracked windupData.
 
         scope.launch {
             var countingDown = true
@@ -32,7 +32,7 @@ object AsyncWindup {
         if (abstractWindup.windupDelay.get() > 0) {
             // Countdown not finished
             if (abstractWindup.cancelled.get()) {
-                removeWindupData(abstractWindup)
+                WindupWatcher.removeWindupData(abstractWindup)
                 return false
             }
 
@@ -44,14 +44,14 @@ object AsyncWindup {
         }
 
         if (abstractWindup.cancelled.get()) {
-            removeWindupData(abstractWindup)
+            WindupWatcher.removeWindupData(abstractWindup)
             return false
         }
 
         // Delay is zero, countdown finished
         onCountdownFinished(abstractWindup)
 
-        removeWindupData(abstractWindup)
+        WindupWatcher.removeWindupData(abstractWindup)
         return false
     }
 

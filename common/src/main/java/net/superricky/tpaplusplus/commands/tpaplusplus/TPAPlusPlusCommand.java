@@ -14,7 +14,7 @@ import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.util.MsgFmt;
-import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcherKt;
+import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 
 import java.util.Map;
 import java.util.Objects;
@@ -143,7 +143,7 @@ public class TPAPlusPlusCommand {
 
             RequestHelper.clearRequestSet();
             DeathHelper.clearDeathCoordinates();
-            WindupWatcherKt.clearTrackedWindupData();
+            WindupWatcher.INSTANCE.clearTrackedWindupData();
 
             source.sendSystemMessage(Component.literal(Messages.TPAPLUSPLUS_FORCE_RELOADED_CONFIG.get()));
             return 1;

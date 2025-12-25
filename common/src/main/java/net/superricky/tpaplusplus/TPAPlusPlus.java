@@ -18,7 +18,7 @@ import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.io.ServerLifecycleHandler;
 import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.timeout.RequestTimeoutEvent;
-import net.superricky.tpaplusplus.timeout.TimeoutManagerKt;
+import net.superricky.tpaplusplus.timeout.TimeoutManager;
 import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 import org.slf4j.Logger;
@@ -62,7 +62,7 @@ public class TPAPlusPlus {
         EntityEvent.LIVING_DEATH.register((deadEntity, source) -> DeathHelper.onDeath(deadEntity));
 
         LOGGER.info("REGISTERING \"RequestTimeoutEvent\"...");
-        RequestTimeoutEvent.EVENT.register(TimeoutManagerKt::onTimeoutEvent);
+        RequestTimeoutEvent.EVENT.register(TimeoutManager.INSTANCE::onTimeoutEvent);
 
         if (Config.USE_NON_BLOCKING_ASYNC_TICK_LOOP.get()) {
             LOGGER.warn("USING EXPERIMENTAL NON BLOCKING TICK LOOP");

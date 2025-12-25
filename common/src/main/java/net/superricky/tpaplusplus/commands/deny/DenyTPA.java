@@ -11,7 +11,7 @@ import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.impl.DenyWindup;
 
 import java.util.Map;
@@ -34,7 +34,7 @@ public class DenyTPA {
         if (Config.DENY_WINDUP.get() == 0) {
             absoluteDeny(request);
         } else {
-            AsyncWindupKt.schedule(new DenyWindup(request));
+            AsyncWindup.INSTANCE.schedule(new DenyWindup(request));
         }
     }
 

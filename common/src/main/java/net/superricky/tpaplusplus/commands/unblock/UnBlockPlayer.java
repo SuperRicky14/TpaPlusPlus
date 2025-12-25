@@ -12,7 +12,7 @@ import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.impl.UnBlockPlayerWindup;
 
 import java.util.Map;
@@ -43,7 +43,7 @@ public class UnBlockPlayer {
         if (Config.UNBLOCK_WINDUP.get() == 0) {
             absoluteUnBlockPlayer(executorData, executor, blockedPlayer);
         } else {
-            AsyncWindupKt.schedule(new UnBlockPlayerWindup(executorData, executor, blockedPlayer));
+            AsyncWindup.INSTANCE.schedule(new UnBlockPlayerWindup(executorData, executor, blockedPlayer));
         }
     }
 

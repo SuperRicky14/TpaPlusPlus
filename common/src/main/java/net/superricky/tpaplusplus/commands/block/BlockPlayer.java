@@ -11,7 +11,7 @@ import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.impl.BlockPlayerWindup;
 
 import java.util.Map;
@@ -42,7 +42,7 @@ public class BlockPlayer {
         if (Config.BLOCK_WINDUP.get() == 0) {
             absoluteBlockPlayer(executorData, executor, blockedPlayer);
         } else {
-            AsyncWindupKt.schedule(new BlockPlayerWindup(executorData, executor, blockedPlayer));
+            AsyncWindup.INSTANCE.schedule(new BlockPlayerWindup(executorData, executor, blockedPlayer));
         }
     }
 

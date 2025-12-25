@@ -11,7 +11,7 @@ import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindupKt;
+import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.impl.AcceptWindup;
 
 import java.util.Map;
@@ -34,7 +34,7 @@ public class AcceptTPA {
         if (Config.ACCEPT_WINDUP.get() == 0) {
             absoluteAcceptFunctionality(request, receiver);
         } else {
-            AsyncWindupKt.schedule(new AcceptWindup(request));
+            AsyncWindup.INSTANCE.schedule(new AcceptWindup(request));
         }
     }
 

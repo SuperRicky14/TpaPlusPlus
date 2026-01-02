@@ -38,7 +38,6 @@ jobs:
       run: ./gradlew build
 
     - name: Run Forgix
-      if: github.ref == 'refs/heads/main' # Forgix should only be used on main
       run: ./gradlew mergeJars
 
     - name: Create Github Artifact

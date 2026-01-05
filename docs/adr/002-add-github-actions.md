@@ -12,11 +12,12 @@ Beta/Alpha builds clutter up CurseForge/Modrinth and confuse users.
 ## Decision
 Add GitHub actions.\
 Configure GitHub actions to run unit tests and comment the results.\
-Configure GitHub actions to publish artifacts on commits that successfuly compile&test.\
+Configure GitHub actions to publish artifacts on commits to main that successfuly compile&test.\
 We will **not** be implementing Modrinth/CurseForge uploading in this iteration to keep things simple.
 
 ## Options Considered
 **Do nothing**: Because these pain points have been the things really putting me off from maintaining TPA++\
+**Produce artifacts on other branches**: Not sure how that would play with tools like [nightly.link](https://nightly.link). If it did end up playing nicely, I pretty much want artifacts to be bleeding edge builds for the community. So, don't want them to be confused downloading a broken build from a PR that's in-progress for example.
 **Use an external system like Jenkins**: GitHub actions is just right there. The only benefit I see to an external project is no account requirement for downloading artifacts, but that can be solved with a service such as [nightly.link](https://nightly.link). For my first project with proper CI/CD, learning an external tool doesn't have proper ROI.
 
 ## Consequences

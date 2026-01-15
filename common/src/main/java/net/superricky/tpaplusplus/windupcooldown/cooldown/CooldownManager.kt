@@ -69,7 +69,6 @@ object CooldownManager {
             return EventResult.pass()
         }
 
-        cooledDownPlayer.sendSystemMessage(Component.literal(cooldownData.commandOnCooldown.getCommandNameFromType()))
         return EventResult.pass()
     }
 }

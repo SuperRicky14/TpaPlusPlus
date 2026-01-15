@@ -64,6 +64,9 @@ public class TPAPlusPlus {
         LOGGER.info("REGISTERING \"RequestTimeoutEvent\"...");
         RequestTimeoutEvent.EVENT.register(TimeoutManager.INSTANCE::onTimeoutEvent);
 
+        LOGGER.info("REGISTERING \"TimeoutTicker\"...");
+        TickEvent.SERVER_POST.register(TimeoutManager.INSTANCE::onMinecraftServerTick);
+
         if (Config.USE_NON_BLOCKING_ASYNC_TICK_LOOP.get()) {
             LOGGER.warn("USING EXPERIMENTAL NON BLOCKING TICK LOOP");
             LOGGER.info(MsgFmt.fmt("INITIALIZING TICK LOOP WITH RATE OF ${tick_rate}...", Map.of("tick_rate", Config.ASYNC_TICK_LOOP_UPDATE_RATE.get())));

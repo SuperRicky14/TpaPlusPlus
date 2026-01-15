@@ -19,6 +19,7 @@ import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.impl.TPAHereWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.impl.TPAWindup;
 
+import java.time.Duration;
 import java.util.Map;
 import java.util.Objects;
 
@@ -95,7 +96,7 @@ public class SendTPA {
         RequestHelper.getRequestSet().add(request);
 
         if (!Objects.equals(Config.TPA_TIMEOUT_IN_SECONDS.get(), Config.TPA_TIMEOUT_DISABLED)) {
-            TimeoutManager.INSTANCE.scheduleTeleportTimeout(request, Config.TPA_TIMEOUT_IN_SECONDS.get());
+            TimeoutManager.INSTANCE.scheduleTeleportTimeout(request, Duration.ofSeconds(Config.TPA_TIMEOUT_IN_SECONDS.get()));
         }
 
 

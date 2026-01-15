@@ -8,5 +8,5 @@ import net.superricky.tpaplusplus.requests.Request;
 public interface RequestTimeoutEvent {
     Event<RequestTimeoutEvent> EVENT = EventFactory.createEventResult();
 
-    EventResult onRequestTimeout(Request request);
+    EventResult onRequestTimeout(Timeout timeout);
 }

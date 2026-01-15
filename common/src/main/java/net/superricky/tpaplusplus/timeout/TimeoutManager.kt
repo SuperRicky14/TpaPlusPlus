@@ -3,31 +3,42 @@ package net.superricky.tpaplusplus.timeout
 import dev.architectury.event.EventResult
 import kotlinx.coroutines.*
 import net.minecraft.network.chat.Component
+import net.minecraft.server.MinecraftServer
 import net.superricky.tpaplusplus.config.Messages
 import net.superricky.tpaplusplus.requests.Request
 import net.superricky.tpaplusplus.requests.RequestHelper
 import net.superricky.tpaplusplus.util.MsgFmt
+import java.time.Duration
+import java.time.Instant
+
+data class Timeout(val timeoutTimestamp: Instant, val request: Request) // Don't like storing Request references, but legacy architecture said no.
 
 object TimeoutManager {
-    // Create a shared thread pool
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-    private val scope: CoroutineScope = CoroutineScope(dispatcher)
+    private val timeoutList: MutableList<Timeout> = mutableListOf();
 
-    fun scheduleTeleportTimeout(request: Request, timeoutSeconds: Long) {
-        scope.launch {
-            delay(timeoutSeconds * 1000L)
-            RequestTimeoutEvent.EVENT.invoker().onRequestTimeout(request)
+    fun scheduleTeleportTimeout(request: Request, timeoutSeconds: Duration) {
+        timeoutList.add(Timeout(Instant.now() + timeoutSeconds, request))
+    }
+
+    fun onMinecraftServerTick(server: MinecraftServer) {
+        timeoutList.removeIf { timeout ->
+            val timedOut = Instant.now().isAfter(timeout.timeoutTimestamp)
+            if (timedOut) {
+                RequestTimeoutEvent.EVENT.invoker().onRequestTimeout(timeout)
+            }
+            timedOut
         }
     }
 
-    fun onTimeoutEvent(request: Request): EventResult {
-        // Check if the request still exists before printing a timeout message
-        if (!RequestHelper.teleportRequestExists(request)) return EventResult.pass()
+    fun onTimeoutEvent(timeout: Timeout): EventResult {
+        if (!RequestHelper.teleportRequestExists(timeout.request)) {
+            return EventResult.pass();
+        }
 
-        val receiver = request.receiver
-        val sender = request.sender
+        val receiver = timeout.request.receiver
+        val sender = timeout.request.sender
 
-        if (request.isHereRequest) {
+        if (timeout.request.isHereRequest) {
             sender.sendSystemMessage(
                 Component.literal(
                     MsgFmt.fmt(
@@ -46,7 +57,7 @@ object TimeoutManager {
                 )
             )
 
-            RequestHelper.getRequestSet().remove(request)
+            RequestHelper.getRequestSet().remove(timeout.request)
             return EventResult.pass()
         }
 
@@ -68,11 +79,7 @@ object TimeoutManager {
             )
         )
 
-        RequestHelper.getRequestSet().remove(request)
+        RequestHelper.getRequestSet().remove(timeout.request)
         return EventResult.pass()
-    }
-
-    fun shutdownNow() {
-        scope.cancel()
     }
 }

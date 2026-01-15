@@ -20,6 +20,8 @@ import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.timeout.RequestTimeoutEvent;
 import net.superricky.tpaplusplus.timeout.TimeoutManager;
 import net.superricky.tpaplusplus.util.MsgFmt;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownExpiredEvent;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownManager;
 import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +65,12 @@ public class TPAPlusPlus {
 
         LOGGER.info("REGISTERING \"RequestTimeoutEvent\"...");
         RequestTimeoutEvent.EVENT.register(TimeoutManager.INSTANCE::onTimeoutEvent);
+
+        LOGGER.info("REGISTERING \"CooldownExpiredEvent\"...");
+        CooldownExpiredEvent.Companion.getEVENT().register(CooldownManager.INSTANCE::onCooldownExpired);
+
+        LOGGER.info("REGISTERING \"CooldownTicker\"...");
+        TickEvent.SERVER_POST.register(CooldownManager.INSTANCE::onMinecraftServerTick);
 
         LOGGER.info("REGISTERING \"TimeoutTicker\"...");
         TickEvent.SERVER_POST.register(TimeoutManager.INSTANCE::onMinecraftServerTick);

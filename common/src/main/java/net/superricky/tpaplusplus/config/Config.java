@@ -63,7 +63,6 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Integer> TOGGLE_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Integer> BLOCK_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Integer> UNBLOCK_COOLDOWN;
-    public static final ForgeConfigSpec.ConfigValue<Integer> GLOBAL_COOLDOWN;
 
     // Advanced Settings
     public static final ForgeConfigSpec.ConfigValue<Integer> AUTOSAVE_INTERVAL_SECONDS;
@@ -269,9 +268,6 @@ public class Config {
 
         UNBLOCK_COOLDOWN = BUILDER.comment("\n How long it takes for players to run /tpunblock.")
                 .defineInRange("Unblock Cooldown", 0, 0, Integer.MAX_VALUE);
-
-        GLOBAL_COOLDOWN = BUILDER.comment("\n The delay after a command is executed, before another one can be run.")
-                .defineInRange("Global Cooldown", 0, 0, Integer.MAX_VALUE);
 
         BUILDER.pop();
         BUILDER.push("Advanced Settings");

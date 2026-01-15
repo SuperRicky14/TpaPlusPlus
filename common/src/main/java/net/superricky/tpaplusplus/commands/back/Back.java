@@ -4,13 +4,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownData;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownManager;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.impl.BackWindup;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
 import java.util.Objects;
 
 public class Back {
@@ -32,11 +33,14 @@ public class Back {
             return;
         }
 
-        if (AsyncCooldownHelper.checkCommandCooldownAndNotify(executor, executor.getUUID(), CommandType.BACK))
+        CooldownData cooldown;
+        if ((cooldown = CooldownManager.INSTANCE.getPlayerCooldown(executor.getUUID(), CommandType.BACK)) != null) {
+            CooldownManager.INSTANCE.notifyCooldown(executor, cooldown);
             return;
+        }
 
         if (Config.BACK_COOLDOWN.get() > 0) // Check if cooldown is enabled
-            AsyncCooldownKt.scheduleCooldown(executor.getUUID(), Config.BACK_COOLDOWN.get(), CommandType.BACK);
+            CooldownManager.INSTANCE.scheduleCooldown(executor.getUUID(), Duration.ofSeconds(Config.BACK_COOLDOWN.get()), CommandType.BACK);
 
         if (Config.BACK_WINDUP.get() == 0) {
             absoluteTeleportToLatestDeath(executor, deathPosition);

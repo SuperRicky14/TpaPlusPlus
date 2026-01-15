@@ -9,12 +9,13 @@ import net.superricky.tpaplusplus.io.PlayerData;
 import net.superricky.tpaplusplus.io.SaveDataManager;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.util.MsgFmt;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownData;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownManager;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.impl.UnBlockPlayerWindup;
 
+import java.time.Duration;
 import java.util.Map;
 
 public class UnBlockPlayer {
@@ -34,11 +35,14 @@ public class UnBlockPlayer {
             return;
         }
 
-        if (AsyncCooldownHelper.checkCommandCooldownAndNotify(executor, executor.getUUID(), CommandType.UNBLOCK))
+        CooldownData cooldown;
+        if ((cooldown = CooldownManager.INSTANCE.getPlayerCooldown(executor.getUUID(), CommandType.UNBLOCK)) != null) {
+            CooldownManager.INSTANCE.notifyCooldown(executor, cooldown);
             return;
+        }
 
         if (Config.UNBLOCK_COOLDOWN.get() > 0) // Check if cooldown is enabled
-            AsyncCooldownKt.scheduleCooldown(executor.getUUID(), Config.UNBLOCK_COOLDOWN.get(), CommandType.UNBLOCK);
+            CooldownManager.INSTANCE.scheduleCooldown(executor.getUUID(), Duration.ofSeconds(Config.UNBLOCK_COOLDOWN.get()), CommandType.UNBLOCK);
 
         if (Config.UNBLOCK_WINDUP.get() == 0) {
             absoluteUnBlockPlayer(executorData, executor, blockedPlayer);

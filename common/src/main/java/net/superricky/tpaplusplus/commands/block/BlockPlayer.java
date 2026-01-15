@@ -8,12 +8,13 @@ import net.superricky.tpaplusplus.io.PlayerData;
 import net.superricky.tpaplusplus.io.SaveDataManager;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.util.MsgFmt;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownData;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownManager;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.impl.BlockPlayerWindup;
 
+import java.time.Duration;
 import java.util.Map;
 
 public class BlockPlayer {
@@ -33,11 +34,14 @@ public class BlockPlayer {
             return;
         }
 
-        if (AsyncCooldownHelper.checkCommandCooldownAndNotify(executor, executor.getUUID(), CommandType.BLOCK))
+        CooldownData cooldown;
+        if ((cooldown = CooldownManager.INSTANCE.getPlayerCooldown(executor.getUUID(), CommandType.BLOCK)) != null) {
+            CooldownManager.INSTANCE.notifyCooldown(executor, cooldown);
             return;
+        }
 
         if (Config.BLOCK_COOLDOWN.get() > 0) // Check if cooldown is enabled
-            AsyncCooldownKt.scheduleCooldown(executor.getUUID(), Config.BLOCK_COOLDOWN.get(), CommandType.BLOCK);
+            CooldownManager.INSTANCE.scheduleCooldown(executor.getUUID(), Duration.ofSeconds(Config.BLOCK_COOLDOWN.get()), CommandType.BLOCK);
 
         if (Config.BLOCK_WINDUP.get() == 0) {
             absoluteBlockPlayer(executorData, executor, blockedPlayer);

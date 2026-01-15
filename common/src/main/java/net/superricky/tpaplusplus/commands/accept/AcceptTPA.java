@@ -9,11 +9,12 @@ import net.superricky.tpaplusplus.requests.RequestGrabUtil;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.util.MsgFmt;
 import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownHelper;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.AsyncCooldownKt;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownData;
+import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownManager;
 import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
 import net.superricky.tpaplusplus.windupcooldown.windup.impl.AcceptWindup;
 
+import java.time.Duration;
 import java.util.Map;
 import java.util.Objects;
 
@@ -25,11 +26,14 @@ public class AcceptTPA {
             return;
         }
 
-        if (AsyncCooldownHelper.checkCommandCooldownAndNotify(receiver, receiver.getUUID(), CommandType.ACCEPT))
+        CooldownData cooldown;
+        if ((cooldown = CooldownManager.INSTANCE.getPlayerCooldown(receiver.getUUID(), CommandType.ACCEPT)) != null) {
+            CooldownManager.INSTANCE.notifyCooldown(receiver, cooldown);
             return;
+        }
 
         if (Config.ACCEPT_COOLDOWN.get() > 0) // Check if cooldown is enabled
-            AsyncCooldownKt.scheduleCooldown(receiver.getUUID(), Config.ACCEPT_COOLDOWN.get(), CommandType.ACCEPT);
+            CooldownManager.INSTANCE.scheduleCooldown(receiver.getUUID(), Duration.ofSeconds(Config.ACCEPT_COOLDOWN.get()), CommandType.ACCEPT);
 
         if (Config.ACCEPT_WINDUP.get() == 0) {
             absoluteAcceptFunctionality(request, receiver);

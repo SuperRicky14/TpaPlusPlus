@@ -94,7 +94,6 @@ public class Messages {
     public static final ForgeConfigSpec.ConfigValue<String> WINDUP_TIME_REMAINING;
     public static final ForgeConfigSpec.ConfigValue<String> PLAYER_MOVED_DURING_WINDUP;
     public static final ForgeConfigSpec.ConfigValue<String> COMMAND_ON_COOLDOWN_MESSAGE;
-    public static final ForgeConfigSpec.ConfigValue<String> PLAYER_ON_GLOBAL_COOLDOWN_MESSAGE;
 
     static {
         BUILDER.push("TPA++ Messages");
@@ -364,12 +363,8 @@ public class Messages {
 
         COMMAND_ON_COOLDOWN_MESSAGE = BUILDER.comment("\n The message displayed when a player tries to execute a command but it is currently on cooldown.")
                 .comment("Placeholders: \"${command_used}\": \"The command that was on cooldown. This placeholder respects the command names set in the config.\"")
-                .comment("              \"${time_remaining}\": \"How long is left on the cooldown (in seconds)\"")
-                .define("COMMAND_ON_COOLDOWN_MESSAGE", "§6\"§c/${command_used}§6\" §cis currently on §ccooldown§6, please wait §c${time_remaining}§6s!");
-
-        PLAYER_ON_GLOBAL_COOLDOWN_MESSAGE = BUILDER.comment("\n The message displayed when a player tries to execute a command, but they are currently on cooldown.")
-                .comment("Placeholders: \"${time_remaining}\": \"How long is left on the cooldown (in seconds)\"")
-                .define("PLAYER_ON_GLOBAL_COOLDOWN_MESSAGE", "§cYou §6are currently on §ccooldown§6, please wait §c${time_remaining}§6s before running another command!");
+                .comment("              \"${time_remaining}\": \"How long is left on the cooldown. Already includes appropriate units of time, for example 1h 30m 30s, or 5.602s, or 600ms.\"")
+                .define("COMMAND_ON_COOLDOWN_MESSAGE", "§6\"§c/${command_used}§6\" §cis currently on §ccooldown§6, please wait §c${time_remaining}§6!");
 
         BUILDER.pop(2);
         SPEC = BUILDER.build();

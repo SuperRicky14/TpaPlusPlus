@@ -2,7 +2,6 @@ package net.superricky.tpaplusplus.commands.unblock;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.superricky.tpaplusplus.commands.block.PlayerBlockingHelper;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.cooldown.CommandType;
@@ -24,12 +23,12 @@ public class UnBlockPlayer {
             return;
         }
 
-        PlayerData executorData = SaveDataManager.getPlayerData(executor);
+        PlayerData executorData = SaveDataManager.INSTANCE.getPlayerData(executor);
 
-        if (Boolean.FALSE.equals(executorData.getBlockedPlayers().contains(blockedPlayer.getUUID()))) {
+        if (!executorData.hasBlockedPlayer(blockedPlayer.getUUID())) {
             // Executor has not blocked the other player
             executor.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.HAVENT_BLOCKED_PLAYER.get(),
-                    Map.of(PlayerBlockingHelper.BLOCKED_PLAYER_CONSTANT, blockedPlayer.getName().getString()))));
+                    Map.of("blocked_player", blockedPlayer.getName().getString()))));
             return;
         }
 

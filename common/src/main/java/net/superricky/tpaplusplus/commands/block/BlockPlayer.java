@@ -23,12 +23,12 @@ public class BlockPlayer {
             return;
         }
 
-        PlayerData executorData = SaveDataManager.getPlayerData(executor);
+        PlayerData executorData = SaveDataManager.INSTANCE.getPlayerData(executor);
 
-        if (executorData.getBlockedPlayers().contains(blockedPlayer.getUUID())) {
+        if (executorData.hasBlockedPlayer(blockedPlayer.getUUID())) {
             // Executor has already blocked the other player
             executor.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.ALREADY_BLOCKED_PLAYER.get(),
-                    Map.of(PlayerBlockingHelper.BLOCKED_PLAYER_CONSTANT, blockedPlayer.getName().getString()))));
+                    Map.of("blocked_player", blockedPlayer.getName().getString()))));
             return;
         }
 
@@ -48,7 +48,7 @@ public class BlockPlayer {
         executorData.addBlockedPlayer(blockedPlayer.getUUID()); // Add the blocked player to the executors list.
 
         executor.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_BLOCKED_PLAYER.get(),
-                Map.of(PlayerBlockingHelper.BLOCKED_PLAYER_CONSTANT, blockedPlayer.getName().getString()))));
+                Map.of("blocked_player", blockedPlayer.getName().getString()))));
 
         if (Boolean.TRUE.equals(Config.SEND_BLOCKED_MESSAGES_TO_BOTH_PLAYERS.get())) {
             // Sending Blocked / Unblocked Messages has been enabled in the config

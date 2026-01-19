@@ -1,31 +1,19 @@
-package net.superricky.tpaplusplus.io;
+package net.superricky.tpaplusplus.io
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.UUID
 
-public class PlayerData {
-    private volatile boolean tpToggle = false;
-    private final List<UUID> blockedPlayers = Collections.synchronizedList(new ArrayList<>());
+data class PlayerData(var tPToggle: Boolean = false) {
+    private val blockedPlayers: MutableSet<UUID> = hashSetOf()
 
-    public boolean getTPToggle() {
-        return tpToggle;
+    fun addBlockedPlayer(player: UUID) {
+        blockedPlayers.add(player)
     }
 
-    public void setTPToggle(boolean tpToggle) {
-        this.tpToggle = tpToggle;
+    fun removeBlockedPlayer(player: UUID) {
+        blockedPlayers.remove(player)
     }
 
-    public void addBlockedPlayer(UUID player) {
-        blockedPlayers.add(player);
-    }
-
-    public void removeBlockedPlayer(UUID player) {
-        blockedPlayers.remove(player);
-    }
-
-    public List<UUID> getBlockedPlayers() {
-        return List.copyOf(blockedPlayers);
+    fun hasBlockedPlayer(player: UUID): Boolean {
+        return blockedPlayers.contains(player)
     }
 }

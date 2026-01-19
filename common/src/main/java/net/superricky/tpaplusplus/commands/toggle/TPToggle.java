@@ -32,7 +32,7 @@ public class TPToggle {
     }
 
     public static void toggleTP(ServerPlayer executor) {
-        PlayerData executorData = SaveDataManager.getPlayerData(executor);
+        PlayerData executorData = SaveDataManager.INSTANCE.getPlayerData(executor);
 
         executorData.setTPToggle(!executorData.getTPToggle()); // Switch the TPToggle of the player
 

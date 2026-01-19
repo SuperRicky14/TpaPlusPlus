@@ -1,18 +1,43 @@
-package net.superricky.tpaplusplus.io;
+package net.superricky.tpaplusplus.io
 
-import net.superricky.tpaplusplus.config.Config;
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.time.delay
+import net.minecraft.server.MinecraftServer
+import net.superricky.tpaplusplus.config.Config
+import java.time.Duration
 
-public class ServerLifecycleHandler {
-    public static void onServerStart() {
-        AutosaveSchedulerKt.initialiseAutoSaveService(Config.AUTOSAVE_INTERVAL_SECONDS.get());
+object AutosaveLifecycle {
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val scope: CoroutineScope = CoroutineScope(dispatcher)
+
+    private var autosaving = true
+
+    fun onServerStart(server: MinecraftServer) {
+        autosaving = true
+        initialiseAutoSaveService(Config.AUTOSAVE_INTERVAL_SECONDS.get().toLong())
     }
 
-    public static void onServerStop() {
-        AutosaveSchedulerKt.shutdownNow();
+    fun onServerStop(server: MinecraftServer) {
+        autosaving = false
+        scope.coroutineContext.cancelChildren()
 
-        SaveDataManager.savePlayerData();
+        SaveDataManager.savePlayerData()
     }
 
-    private ServerLifecycleHandler() {
+    fun initialiseAutoSaveService(autosaveIntervalSeconds: Long) {
+        SaveDataManager.loadPlayerData()
+        scope.launch {
+            while (autosaving) {
+                SaveDataManager.savePlayerData()
+                System.out.println("Before")
+                delay(Duration.ofSeconds(autosaveIntervalSeconds))
+                System.out.println("After")
+            }
+        }
     }
 }

@@ -1,7 +1,6 @@
 package net.superricky.tpaplusplus.timeout
 
 import dev.architectury.event.EventResult
-import kotlinx.coroutines.*
 import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
 import net.superricky.tpaplusplus.config.Messages

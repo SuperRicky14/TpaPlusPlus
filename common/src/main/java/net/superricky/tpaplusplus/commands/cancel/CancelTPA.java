@@ -4,15 +4,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
+import net.superricky.tpaplusplus.cooldown.CommandType;
+import net.superricky.tpaplusplus.cooldown.CooldownData;
+import net.superricky.tpaplusplus.cooldown.CooldownManager;
 import net.superricky.tpaplusplus.requests.Request;
 import net.superricky.tpaplusplus.requests.RequestGrabUtil;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.util.MsgFmt;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownData;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownManager;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
-import net.superricky.tpaplusplus.windupcooldown.windup.impl.CancelWindup;
 
 import java.time.Duration;
 import java.util.Map;
@@ -35,11 +33,7 @@ public class CancelTPA {
         if (Config.CANCEL_COOLDOWN.get() > 0) // Check if cooldown is enabled
             CooldownManager.INSTANCE.scheduleCooldown(sender.getUUID(), Duration.ofSeconds(Config.CANCEL_COOLDOWN.get()), CommandType.CANCEL);
 
-        if (Config.CANCEL_WINDUP.get() == 0) {
-            absoluteCancel(request);
-        } else {
-            AsyncWindup.INSTANCE.schedule(new CancelWindup(request));
-        }
+        absoluteCancel(request);
     }
 
     public static void absoluteCancel(Request request) {

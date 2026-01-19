@@ -30,29 +30,6 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Boolean> ALLOW_INTER_DIMENSIONAL_TELEPORT;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DISABLE_RANGE_CHECKS_INTER_DIMENSIONAL;
 
-    // Windup
-    public static final ForgeConfigSpec.ConfigValue<Double> BACK_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Double> ACCEPT_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Double> DENY_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Double> CANCEL_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Double> TPA_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Double> TPAHERE_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Double> TOGGLE_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Double> BLOCK_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Double> UNBLOCK_WINDUP;
-    public static final ForgeConfigSpec.ConfigValue<Double> WINDUP_DECIMAL_MESSAGE_THRESHOLD;
-
-    // Windup Distance
-    public static final ForgeConfigSpec.ConfigValue<Double> BACK_WINDUP_DISTANCE;
-    public static final ForgeConfigSpec.ConfigValue<Double> ACCEPT_WINDUP_DISTANCE;
-    public static final ForgeConfigSpec.ConfigValue<Double> DENY_WINDUP_DISTANCE;
-    public static final ForgeConfigSpec.ConfigValue<Double> CANCEL_WINDUP_DISTANCE;
-    public static final ForgeConfigSpec.ConfigValue<Double> TPA_WINDUP_DISTANCE;
-    public static final ForgeConfigSpec.ConfigValue<Double> TPAHERE_WINDUP_DISTANCE;
-    public static final ForgeConfigSpec.ConfigValue<Double> TOGGLE_WINDUP_DISTANCE;
-    public static final ForgeConfigSpec.ConfigValue<Double> BLOCK_WINDUP_DISTANCE;
-    public static final ForgeConfigSpec.ConfigValue<Double> UNBLOCK_WINDUP_DISTANCE;
-
     // Cooldown
     public static final ForgeConfigSpec.ConfigValue<Integer> BACK_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Integer> ACCEPT_COOLDOWN;
@@ -159,83 +136,6 @@ public class Config {
                 .define("Disable Inter Dimensional Range Checks", true);
 
         BUILDER.pop();
-        BUILDER.push("Windups");
-        BUILDER.push("Delay");
-        BUILDER.comment(" This section of the config controls how long things like commands take to execute.");
-        BUILDER.comment(" This is measured in seconds.");
-        BUILDER.comment(" These values support three decimal places of precision (For example, you can enter 1.5 or 10.375, but not 20.1234 (it will still work, just anything after the 3rd decimal place will be discarded)).");
-        BUILDER.comment(" Set this to 0 if you wish to disable the countdown");
-
-        BACK_WINDUP = BUILDER.comment("\n How long it takes for players to run /back.")
-                .defineInRange("Back Windup", 0, 0, 2_147_483_647d);
-
-        ACCEPT_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpaaccept.")
-                .defineInRange("Accept Windup", 0, 0, 2_147_483_647d);
-
-        DENY_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpadeny.")
-                .defineInRange("Deny Windup", 0, 0, 2_147_483_647d);
-
-        CANCEL_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpacancel.")
-                .defineInRange("Cancel Windup", 0, 0, 2_147_483_647d);
-
-        TPA_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpa")
-                .defineInRange("TPA Windup", 0, 0, 2_147_483_647d);
-
-        TPAHERE_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpahere")
-                .defineInRange("TPAHere Windup", 0, 0, 2_147_483_647d);
-
-        TOGGLE_WINDUP = BUILDER.comment("\n How long it takes for players to run /tptoggle.")
-                .defineInRange("Toggle Windup", 0, 0, 2_147_483_647d);
-
-        BLOCK_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpblock.")
-                .defineInRange("Block Windup", 0, 0, 2_147_483_647d);
-
-        UNBLOCK_WINDUP = BUILDER.comment("\n How long it takes for players to run /tpunblock.")
-                .defineInRange("Unblock Windup", 0, 0, 2_147_483_647d);
-
-        WINDUP_DECIMAL_MESSAGE_THRESHOLD = BUILDER.comment("\n The threshold before a message is sent to the player with the delay, this value ranges from 0 - 1 because this represents the number after the decimal place.")
-                .comment(" Okay that probably made no sense, so here's an example:")
-                .comment(" Say you have the /tpa windup set to 3.75. Then you have this set to 0.5. Since 0.75 (/tpa windup without the whole number) is GREATER than 0.5, when the player first enters the command, a message will show up saying 3.75 seconds remaining.")
-                .comment(" But now lets say the /tpahere windup is set to 1.25. Since 0.25 (again the /tpahere windup without the whole number) is LESS than 0.5, no message will be sent to the player, and the countdown will just continue on with 3.. 2.. 1.. etc.")
-                .comment(" If this is set to 1, no messages will be displayed. If this is set to 0, ALL messages will be displayed.")
-                .comment(" This has no effect on the countdown after the initial command.")
-                .defineInRange("Windup Decimal Message Threshold", 0, 0, 1d);
-
-        BUILDER.pop();
-        BUILDER.push("Distance");
-        BUILDER.comment(" This section of the config controls how far away people can be, from the position that they executed each command.");
-        BUILDER.comment(" This is measured in blocks.");
-        BUILDER.comment(" Set this to 0 if you want players to not be able to move at all during a countdown, or to -1 to completely disable this feature and allow them to move around freely during a windup.");
-        BUILDER.comment(" WARNING: SETTING THESE VALUES IN-BETWEEN 0 AND -1 WILL CAUSE THEIR RESPECTIVE COMMAND TO BE UNUSABLE.");
-
-        BACK_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /back.")
-                .defineInRange("Back Windup Distance", 0, -1, Double.MAX_VALUE);
-
-        ACCEPT_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpaaccept.")
-                .defineInRange("Accept Windup Distance", 0, -1, Double.MAX_VALUE);
-
-        DENY_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpadeny.")
-                .defineInRange("Deny Windup Distance", 0, -1, Double.MAX_VALUE);
-
-        CANCEL_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpacancel.")
-                .defineInRange("Cancel Windup Distance", 0, -1, Double.MAX_VALUE);
-
-        TPA_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpa.")
-                .defineInRange("TPA Windup Distance", 0, -1, Double.MAX_VALUE);
-
-        TPAHERE_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpahere.")
-                .defineInRange("TPAHere Windup Distance", 0, -1, Double.MAX_VALUE);
-
-        TOGGLE_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tptoggle.")
-                .defineInRange("Toggle Windup Distance", 0, -1, Double.MAX_VALUE);
-
-        BLOCK_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpblock.")
-                .defineInRange("Block Windup Distance", 0, -1, Double.MAX_VALUE);
-
-        UNBLOCK_WINDUP_DISTANCE = BUILDER.comment("\n How far away players can be from the position where they ran /tpunblock.")
-                .defineInRange("Unblock Windup Distance", 0, -1, Double.MAX_VALUE);
-
-        BUILDER.pop(2);
 
         BUILDER.push("Cooldowns");
         BUILDER.comment(" This section of the config controls the cooldown (how long the player must wait) after a command executes.");

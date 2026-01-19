@@ -4,11 +4,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownData;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownManager;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
-import net.superricky.tpaplusplus.windupcooldown.windup.impl.BackWindup;
+import net.superricky.tpaplusplus.cooldown.CommandType;
+import net.superricky.tpaplusplus.cooldown.CooldownData;
+import net.superricky.tpaplusplus.cooldown.CooldownManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
@@ -42,11 +40,7 @@ public class Back {
         if (Config.BACK_COOLDOWN.get() > 0) // Check if cooldown is enabled
             CooldownManager.INSTANCE.scheduleCooldown(executor.getUUID(), Duration.ofSeconds(Config.BACK_COOLDOWN.get()), CommandType.BACK);
 
-        if (Config.BACK_WINDUP.get() == 0) {
-            absoluteTeleportToLatestDeath(executor, deathPosition);
-        } else {
-            AsyncWindup.INSTANCE.schedule(new BackWindup(executor, deathPosition));
-        }
+        absoluteTeleportToLatestDeath(executor, deathPosition);
     }
 
     public static void absoluteTeleportToLatestDeath(ServerPlayer executor, LevelBoundVec3 deathPosition) {

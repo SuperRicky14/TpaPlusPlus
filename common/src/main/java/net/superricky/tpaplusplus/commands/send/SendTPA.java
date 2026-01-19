@@ -5,6 +5,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.commands.block.PlayerBlockingHelper;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
+import net.superricky.tpaplusplus.cooldown.CommandType;
+import net.superricky.tpaplusplus.cooldown.CooldownData;
+import net.superricky.tpaplusplus.cooldown.CooldownManager;
 import net.superricky.tpaplusplus.io.PlayerData;
 import net.superricky.tpaplusplus.io.SaveDataManager;
 import net.superricky.tpaplusplus.limitations.LimitationManager;
@@ -12,12 +15,6 @@ import net.superricky.tpaplusplus.requests.Request;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.timeout.TimeoutManager;
 import net.superricky.tpaplusplus.util.MsgFmt;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownData;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownManager;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
-import net.superricky.tpaplusplus.windupcooldown.windup.impl.TPAHereWindup;
-import net.superricky.tpaplusplus.windupcooldown.windup.impl.TPAWindup;
 
 import java.time.Duration;
 import java.util.Map;
@@ -73,11 +70,7 @@ public class SendTPA {
             if (Config.TPAHERE_COOLDOWN.get() > 0) // Check if cooldown is enabled
                 CooldownManager.INSTANCE.scheduleCooldown(sender.getUUID(), Duration.ofSeconds(Config.TPAHERE_COOLDOWN.get()), CommandType.TPAHERE);
 
-            if (Config.TPAHERE_WINDUP.get() == 0) {
-                absoluteSendTeleportRequest(sender, receiver, isHereRequest);
-            } else {
-                AsyncWindup.INSTANCE.schedule(new TPAHereWindup(sender, receiver));
-            }
+            absoluteSendTeleportRequest(sender, receiver, isHereRequest);
         } else {
             CooldownData cooldown;
             if ((cooldown = CooldownManager.INSTANCE.getPlayerCooldown(sender.getUUID(), CommandType.TPA)) != null) {
@@ -88,11 +81,7 @@ public class SendTPA {
             if (Config.TPA_COOLDOWN.get() > 0) // Check if cooldown is enabled
                 CooldownManager.INSTANCE.scheduleCooldown(sender.getUUID(), Duration.ofSeconds(Config.TPA_COOLDOWN.get()), CommandType.TPA);
 
-            if (Config.TPA_WINDUP.get() == 0) {
-                absoluteSendTeleportRequest(sender, receiver, isHereRequest);
-            } else {
-                AsyncWindup.INSTANCE.schedule(new TPAWindup(sender, receiver));
-            }
+            absoluteSendTeleportRequest(sender, receiver, isHereRequest);
         }
     }
 

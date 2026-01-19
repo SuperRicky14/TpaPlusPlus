@@ -1,4 +1,4 @@
-package net.superricky.tpaplusplus.windupcooldown.cooldown
+package net.superricky.tpaplusplus.cooldown
 
 import dev.architectury.event.Event
 import dev.architectury.event.EventFactory

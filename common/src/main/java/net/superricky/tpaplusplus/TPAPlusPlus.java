@@ -15,14 +15,13 @@ import net.superricky.tpaplusplus.commands.toggle.TPToggleCommand;
 import net.superricky.tpaplusplus.commands.tpaplusplus.TPAPlusPlusCommand;
 import net.superricky.tpaplusplus.commands.unblock.TPUnBlockCommand;
 import net.superricky.tpaplusplus.config.Config;
+import net.superricky.tpaplusplus.cooldown.CooldownExpiredEvent;
+import net.superricky.tpaplusplus.cooldown.CooldownManager;
 import net.superricky.tpaplusplus.io.ServerLifecycleHandler;
 import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.timeout.RequestTimeoutEvent;
 import net.superricky.tpaplusplus.timeout.TimeoutManager;
 import net.superricky.tpaplusplus.util.MsgFmt;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownExpiredEvent;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownManager;
-import net.superricky.tpaplusplus.windupcooldown.windup.WindupWatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,16 +73,6 @@ public class TPAPlusPlus {
 
         LOGGER.info("REGISTERING \"TimeoutTicker\"...");
         TickEvent.SERVER_POST.register(TimeoutManager.INSTANCE::onMinecraftServerTick);
-
-        if (Config.USE_NON_BLOCKING_ASYNC_TICK_LOOP.get()) {
-            LOGGER.warn("USING EXPERIMENTAL NON BLOCKING TICK LOOP");
-            LOGGER.info(MsgFmt.fmt("INITIALIZING TICK LOOP WITH RATE OF ${tick_rate}...", Map.of("tick_rate", Config.ASYNC_TICK_LOOP_UPDATE_RATE.get())));
-            WindupWatcher.INSTANCE.startAsyncTickLoop(Config.ASYNC_TICK_LOOP_UPDATE_RATE.get());
-        } else {
-            LOGGER.info("USING SYNCHRONOUS TICK LOOP");
-            LOGGER.info("REGISTERING \"TickEvent.SERVER_POST\"...");
-            TickEvent.SERVER_POST.register(server -> WindupWatcher.INSTANCE.runTick());
-        }
 
         LOGGER.info("INITIALIZING VERSION CHECKING...");
         UpdateCheckKt.initVersionCheckDaemon();

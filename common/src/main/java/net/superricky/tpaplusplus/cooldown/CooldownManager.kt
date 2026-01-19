@@ -1,4 +1,4 @@
-package net.superricky.tpaplusplus.windupcooldown.cooldown
+package net.superricky.tpaplusplus.cooldown
 
 import dev.architectury.event.EventResult
 import net.minecraft.network.chat.Component
@@ -6,9 +6,9 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.superricky.tpaplusplus.config.Messages
 import net.superricky.tpaplusplus.util.MsgFmt
-import java.util.UUID
 import java.time.Duration
 import java.time.Instant
+import java.util.*
 
 data class CooldownData(val playerCooldownUUID: UUID, val cooldownTimestamp: Instant, val commandOnCooldown: CommandType)
 

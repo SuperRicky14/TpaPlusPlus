@@ -5,15 +5,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.superricky.tpaplusplus.commands.block.PlayerBlockingHelper;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
+import net.superricky.tpaplusplus.cooldown.CommandType;
+import net.superricky.tpaplusplus.cooldown.CooldownData;
+import net.superricky.tpaplusplus.cooldown.CooldownManager;
 import net.superricky.tpaplusplus.io.PlayerData;
 import net.superricky.tpaplusplus.io.SaveDataManager;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.util.MsgFmt;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownData;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CooldownManager;
-import net.superricky.tpaplusplus.windupcooldown.cooldown.CommandType;
-import net.superricky.tpaplusplus.windupcooldown.windup.AsyncWindup;
-import net.superricky.tpaplusplus.windupcooldown.windup.impl.UnBlockPlayerWindup;
 
 import java.time.Duration;
 import java.util.Map;
@@ -44,11 +42,7 @@ public class UnBlockPlayer {
         if (Config.UNBLOCK_COOLDOWN.get() > 0) // Check if cooldown is enabled
             CooldownManager.INSTANCE.scheduleCooldown(executor.getUUID(), Duration.ofSeconds(Config.UNBLOCK_COOLDOWN.get()), CommandType.UNBLOCK);
 
-        if (Config.UNBLOCK_WINDUP.get() == 0) {
-            absoluteUnBlockPlayer(executorData, executor, blockedPlayer);
-        } else {
-            AsyncWindup.INSTANCE.schedule(new UnBlockPlayerWindup(executorData, executor, blockedPlayer));
-        }
+        absoluteUnBlockPlayer(executorData, executor, blockedPlayer);
     }
 
     public static void absoluteUnBlockPlayer(PlayerData executorData, ServerPlayer executor, ServerPlayer blockedPlayer) {

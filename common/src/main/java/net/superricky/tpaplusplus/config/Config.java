@@ -9,7 +9,6 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Boolean> BACK_COMMAND_ENABLED;
     public static final ForgeConfigSpec.ConfigValue<Long> TPA_TIMEOUT_IN_SECONDS;
     public static final Long TPA_TIMEOUT_DISABLED = 0L;
-    public static final ForgeConfigSpec.ConfigValue<Integer> TPA_ACCEPT_TIME_IN_SECONDS;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ALLOW_TPTOGGLED_PLAYERS_TO_SEND_REQUESTS;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SEND_BLOCKED_MESSAGES_TO_BOTH_PLAYERS;
 
@@ -55,11 +54,6 @@ public class Config {
         TPA_TIMEOUT_IN_SECONDS = BUILDER.comment(" How long until teleport requests expire (in seconds)")
                 .comment(" The default is 60 seconds ( 1 minute ), if you wish to disable this set this to 0")
                 .defineInRange("TPA Timeout", 60L, 0L, Long.MAX_VALUE);
-
-        // TPA ACCEPT TIME
-        TPA_ACCEPT_TIME_IN_SECONDS = BUILDER.comment("\n How long it takes until a player is teleported via /tpaaccept")
-                .comment(" The default is 5 seconds, if you wish to disable this set this to 0")
-                .defineInRange("TPA Accept Time", 5, 0, Integer.MAX_VALUE);
 
         // BACK COMMAND
         BACK_COMMAND_ENABLED = BUILDER.comment("\n Whether or not the /back system is enabled.")

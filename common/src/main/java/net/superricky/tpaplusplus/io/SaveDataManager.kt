@@ -1,9 +1,10 @@
 @file:UseSerializers(UUIDSerializer::class)
 package net.superricky.tpaplusplus.io
 
-import com.google.gson.JsonSyntaxException
 import com.mojang.logging.LogUtils
+import kotlinx.io.files.FileNotFoundException
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.json.Json
@@ -45,36 +46,62 @@ object SaveDataManager {
             }
         }
 
-        try {
-            synchronized (saveDataLock) {
-                FileOutputStream(MOD_SAVEDATA_FILE_PATH).use { writer ->
+        runCatching {
+            FileOutputStream(MOD_SAVEDATA_FILE_PATH).use { writer ->
+                synchronized (saveDataLock) {
                     // We have to manually pass in our serializer here since Kotlinx.serialization's @Serializable annotation doesn't work for field types. See https://github.com/Kotlin/kotlinx.serialization/issues/2731 for more info
                     Json.encodeToStream(MapSerializer(UUIDSerializer, PlayerData.serializer()), saveData, writer)
                 }
             }
-        } catch (e: IOException) {
-            LOGGER.error("An IOException occurred when trying to save playerData.")
-            LOGGER.error(e.message)
+        }.onFailure { error ->
+            when (error) {
+                is IOException -> LOGGER.error("An I/O error occured whilst trying to read TPA++'s save data!", error)
+
+                is SerializationException -> LOGGER.error("""
+                    Failed to serialize TPA++'s save data to JSON!
+                """.trimIndent(), error)
+            }
+        }
+    }
+
+    fun loadPlayerData() {
+        if (!MOD_SAVEDATA_FOLDER.exists()) {
+            LOGGER.info("TPA++ save data folder does not exist, aborting loading procedure.")
+            return
+        }
+
+        runCatching {
+            FileInputStream(MOD_SAVEDATA_FILE_PATH).use { reader ->
+                // We have to manually pass in our serializer here since Kotlinx.serialization's @Serializable annotation doesn't work for field types. See https://github.com/Kotlin/kotlinx.serialization/issues/2731 for more info
+                val deserializedSaveData = deserializePlayerData(reader).toMutableMap()
+                LOGGER.info("Successfully loaded player data!")
+                return@runCatching deserializedSaveData
+            }
+        }.onFailure { error ->
+            when (error) {
+                is FileNotFoundException -> LOGGER.info("TPA++ save data does not exist, aborting loading procedure.")
+
+                is IOException -> LOGGER.error("An I/O error occured whilst trying to read TPA++'s save data!", error)
+
+                is SerializationException -> LOGGER.error("""
+                        Failed to deserialize TPA++'s save data.
+                        Did you manually edit \"$MOD_SAVEDATA_FILE_NAME\"? If so, you might want to check your syntax!
+                    """.trimIndent(), error)
+
+                is IllegalArgumentException -> LOGGER.error("""
+                        TPA++'s save data is not representative of the in-memory format!
+                        Is the save data from a different version?
+                    """.trimIndent(), error)
+
+                else -> throw error
+            }
+        }.onSuccess { deserializedPlayerData ->
+            synchronized (saveDataLock) { saveData = deserializedPlayerData.toMutableMap() }
         }
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun loadPlayerData() = synchronized (saveDataLock) {
-        if (!MOD_SAVEDATA_FOLDER.exists()) return
-
-        try {
-            FileInputStream(MOD_SAVEDATA_FILE_PATH).use { reader ->
-                // We have to manually pass in our serializer here since Kotlinx.serialization's @Serializable annotation doesn't work for field types. See https://github.com/Kotlin/kotlinx.serialization/issues/2731 for more info
-                saveData = Json.decodeFromStream(MapSerializer(UUIDSerializer, PlayerData.serializer()), reader).toMutableMap()
-                LOGGER.info("Successfully loaded player data!")
-            }
-        } catch (e: IOException) {
-            LOGGER.error("An IOException occurred when trying to load playerData.")
-            LOGGER.error(e.message)
-        } catch (e: JsonSyntaxException) {
-            LOGGER.error("An JsonSyntaxException occurred when trying to load playerData.")
-            LOGGER.error("Did you manually edit \"$MOD_SAVEDATA_FILE_NAME\"? If so, you might want to check your syntax!")
-            LOGGER.error(e.message)
-        }
+    private fun deserializePlayerData(reader: FileInputStream): Map<UUID, PlayerData> {
+        return Json.decodeFromStream(MapSerializer(UUIDSerializer, PlayerData.serializer()), reader)
     }
 }

@@ -1,10 +1,12 @@
+@file:UseSerializers(UUIDSerializer::class)
 package net.superricky.tpaplusplus.io
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import java.util.UUID
 
-data class PlayerData(var tPToggle: Boolean = false) {
-    private val blockedPlayers: MutableSet<UUID> = hashSetOf()
-
+@Serializable
+data class PlayerData(var tPToggle: Boolean = false, private val blockedPlayers: MutableSet<UUID> = hashSetOf()) {
     fun addBlockedPlayer(player: UUID) {
         blockedPlayers.add(player)
     }

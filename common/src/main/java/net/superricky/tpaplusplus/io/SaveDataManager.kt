@@ -1,14 +1,19 @@
+@file:UseSerializers(UUIDSerializer::class)
 package net.superricky.tpaplusplus.io
 
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
-import com.google.gson.reflect.TypeToken
 import com.mojang.logging.LogUtils
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.UseSerializers
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.encodeToStream
 import net.minecraft.server.level.ServerPlayer
 import org.slf4j.Logger
 import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 
@@ -30,9 +35,8 @@ object SaveDataManager {
         }
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     fun savePlayerData() {
-        val gson = GsonBuilder().setPrettyPrinting().create()
-
         if (!MOD_SAVEDATA_FOLDER.exists()) {
             val success = MOD_SAVEDATA_FOLDER.mkdirs()
             if (!success) {
@@ -43,8 +47,9 @@ object SaveDataManager {
 
         try {
             synchronized (saveDataLock) {
-                FileWriter(MOD_SAVEDATA_FILE_PATH).use { writer ->
-                    gson.toJson(saveData, writer)
+                FileOutputStream(MOD_SAVEDATA_FILE_PATH).use { writer ->
+                    // We have to manually pass in our serializer here since Kotlinx.serialization's @Serializable annotation doesn't work for field types. See https://github.com/Kotlin/kotlinx.serialization/issues/2731 for more info
+                    Json.encodeToStream(MapSerializer(UUIDSerializer, PlayerData.serializer()), saveData, writer)
                 }
             }
         } catch (e: IOException) {
@@ -53,14 +58,14 @@ object SaveDataManager {
         }
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     fun loadPlayerData() = synchronized (saveDataLock) {
-        val gson = GsonBuilder().setPrettyPrinting().create()
-
         if (!MOD_SAVEDATA_FOLDER.exists()) return
 
         try {
-            FileReader(MOD_SAVEDATA_FILE_PATH).use { reader ->
-                saveData = gson.fromJson(reader, object : TypeToken<MutableMap<UUID, PlayerData>>() {}.type)
+            FileInputStream(MOD_SAVEDATA_FILE_PATH).use { reader ->
+                // We have to manually pass in our serializer here since Kotlinx.serialization's @Serializable annotation doesn't work for field types. See https://github.com/Kotlin/kotlinx.serialization/issues/2731 for more info
+                saveData = Json.decodeFromStream(MapSerializer(UUIDSerializer, PlayerData.serializer()), reader).toMutableMap()
                 LOGGER.info("Successfully loaded player data!")
             }
         } catch (e: IOException) {

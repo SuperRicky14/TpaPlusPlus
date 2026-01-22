@@ -12,16 +12,16 @@ import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
 import net.minecraft.server.level.ServerPlayer
 import org.slf4j.Logger
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
+import java.nio.file.FileAlreadyExistsException
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.util.*
 
-private val MOD_SAVEDATA_FILE_NAME = "tpaplusplus_savedata.json"
-private val MOD_SAVEDATA_FOLDER_PATH = "mods" + File.separator + ".tpaplusplus" + File.separator
-private val MOD_SAVEDATA_FILE_PATH = MOD_SAVEDATA_FOLDER_PATH + File.separator + MOD_SAVEDATA_FILE_NAME
-private val MOD_SAVEDATA_FOLDER = File(MOD_SAVEDATA_FOLDER_PATH)
+private val MOD_SAVE_DATA_FILE_NAME = "tpaplusplus_savedata.json"
+private val SAVE_DATA_PATH = Paths.get("mods", ".tpaplusplus", MOD_SAVE_DATA_FILE_NAME)
 
 object SaveDataManager {
     private val LOGGER: Logger = LogUtils.getLogger()
@@ -36,72 +36,99 @@ object SaveDataManager {
         }
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
+    //region <Saving>
     fun savePlayerData() {
-        if (!MOD_SAVEDATA_FOLDER.exists()) {
-            val success = MOD_SAVEDATA_FOLDER.mkdirs()
-            if (!success) {
-                LOGGER.error("Failed to automatically create TPAPlusPlus's savedata folder, consider creating $MOD_SAVEDATA_FILE_PATH manually!")
-                return
-            }
-        }
-
-        runCatching {
-            FileOutputStream(MOD_SAVEDATA_FILE_PATH).use { writer ->
-                synchronized (saveDataLock) {
-                    // We have to manually pass in our serializer here since Kotlinx.serialization's @Serializable annotation doesn't work for field types. See https://github.com/Kotlin/kotlinx.serialization/issues/2731 for more info
-                    Json.encodeToStream(MapSerializer(UUIDSerializer, PlayerData.serializer()), saveData, writer)
-                }
-            }
-        }.onFailure { error ->
-            when (error) {
-                is IOException -> LOGGER.error("An I/O error occured whilst trying to read TPA++'s save data!", error)
-
-                is SerializationException -> LOGGER.error("""
-                    Failed to serialize TPA++'s save data to JSON!
-                """.trimIndent(), error)
-            }
-        }
-    }
-
-    fun loadPlayerData() {
-        if (!MOD_SAVEDATA_FOLDER.exists()) {
-            LOGGER.info("TPA++ save data folder does not exist, aborting loading procedure.")
+        try {
+            Files.createDirectories(SAVE_DATA_PATH.parent)
+        } catch (e: FileAlreadyExistsException) {
+            LOGGER.error("""
+                Failed to create save data folder. A file exists with the same name as one of the required folders in: "${SAVE_DATA_PATH.parent}"
+                
+                Please rename or remove the conflicting file(s) so that TPA++ can save data.
+                """.trimIndent(), e)
+            return
+        } catch (e: IOException) {
+            LOGGER.error("""
+                An I/O error occurred whilst trying to create TPA++'s save data folder.
+                
+                If this happens consistently, consider manually creating the parent folder(s) at "${SAVE_DATA_PATH.parent}"
+            """.trimIndent(), e)
             return
         }
 
-        runCatching {
-            FileInputStream(MOD_SAVEDATA_FILE_PATH).use { reader ->
-                // We have to manually pass in our serializer here since Kotlinx.serialization's @Serializable annotation doesn't work for field types. See https://github.com/Kotlin/kotlinx.serialization/issues/2731 for more info
-                val deserializedSaveData = deserializePlayerData(reader).toMutableMap()
-                LOGGER.info("Successfully loaded player data!")
-                return@runCatching deserializedSaveData
-            }
-        }.onFailure { error ->
-            when (error) {
-                is FileNotFoundException -> LOGGER.info("TPA++ save data does not exist, aborting loading procedure.")
+        val saveDataSnapshot = synchronized (saveDataLock) {
+            saveData.toMap() // TODO: This is a shallow copy, it is not currently thread safe as PlayerData is mutable
+        }
 
-                is IOException -> LOGGER.error("An I/O error occured whilst trying to read TPA++'s save data!", error)
+        val outputStream = try {
+            Files.newOutputStream(SAVE_DATA_PATH)
+        } catch (e: IOException) {
+            LOGGER.error("""
+                An I/O error occurred whilst trying to open the save data file at "$SAVE_DATA_PATH".
+            """.trimIndent(), e)
+            return
+        }
 
-                is SerializationException -> LOGGER.error("""
-                        Failed to deserialize TPA++'s save data.
-                        Did you manually edit \"$MOD_SAVEDATA_FILE_NAME\"? If so, you might want to check your syntax!
-                    """.trimIndent(), error)
-
-                is IllegalArgumentException -> LOGGER.error("""
-                        TPA++'s save data is not representative of the in-memory format!
-                        Is the save data from a different version?
-                    """.trimIndent(), error)
-
-                else -> throw error
-            }
-        }.onSuccess { deserializedPlayerData ->
-            synchronized (saveDataLock) { saveData = deserializedPlayerData.toMutableMap() }
+        outputStream.use {
+            encodeSaveData(saveDataSnapshot, it)
         }
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    private fun deserializePlayerData(reader: FileInputStream): Map<UUID, PlayerData> {
-        return Json.decodeFromStream(MapSerializer(UUIDSerializer, PlayerData.serializer()), reader)
+    fun encodeSaveData(saveDataSnapshot: Map<UUID, PlayerData>, outputStream: OutputStream) {
+        try {
+            // We have to manually pass in our serializer here since Kotlinx.serialization's @Serializable annotation doesn't work for field types. See https://github.com/Kotlin/kotlinx.serialization/issues/2731 for more info
+            Json.encodeToStream(MapSerializer(UUIDSerializer, PlayerData.serializer()), saveDataSnapshot, outputStream)
+        } catch (e: IOException) {
+            LOGGER.error("An I/O error occurred whilst trying to write to TPA++'s save data stream", e)
+            return
+        } catch (e: SerializationException) {
+            LOGGER.error("""
+                Failed to serialize TPA++'s save data to JSON!
+            """.trimIndent(), e)
+            return
+        }
     }
+    //endregion
+
+    //region <Loading>
+    fun loadPlayerData() {
+        val inputStream = try {
+            Files.newInputStream(SAVE_DATA_PATH)
+        } catch (_: FileNotFoundException) {
+            LOGGER.info("TPA++ save data does not exist, aborting loading procedure.")
+            return
+        } catch (e: IOException) {
+            LOGGER.error("An I/O error occurred whilst trying to read TPA++'s save data!", e)
+            return
+        }
+
+        val deserializedPlayerData = inputStream.use {
+            deserializePlayerData(it)
+        }
+        if (deserializedPlayerData == null) return
+
+        synchronized (saveDataLock) { saveData = deserializedPlayerData.toMutableMap() }
+
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    private fun deserializePlayerData(reader: InputStream): Map<UUID, PlayerData>? {
+        try {
+            // We have to manually pass in our serializer here since Kotlinx.serialization's @Serializable annotation doesn't work for field types. See https://github.com/Kotlin/kotlinx.serialization/issues/2731 for more info
+            return Json.decodeFromStream(MapSerializer(UUIDSerializer, PlayerData.serializer()), reader)
+        } catch (e: SerializationException) {
+            LOGGER.error("""
+                Failed to deserialize TPA++'s save data.
+                Did you manually edit \"$MOD_SAVE_DATA_FILE_NAME\"? If so, you might want to check your syntax!
+            """.trimIndent(), e)
+        } catch (e: IllegalArgumentException) {
+            LOGGER.error("""
+                TPA++'s save data is not compatible with the internal format.
+                Is the save data from a different version?
+            """.trimIndent(), e)
+        }
+        return null
+    }
+    //endregion
 }

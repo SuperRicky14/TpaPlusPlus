@@ -31,6 +31,25 @@ object SaveDataManager {
 
     private var saveData: MutableMap<UUID, PlayerData> = hashMapOf()
 
+    /**
+     * Blocks a player. Will not block players twice, but will not throw if you attempt to.
+     */
+    fun addBlockedPlayer(playerBlocking: UUID, playerToBlock: UUID) = synchronized(saveDataLock) {
+        saveData.compute(playerBlocking) {_, data ->
+            data?.copy(blockedPlayers = data.blockedPlayers + playerToBlock)
+                ?: PlayerData(blockedPlayers = setOf(playerToBlock))
+        }
+    }
+
+    /**
+     * Unblocks a player. Will do nothing if that player wasn't already blocked.
+     */
+    fun removeBlockedPlayer(playerUnblocking: UUID, playerToUnblock: UUID) = synchronized (saveDataLock) {
+        saveData.compute(playerUnblocking) {_, data ->
+            data?.copy(blockedPlayers = data.blockedPlayers - playerToUnblock)
+        }
+    }
+
     fun getPlayerData(player: UUID): PlayerData = synchronized (saveDataLock) {
         return saveData.getOrPut(player) {
             PlayerData(tpToggle = DEFAULT_TP_TOGGLE_STATE)

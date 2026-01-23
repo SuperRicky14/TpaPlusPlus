@@ -52,7 +52,7 @@ public class SendTPA {
         if (isEitherBlocked(sender, receiver)) return;
 
         PlayerData receiverData = SaveDataManager.INSTANCE.getPlayerData(receiver.getUUID());
-        if (Boolean.FALSE.equals(Objects.isNull(receiverData)) && receiverData.getTpToggle()) { // receiverData is not null && receiver TP toggle is enabled.
+        if (receiverData.getTpToggle()) { // receiverData is not null && receiver TP toggle is enabled.
             sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.ERR_RECEIVER_TP_DISABLED.get(),
                     Map.of("receiverName", receiver.getName().getString()))));
             return;
@@ -61,7 +61,7 @@ public class SendTPA {
         if (Boolean.FALSE.equals(Config.ALLOW_TPTOGGLED_PLAYERS_TO_SEND_REQUESTS.get())) { // Allow TPToggled players to send requests is disabled in the config
             PlayerData senderData = SaveDataManager.INSTANCE.getPlayerData(sender.getUUID());
 
-            if (Boolean.FALSE.equals(Objects.isNull(senderData)) && senderData.getTpToggle()) { // senderData is not null && sender TP toggle is enabled.
+            if (senderData.getTpToggle()) { // senderData is not null && sender TP toggle is enabled.
                 sender.sendSystemMessage(Component.literal(Messages.ERR_SENDER_TP_DISABLED.get()));
                 return;
             }

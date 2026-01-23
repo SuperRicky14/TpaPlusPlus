@@ -41,11 +41,11 @@ public class UnBlockPlayer {
         if (Config.UNBLOCK_COOLDOWN.get() > 0) // Check if cooldown is enabled
             CooldownManager.INSTANCE.scheduleCooldown(executor.getUUID(), Duration.ofSeconds(Config.UNBLOCK_COOLDOWN.get()), CommandType.UNBLOCK);
 
-        absoluteUnBlockPlayer(executorData, executor, blockedPlayer);
+        absoluteUnBlockPlayer(executor, blockedPlayer);
     }
 
-    public static void absoluteUnBlockPlayer(PlayerData executorData, ServerPlayer executor, ServerPlayer blockedPlayer) {
-        executorData.removeBlockedPlayer(blockedPlayer.getUUID()); // Remove the blocked player from the executors list.
+    public static void absoluteUnBlockPlayer(ServerPlayer executor, ServerPlayer blockedPlayer) {
+        SaveDataManager.INSTANCE.removeBlockedPlayer(executor.getUUID(), blockedPlayer.getUUID());
 
         executor.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_UNBLOCKED_PLAYER.get(),
                 Map.of("unblocked_player", blockedPlayer.getName().getString()))));

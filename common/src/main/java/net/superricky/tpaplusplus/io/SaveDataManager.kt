@@ -20,6 +20,10 @@ import java.util.*
 private const val MOD_SAVE_DATA_FILE_NAME = "tpaplusplus_savedata.json"
 private val SAVE_DATA_PATH = Paths.get("mods", ".tpaplusplus", MOD_SAVE_DATA_FILE_NAME)
 
+private val jsonConfig = Json {
+    prettyPrint = true
+}
+
 internal const val DEFAULT_TP_TOGGLE_STATE = false
 
 object SaveDataManager {
@@ -113,7 +117,7 @@ object SaveDataManager {
     fun encodeSaveData(saveDataSnapshot: Map<UUID, PlayerData>, outputStream: OutputStream) {
         try {
             // We have to manually pass in our serializer here since Kotlinx.serialization's @Serializable annotation doesn't work for field types. See https://github.com/Kotlin/kotlinx.serialization/issues/2731 for more info
-            Json.encodeToStream(MapSerializer(UUIDSerializer, PlayerData.serializer()), saveDataSnapshot, outputStream)
+            jsonConfig.encodeToStream(MapSerializer(UUIDSerializer, PlayerData.serializer()), saveDataSnapshot, outputStream)
         } catch (e: IOException) {
             LOGGER.error("An I/O error occurred whilst trying to write to TPA++'s save data stream", e)
             return
@@ -151,7 +155,7 @@ object SaveDataManager {
     private fun deserializePlayerData(reader: InputStream): Map<UUID, PlayerData>? {
         try {
             // We have to manually pass in our serializer here since Kotlinx.serialization's @Serializable annotation doesn't work for field types. See https://github.com/Kotlin/kotlinx.serialization/issues/2731 for more info
-            return Json.decodeFromStream(MapSerializer(UUIDSerializer, PlayerData.serializer()), reader)
+            return jsonConfig.decodeFromStream(MapSerializer(UUIDSerializer, PlayerData.serializer()), reader)
         } catch (e: SerializationException) {
             LOGGER.error("""
                 Failed to deserialize TPA++'s save data.

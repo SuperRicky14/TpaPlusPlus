@@ -1,11 +1,9 @@
-@file:UseSerializers(UUIDSerializer::class)
 package net.superricky.tpaplusplus.io
 
 import com.mojang.logging.LogUtils
 import kotlinx.io.files.FileNotFoundException
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream

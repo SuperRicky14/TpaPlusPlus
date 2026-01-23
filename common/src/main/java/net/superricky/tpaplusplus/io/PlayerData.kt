@@ -6,7 +6,7 @@ import kotlinx.serialization.UseSerializers
 import java.util.UUID
 
 @Serializable
-data class PlayerData(var tPToggle: Boolean = false, private val blockedPlayers: MutableSet<UUID> = hashSetOf()) {
+data class PlayerData(val tpToggle: Boolean = DEFAULT_TP_TOGGLE_STATE, internal val blockedPlayers: MutableSet<UUID> = hashSetOf()) {
     fun addBlockedPlayer(player: UUID) {
         blockedPlayers.add(player)
     }
@@ -18,4 +18,5 @@ data class PlayerData(var tPToggle: Boolean = false, private val blockedPlayers:
     fun hasBlockedPlayer(player: UUID): Boolean {
         return blockedPlayers.contains(player)
     }
+
 }

@@ -10,7 +10,6 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
-import net.minecraft.server.level.ServerPlayer
 import org.slf4j.Logger
 import java.io.IOException
 import java.io.InputStream
@@ -23,6 +22,8 @@ import java.util.*
 private val MOD_SAVE_DATA_FILE_NAME = "tpaplusplus_savedata.json"
 private val SAVE_DATA_PATH = Paths.get("mods", ".tpaplusplus", MOD_SAVE_DATA_FILE_NAME)
 
+internal const val DEFAULT_TP_TOGGLE_STATE = false
+
 object SaveDataManager {
     private val LOGGER: Logger = LogUtils.getLogger()
 
@@ -30,10 +31,23 @@ object SaveDataManager {
 
     private var saveData: MutableMap<UUID, PlayerData> = hashMapOf()
 
-    fun getPlayerData(player: ServerPlayer): PlayerData = synchronized (saveDataLock) {
-        return saveData.getOrPut(player.uuid) {
-            PlayerData()
+    fun getPlayerData(player: UUID): PlayerData = synchronized (saveDataLock) {
+        return saveData.getOrPut(player) {
+            PlayerData(tpToggle = DEFAULT_TP_TOGGLE_STATE)
         }
+    }
+
+    /**
+     * @return The new TPToggle value
+     */
+    fun toggleTP(player: UUID): Boolean = synchronized (saveDataLock) {
+        @Suppress("KotlinConstantConditions") // We want IDE's to shut up about DEFAULT_TP_TOGGLE_STATE
+        val newPlayerData = saveData[player]?.let { it.copy(tpToggle = !it.tpToggle) }
+            ?: PlayerData(tpToggle = !DEFAULT_TP_TOGGLE_STATE)
+
+        saveData[player] = newPlayerData
+
+        return newPlayerData.tpToggle
     }
 
     //region <Saving>

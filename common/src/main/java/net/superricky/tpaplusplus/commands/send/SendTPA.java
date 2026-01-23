@@ -21,14 +21,14 @@ import java.util.Objects;
 
 public class SendTPA {
     private static boolean isEitherBlocked(ServerPlayer sender, ServerPlayer receiver) {
-        PlayerData senderData = SaveDataManager.INSTANCE.getPlayerData(sender);
+        PlayerData senderData = SaveDataManager.INSTANCE.getPlayerData(sender.getUUID());
         if (senderData.hasBlockedPlayer(receiver.getUUID())) {
             sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_BLOCKED_RECEIVER.get(),
                     Map.of("blocked_player", receiver.getName().getString()))));
             return true;
         }
 
-        PlayerData receiverData = SaveDataManager.INSTANCE.getPlayerData(receiver);
+        PlayerData receiverData = SaveDataManager.INSTANCE.getPlayerData(receiver.getUUID());
         if (receiverData.hasBlockedPlayer(sender.getUUID())) {
             sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.RECEIVER_BLOCKED_SENDER.get(),
                     Map.of("blocking_player", receiver.getName().getString()))));
@@ -51,17 +51,17 @@ public class SendTPA {
 
         if (isEitherBlocked(sender, receiver)) return;
 
-        PlayerData receiverData = SaveDataManager.INSTANCE.getPlayerData(receiver);
-        if (Boolean.FALSE.equals(Objects.isNull(receiverData)) && receiverData.getTPToggle()) { // receiverData is not null && receiver TP toggle is enabled.
+        PlayerData receiverData = SaveDataManager.INSTANCE.getPlayerData(receiver.getUUID());
+        if (Boolean.FALSE.equals(Objects.isNull(receiverData)) && receiverData.getTpToggle()) { // receiverData is not null && receiver TP toggle is enabled.
             sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.ERR_RECEIVER_TP_DISABLED.get(),
                     Map.of("receiverName", receiver.getName().getString()))));
             return;
         }
 
         if (Boolean.FALSE.equals(Config.ALLOW_TPTOGGLED_PLAYERS_TO_SEND_REQUESTS.get())) { // Allow TPToggled players to send requests is disabled in the config
-            PlayerData senderData = SaveDataManager.INSTANCE.getPlayerData(sender);
+            PlayerData senderData = SaveDataManager.INSTANCE.getPlayerData(sender.getUUID());
 
-            if (Boolean.FALSE.equals(Objects.isNull(senderData)) && senderData.getTPToggle()) { // senderData is not null && sender TP toggle is enabled.
+            if (Boolean.FALSE.equals(Objects.isNull(senderData)) && senderData.getTpToggle()) { // senderData is not null && sender TP toggle is enabled.
                 sender.sendSystemMessage(Component.literal(Messages.ERR_SENDER_TP_DISABLED.get()));
                 return;
             }

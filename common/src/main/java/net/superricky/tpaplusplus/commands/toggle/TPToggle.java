@@ -8,7 +8,6 @@ import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.cooldown.CommandType;
 import net.superricky.tpaplusplus.cooldown.CooldownData;
 import net.superricky.tpaplusplus.cooldown.CooldownManager;
-import net.superricky.tpaplusplus.io.PlayerData;
 import net.superricky.tpaplusplus.io.SaveDataManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +31,9 @@ public class TPToggle {
     }
 
     public static void toggleTP(ServerPlayer executor) {
-        PlayerData executorData = SaveDataManager.INSTANCE.getPlayerData(executor);
+        boolean executorNewTPToggle = SaveDataManager.INSTANCE.toggleTP(executor.getUUID());
 
-        executorData.setTPToggle(!executorData.getTPToggle()); // Switch the TPToggle of the player
-
-        if (executorData.getTPToggle()) {
+        if (executorNewTPToggle) {
             executor.sendSystemMessage(Component.literal(Messages.TPTOGGLE_ENABLED.get()));
         } else {
             executor.sendSystemMessage(Component.literal(Messages.TPTOGGLE_DISABLED.get()));

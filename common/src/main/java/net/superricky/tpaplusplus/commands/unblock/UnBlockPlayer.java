@@ -23,7 +23,7 @@ public class UnBlockPlayer {
             return;
         }
 
-        PlayerData executorData = SaveDataManager.INSTANCE.getPlayerData(executor);
+        PlayerData executorData = SaveDataManager.INSTANCE.getPlayerData(executor.getUUID());
 
         if (!executorData.hasBlockedPlayer(blockedPlayer.getUUID())) {
             // Executor has not blocked the other player

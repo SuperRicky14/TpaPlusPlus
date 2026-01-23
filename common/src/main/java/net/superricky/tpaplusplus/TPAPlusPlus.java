@@ -2,6 +2,7 @@ package net.superricky.tpaplusplus;
 
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.EntityEvent;
+import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.TickEvent;
 import net.superricky.tpaplusplus.commands.accept.TPAAcceptCommand;
 import net.superricky.tpaplusplus.commands.back.BackCommand;
@@ -14,18 +15,14 @@ import net.superricky.tpaplusplus.commands.send.TPAHereCommand;
 import net.superricky.tpaplusplus.commands.toggle.TPToggleCommand;
 import net.superricky.tpaplusplus.commands.tpaplusplus.TPAPlusPlusCommand;
 import net.superricky.tpaplusplus.commands.unblock.TPUnBlockCommand;
-import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.cooldown.CooldownExpiredEvent;
 import net.superricky.tpaplusplus.cooldown.CooldownManager;
-import net.superricky.tpaplusplus.io.ServerLifecycleHandler;
+import net.superricky.tpaplusplus.io.AutosaveLifecycle;
 import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.timeout.RequestTimeoutEvent;
 import net.superricky.tpaplusplus.timeout.TimeoutManager;
-import net.superricky.tpaplusplus.util.MsgFmt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 public class TPAPlusPlus {
     public static final String MOD_ID = "tpaplusplus";
@@ -78,10 +75,10 @@ public class TPAPlusPlus {
         UpdateCheckKt.initVersionCheckDaemon();
 
         LOGGER.info("FINAL SETUP...");
-        ServerLifecycleHandler.onServerStart();
+        LifecycleEvent.SERVER_STARTING.register(AutosaveLifecycle.INSTANCE::onServerStart);
 
-        LOGGER.info("INITIALIZING SHUTDOWN HOOK FOR CLEANUP...");
-        Runtime.getRuntime().addShutdownHook(new Thread(ServerLifecycleHandler::onServerStop));
+        LOGGER.info("INITIALIZING SERVER SHUTDOWN HOOK...");
+        LifecycleEvent.SERVER_STOPPING.register(AutosaveLifecycle.INSTANCE::onServerStop);
 
         LOGGER.info("...INITIALIZATION COMPLETE");
     }

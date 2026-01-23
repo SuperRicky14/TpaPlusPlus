@@ -2,7 +2,6 @@ package net.superricky.tpaplusplus.commands.send;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.superricky.tpaplusplus.commands.block.PlayerBlockingHelper;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.cooldown.CommandType;
@@ -21,6 +20,24 @@ import java.util.Map;
 import java.util.Objects;
 
 public class SendTPA {
+    private static boolean isEitherBlocked(ServerPlayer sender, ServerPlayer receiver) {
+        PlayerData senderData = SaveDataManager.INSTANCE.getPlayerData(sender.getUUID());
+        if (senderData.hasBlockedPlayer(receiver.getUUID())) {
+            sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_BLOCKED_RECEIVER.get(),
+                    Map.of("blocked_player", receiver.getName().getString()))));
+            return true;
+        }
+
+        PlayerData receiverData = SaveDataManager.INSTANCE.getPlayerData(receiver.getUUID());
+        if (receiverData.hasBlockedPlayer(sender.getUUID())) {
+            sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.RECEIVER_BLOCKED_SENDER.get(),
+                    Map.of("blocking_player", receiver.getName().getString()))));
+            return true;
+        }
+
+        return false;
+    }
+
     public static void sendTeleportRequest(ServerPlayer sender, ServerPlayer receiver, boolean isHereRequest) {
         if (RequestHelper.isPlayerIdentical(sender, receiver)) {
             sender.sendSystemMessage(Component.literal(Messages.ERR_NO_SELF_TELEPORT.get()));
@@ -32,21 +49,19 @@ public class SendTPA {
             return;
         }
 
-        if (PlayerBlockingHelper.isPlayerBlocked(sender, receiver))
-            return; // Return if one of the players has blocked the other player.
+        if (isEitherBlocked(sender, receiver)) return;
 
-        PlayerData receiverData = SaveDataManager.getPlayerData(receiver);
-
-        if (Boolean.FALSE.equals(Objects.isNull(receiverData)) && receiverData.getTPToggle()) { // receiverData is not null && receiver TP toggle is enabled.
+        PlayerData receiverData = SaveDataManager.INSTANCE.getPlayerData(receiver.getUUID());
+        if (receiverData.getTpToggle()) { // receiverData is not null && receiver TP toggle is enabled.
             sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.ERR_RECEIVER_TP_DISABLED.get(),
                     Map.of("receiverName", receiver.getName().getString()))));
             return;
         }
 
         if (Boolean.FALSE.equals(Config.ALLOW_TPTOGGLED_PLAYERS_TO_SEND_REQUESTS.get())) { // Allow TPToggled players to send requests is disabled in the config
-            PlayerData senderData = SaveDataManager.getPlayerData(sender);
+            PlayerData senderData = SaveDataManager.INSTANCE.getPlayerData(sender.getUUID());
 
-            if (Boolean.FALSE.equals(Objects.isNull(senderData)) && senderData.getTPToggle()) { // senderData is not null && sender TP toggle is enabled.
+            if (senderData.getTpToggle()) { // senderData is not null && sender TP toggle is enabled.
                 sender.sendSystemMessage(Component.literal(Messages.ERR_SENDER_TP_DISABLED.get()));
                 return;
             }

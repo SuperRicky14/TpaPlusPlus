@@ -15,6 +15,10 @@
    It is measured in megabytes, for example 6GB would be 6144M (which it is set to by default), and 10GB would be 10240M.
    You can calculate this by doing: Megabytes of RAM = 1024 * (how many gigabytes you want to allocate to gradle).
 
+   ### Note:
+   We use regions to fold code. This may not be enabled by default, so you can find it in:\
+      Settings/Preferences > Editor > General > Code Folding > "Custom folding regions"
+
 ## Improve build speed
 **Add <org.gradle.parallel=true> and <org.gradle.usecache=true> just underneath the <org.gradle.jvmargs=-Xmx6144M> line for greatly reduced build times.** This is because Architectury uses multiple project modules, but when building the whole project, gradle supports running these builds (along with many other operations) in parallel, using all your CPU cores. The reason why it isn't already added beforehand (anymore), is because importing the gradle project completely fails when this is enabled. After you initially import the project, you can add those lines to speedup gradle.
 PS: If anyone knows how to fix my build system please tell me

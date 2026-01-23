@@ -23,12 +23,12 @@ public class BlockPlayer {
             return;
         }
 
-        PlayerData executorData = SaveDataManager.getPlayerData(executor);
+        PlayerData executorData = SaveDataManager.INSTANCE.getPlayerData(executor.getUUID());
 
-        if (executorData.getBlockedPlayers().contains(blockedPlayer.getUUID())) {
+        if (executorData.hasBlockedPlayer(blockedPlayer.getUUID())) {
             // Executor has already blocked the other player
             executor.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.ALREADY_BLOCKED_PLAYER.get(),
-                    Map.of(PlayerBlockingHelper.BLOCKED_PLAYER_CONSTANT, blockedPlayer.getName().getString()))));
+                    Map.of("blocked_player", blockedPlayer.getName().getString()))));
             return;
         }
 
@@ -41,14 +41,14 @@ public class BlockPlayer {
         if (Config.BLOCK_COOLDOWN.get() > 0) // Check if cooldown is enabled
             CooldownManager.INSTANCE.scheduleCooldown(executor.getUUID(), Duration.ofSeconds(Config.BLOCK_COOLDOWN.get()), CommandType.BLOCK);
 
-        absoluteBlockPlayer(executorData, executor, blockedPlayer);
+        absoluteBlockPlayer(executor, blockedPlayer);
     }
 
-    public static void absoluteBlockPlayer(PlayerData executorData, ServerPlayer executor, ServerPlayer blockedPlayer) {
-        executorData.addBlockedPlayer(blockedPlayer.getUUID()); // Add the blocked player to the executors list.
+    public static void absoluteBlockPlayer(ServerPlayer executor, ServerPlayer blockedPlayer) {
+        SaveDataManager.INSTANCE.addBlockedPlayer(executor.getUUID(), blockedPlayer.getUUID());
 
         executor.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_BLOCKED_PLAYER.get(),
-                Map.of(PlayerBlockingHelper.BLOCKED_PLAYER_CONSTANT, blockedPlayer.getName().getString()))));
+                Map.of("blocked_player", blockedPlayer.getName().getString()))));
 
         if (Boolean.TRUE.equals(Config.SEND_BLOCKED_MESSAGES_TO_BOTH_PLAYERS.get())) {
             // Sending Blocked / Unblocked Messages has been enabled in the config

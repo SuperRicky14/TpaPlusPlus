@@ -2,7 +2,6 @@ package net.superricky.tpaplusplus.commands.unblock;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.superricky.tpaplusplus.commands.block.PlayerBlockingHelper;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.cooldown.CommandType;
@@ -24,12 +23,12 @@ public class UnBlockPlayer {
             return;
         }
 
-        PlayerData executorData = SaveDataManager.getPlayerData(executor);
+        PlayerData executorData = SaveDataManager.INSTANCE.getPlayerData(executor.getUUID());
 
-        if (Boolean.FALSE.equals(executorData.getBlockedPlayers().contains(blockedPlayer.getUUID()))) {
+        if (!executorData.hasBlockedPlayer(blockedPlayer.getUUID())) {
             // Executor has not blocked the other player
             executor.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.HAVENT_BLOCKED_PLAYER.get(),
-                    Map.of(PlayerBlockingHelper.BLOCKED_PLAYER_CONSTANT, blockedPlayer.getName().getString()))));
+                    Map.of("blocked_player", blockedPlayer.getName().getString()))));
             return;
         }
 
@@ -42,11 +41,11 @@ public class UnBlockPlayer {
         if (Config.UNBLOCK_COOLDOWN.get() > 0) // Check if cooldown is enabled
             CooldownManager.INSTANCE.scheduleCooldown(executor.getUUID(), Duration.ofSeconds(Config.UNBLOCK_COOLDOWN.get()), CommandType.UNBLOCK);
 
-        absoluteUnBlockPlayer(executorData, executor, blockedPlayer);
+        absoluteUnBlockPlayer(executor, blockedPlayer);
     }
 
-    public static void absoluteUnBlockPlayer(PlayerData executorData, ServerPlayer executor, ServerPlayer blockedPlayer) {
-        executorData.removeBlockedPlayer(blockedPlayer.getUUID()); // Remove the blocked player from the executors list.
+    public static void absoluteUnBlockPlayer(ServerPlayer executor, ServerPlayer blockedPlayer) {
+        SaveDataManager.INSTANCE.removeBlockedPlayer(executor.getUUID(), blockedPlayer.getUUID());
 
         executor.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_UNBLOCKED_PLAYER.get(),
                 Map.of("unblocked_player", blockedPlayer.getName().getString()))));

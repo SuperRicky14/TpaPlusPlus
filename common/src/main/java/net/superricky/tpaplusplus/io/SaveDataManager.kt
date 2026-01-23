@@ -19,7 +19,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
 
-private val MOD_SAVE_DATA_FILE_NAME = "tpaplusplus_savedata.json"
+private const val MOD_SAVE_DATA_FILE_NAME = "tpaplusplus_savedata.json"
 private val SAVE_DATA_PATH = Paths.get("mods", ".tpaplusplus", MOD_SAVE_DATA_FILE_NAME)
 
 internal const val DEFAULT_TP_TOGGLE_STATE = false

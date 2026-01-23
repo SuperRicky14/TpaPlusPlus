@@ -34,9 +34,7 @@ object AutosaveLifecycle {
         scope.launch {
             while (autosaving) {
                 SaveDataManager.savePlayerData()
-                System.out.println("Before")
                 delay(Duration.ofSeconds(autosaveIntervalSeconds))
-                System.out.println("After")
             }
         }
     }

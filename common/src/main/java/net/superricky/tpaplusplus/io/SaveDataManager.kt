@@ -92,7 +92,7 @@ object SaveDataManager {
         }
 
         val saveDataSnapshot = synchronized (saveDataLock) {
-            saveData.toMap() // TODO: This is a shallow copy, it is not currently thread safe as PlayerData is mutable
+            saveData.toMap()
         }
 
         val outputStream = try {

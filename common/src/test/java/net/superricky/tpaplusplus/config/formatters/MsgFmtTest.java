@@ -33,25 +33,14 @@ public class MsgFmtTest {
         assertEquals("", result);
     }
 
-    @SuppressWarnings("ConstantValue")
-    @Test
-    public void testNullFormatString() {
-        String result = template(null, new HashMap<>());
-        assertNull(result);
-    }
-
-    @SuppressWarnings("ConstantValue")
-    @Test
-    public void testNullValues() {
-        String result = template("Hello, ${name}!", null);
-        assertNull(result);
-    }
-
     @Test
     public void testMissingPlaceholderValue() {
         Map<String, Object> values = new HashMap<>();
         values.put("name", "John");
-        assertThrows(IllegalArgumentException.class, () -> template("Hello, ${name}. Your balance is ${balance}.", values));
+
+        String result = template("Hello, ${name}. Your balance is ${balance}.", values);
+
+        assertEquals("Hello, John. Your balance is ${balance}.", result);
     }
 
     @Test

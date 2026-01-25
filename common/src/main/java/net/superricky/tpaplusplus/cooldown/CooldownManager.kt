@@ -5,7 +5,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.superricky.tpaplusplus.config.Messages
-import net.superricky.tpaplusplus.util.MsgFmt
+import net.superricky.tpaplusplus.util.template
 import java.time.Duration
 import java.time.Instant
 import java.util.*
@@ -47,8 +47,8 @@ object CooldownManager {
             }
         }
 
-        playerToNotify.sendSystemMessage(Component.literal(MsgFmt.fmt(
-            Messages.COMMAND_ON_COOLDOWN_MESSAGE.get(), mapOf(
+        playerToNotify.sendSystemMessage(Component.literal(Messages.COMMAND_ON_COOLDOWN_MESSAGE.get().template(
+            mapOf(
                 "command_used" to cooldownData.commandOnCooldown.getCommandNameFromType(),
                 "time_remaining" to formattedDurationText
             )

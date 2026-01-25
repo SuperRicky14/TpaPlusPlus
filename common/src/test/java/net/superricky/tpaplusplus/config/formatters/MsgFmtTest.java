@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.superricky.tpaplusplus.util.MsgFmt.fmt;
+import static net.superricky.tpaplusplus.util.MsgFmtKt.template;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MsgFmtTest {
@@ -14,7 +14,7 @@ public class MsgFmtTest {
     public void testBasicReplacement() {
         Map<String, Object> values = new HashMap<>();
         values.put("name", "John");
-        String result = fmt("Hello, ${name}!", values);
+        String result = template("Hello, ${name}!", values);
         assertEquals("Hello, John!", result);
     }
 
@@ -23,27 +23,27 @@ public class MsgFmtTest {
         Map<String, Object> values = new HashMap<>();
         values.put("name", "John");
         values.put("age", 30);
-        String result = fmt("Name: ${name}, Age: ${age}", values);
+        String result = template("Name: ${name}, Age: ${age}", values);
         assertEquals("Name: John, Age: 30", result);
     }
 
     @Test
     public void testEmptyString() {
-        String result = fmt("", new HashMap<>());
+        String result = template("", new HashMap<>());
         assertEquals("", result);
     }
 
     @SuppressWarnings("ConstantValue")
     @Test
     public void testNullFormatString() {
-        String result = fmt(null, new HashMap<>());
+        String result = template(null, new HashMap<>());
         assertNull(result);
     }
 
     @SuppressWarnings("ConstantValue")
     @Test
     public void testNullValues() {
-        String result = fmt("Hello, ${name}!", null);
+        String result = template("Hello, ${name}!", null);
         assertNull(result);
     }
 
@@ -51,7 +51,7 @@ public class MsgFmtTest {
     public void testMissingPlaceholderValue() {
         Map<String, Object> values = new HashMap<>();
         values.put("name", "John");
-        assertThrows(IllegalArgumentException.class, () -> fmt("Hello, ${name}. Your balance is ${balance}.", values));
+        assertThrows(IllegalArgumentException.class, () -> template("Hello, ${name}. Your balance is ${balance}.", values));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class MsgFmtTest {
         values.put("age", 46);
         values.put("favouriteColor", "Red");
 
-        String result = fmt("Hello, ${name}! You are ${age} years old", values);
+        String result = template("Hello, ${name}! You are ${age} years old", values);
 
         assertEquals("Hello, John! You are 46 years old", result);
     }
@@ -72,7 +72,7 @@ public class MsgFmtTest {
         Map<String, Object> values = new HashMap<>();
         values.put("name", "John");
 
-        String result = fmt("Hello, ${name}! How are you, ${name}?", values);
+        String result = template("Hello, ${name}! How are you, ${name}?", values);
 
         assertEquals("Hello, John! How are you, John?", result);
     }

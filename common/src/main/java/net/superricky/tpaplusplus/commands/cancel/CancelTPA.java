@@ -10,7 +10,7 @@ import net.superricky.tpaplusplus.cooldown.CooldownManager;
 import net.superricky.tpaplusplus.requests.Request;
 import net.superricky.tpaplusplus.requests.RequestGrabUtil;
 import net.superricky.tpaplusplus.requests.RequestHelper;
-import net.superricky.tpaplusplus.util.MsgFmt;
+import net.superricky.tpaplusplus.util.MsgFmtKt;
 
 import java.time.Duration;
 import java.util.Map;
@@ -37,8 +37,8 @@ public class CancelTPA {
     }
 
     public static void absoluteCancel(Request request) {
-        request.getSender().sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_CANCELS_TPA.get(), Map.of("cancelled_tpa_recipient", request.getReceiver().getName().getString()))));
-        request.getReceiver().sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.RECEIVER_GOT_CANCELLED_TPA.get(), Map.of("cancelling_sender_of_tpa", request.getSender().getName().getString()))));
+        request.getSender().sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.SENDER_CANCELS_TPA.get(), Map.of("cancelled_tpa_recipient", request.getReceiver().getName().getString()))));
+        request.getReceiver().sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.RECEIVER_GOT_CANCELLED_TPA.get(), Map.of("cancelling_sender_of_tpa", request.getSender().getName().getString()))));
 
         RequestHelper.getRequestSet().remove(request);
     }

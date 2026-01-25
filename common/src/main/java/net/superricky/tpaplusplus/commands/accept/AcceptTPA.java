@@ -10,7 +10,7 @@ import net.superricky.tpaplusplus.cooldown.CooldownManager;
 import net.superricky.tpaplusplus.requests.Request;
 import net.superricky.tpaplusplus.requests.RequestGrabUtil;
 import net.superricky.tpaplusplus.requests.RequestHelper;
-import net.superricky.tpaplusplus.util.MsgFmt;
+import net.superricky.tpaplusplus.util.MsgFmtKt;
 
 import java.time.Duration;
 import java.util.Map;
@@ -37,8 +37,8 @@ public class AcceptTPA {
     }
 
     public static void absoluteAcceptFunctionality(Request request, ServerPlayer receiver) {
-        receiver.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.RECEIVER_ACCEPTS_TPA.get(), Map.of("senders_name", request.getSender().getName().getString()))));
-        request.getSender().sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_GOT_ACCEPTED_TPA.get(), Map.of("receivers_name", request.getReceiver().getName().getString()))));
+        receiver.sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.RECEIVER_ACCEPTS_TPA.get(), Map.of("senders_name", request.getSender().getName().getString()))));
+        request.getSender().sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.SENDER_GOT_ACCEPTED_TPA.get(), Map.of("receivers_name", request.getReceiver().getName().getString()))));
 
         RequestHelper.teleport(request);
 

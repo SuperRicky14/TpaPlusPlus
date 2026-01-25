@@ -5,7 +5,7 @@ import net.superricky.tpaplusplus.TPAPlusPlus;
 import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.limitations.Limitation;
-import net.superricky.tpaplusplus.util.MsgFmt;
+import net.superricky.tpaplusplus.util.MsgFmtKt;
 
 import java.util.Map;
 
@@ -30,13 +30,13 @@ public class DistanceLimitation implements Limitation {
                 receiver.getX(), receiver.getY(), receiver.getZ());
 
         if (distance > Config.FURTHEST_ALLOWED_DISTANCE.get()) {
-            return MsgFmt.fmt(Messages.ERR_TOO_FAR_EXECUTOR.get(),
-                    Map.of(DISTANCE_IDENTIFIER, Math.round(distance),
-                            EXPECTED_DISTANCE_IDENTIFIER, Math.round(Config.FURTHEST_ALLOWED_DISTANCE.get())));
+            return MsgFmtKt.template(Messages.ERR_TOO_FAR_EXECUTOR.get(),
+                    Map.of(DISTANCE_IDENTIFIER, Double.toString(Math.round(distance)),
+                            EXPECTED_DISTANCE_IDENTIFIER, Double.toString(Math.round(Config.FURTHEST_ALLOWED_DISTANCE.get()))));
         } else {
-            return MsgFmt.fmt(Messages.ERR_TOO_CLOSE_EXECUTOR.get(),
-                    Map.of(DISTANCE_IDENTIFIER, Math.round(distance),
-                            EXPECTED_DISTANCE_IDENTIFIER, Math.round(Config.CLOSEST_ALLOWED_DISTANCE.get())));
+            return MsgFmtKt.template(Messages.ERR_TOO_CLOSE_EXECUTOR.get(),
+                    Map.of(DISTANCE_IDENTIFIER, Double.toString(Math.round(distance)),
+                            EXPECTED_DISTANCE_IDENTIFIER, Double.toString(Math.round(Config.CLOSEST_ALLOWED_DISTANCE.get()))));
         }
     }
 }

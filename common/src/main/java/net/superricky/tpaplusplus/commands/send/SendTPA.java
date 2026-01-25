@@ -13,7 +13,7 @@ import net.superricky.tpaplusplus.limitations.LimitationManager;
 import net.superricky.tpaplusplus.requests.Request;
 import net.superricky.tpaplusplus.requests.RequestHelper;
 import net.superricky.tpaplusplus.timeout.TimeoutManager;
-import net.superricky.tpaplusplus.util.MsgFmt;
+import net.superricky.tpaplusplus.util.MsgFmtKt;
 
 import java.time.Duration;
 import java.util.Map;
@@ -23,14 +23,14 @@ public class SendTPA {
     private static boolean isEitherBlocked(ServerPlayer sender, ServerPlayer receiver) {
         PlayerData senderData = SaveDataManager.INSTANCE.getPlayerData(sender.getUUID());
         if (senderData.hasBlockedPlayer(receiver.getUUID())) {
-            sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_BLOCKED_RECEIVER.get(),
+            sender.sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.SENDER_BLOCKED_RECEIVER.get(),
                     Map.of("blocked_player", receiver.getName().getString()))));
             return true;
         }
 
         PlayerData receiverData = SaveDataManager.INSTANCE.getPlayerData(receiver.getUUID());
         if (receiverData.hasBlockedPlayer(sender.getUUID())) {
-            sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.RECEIVER_BLOCKED_SENDER.get(),
+            sender.sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.RECEIVER_BLOCKED_SENDER.get(),
                     Map.of("blocking_player", receiver.getName().getString()))));
             return true;
         }
@@ -45,7 +45,7 @@ public class SendTPA {
         }
 
         if (RequestHelper.alreadySentTeleportRequest(sender, receiver)) {
-            sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.ERR_ALREADY_SENT_TELEPORT_REQUEST.get(), Map.of("receiver_name", receiver.getName().getString()))));
+            sender.sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.ERR_ALREADY_SENT_TELEPORT_REQUEST.get(), Map.of("receiver_name", receiver.getName().getString()))));
             return;
         }
 
@@ -53,7 +53,7 @@ public class SendTPA {
 
         PlayerData receiverData = SaveDataManager.INSTANCE.getPlayerData(receiver.getUUID());
         if (receiverData.getTpToggle()) { // receiverData is not null && receiver TP toggle is enabled.
-            sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.ERR_RECEIVER_TP_DISABLED.get(),
+            sender.sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.ERR_RECEIVER_TP_DISABLED.get(),
                     Map.of("receiverName", receiver.getName().getString()))));
             return;
         }
@@ -111,11 +111,11 @@ public class SendTPA {
 
 
         if (isHereRequest) {
-            sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_SENT_TPAHERE.get(), Map.of("receivers_name", receiver.getName().getString()))));
-            receiver.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.RECEIVER_GOT_TPAHERE.get(), Map.of("senders_name", sender.getName().getString()))));
+            sender.sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.SENDER_SENT_TPAHERE.get(), Map.of("receivers_name", receiver.getName().getString()))));
+            receiver.sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.RECEIVER_GOT_TPAHERE.get(), Map.of("senders_name", sender.getName().getString()))));
         } else {
-            sender.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_SENT_TPA.get(), Map.of("receivers_name", receiver.getName().getString()))));
-            receiver.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.RECEIVER_GOT_TPA.get(), Map.of("senders_name", sender.getName().getString()))));
+            sender.sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.SENDER_SENT_TPA.get(), Map.of("receivers_name", receiver.getName().getString()))));
+            receiver.sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.RECEIVER_GOT_TPA.get(), Map.of("senders_name", sender.getName().getString()))));
         }
     }
 

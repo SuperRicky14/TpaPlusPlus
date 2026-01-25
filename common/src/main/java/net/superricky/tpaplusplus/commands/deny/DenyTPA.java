@@ -10,7 +10,7 @@ import net.superricky.tpaplusplus.cooldown.CooldownManager;
 import net.superricky.tpaplusplus.requests.Request;
 import net.superricky.tpaplusplus.requests.RequestGrabUtil;
 import net.superricky.tpaplusplus.requests.RequestHelper;
-import net.superricky.tpaplusplus.util.MsgFmt;
+import net.superricky.tpaplusplus.util.MsgFmtKt;
 
 import java.time.Duration;
 import java.util.Map;
@@ -37,8 +37,8 @@ public class DenyTPA {
     }
 
     public static void absoluteDeny(Request request) {
-        request.getReceiver().sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.RECEIVER_DENIES_TPA.get(), Map.of("denied_sender_name", request.getSender().getName().getString()))));
-        request.getSender().sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.SENDER_GOT_DENIED_TPA.get(), Map.of("receiver_who_denied", request.getReceiver().getName().getString()))));
+        request.getReceiver().sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.RECEIVER_DENIES_TPA.get(), Map.of("denied_sender_name", request.getSender().getName().getString()))));
+        request.getSender().sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.SENDER_GOT_DENIED_TPA.get(), Map.of("receiver_who_denied", request.getReceiver().getName().getString()))));
 
         RequestHelper.getRequestSet().remove(request);
     }

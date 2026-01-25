@@ -6,7 +6,7 @@ import net.minecraft.server.MinecraftServer
 import net.superricky.tpaplusplus.config.Messages
 import net.superricky.tpaplusplus.requests.Request
 import net.superricky.tpaplusplus.requests.RequestHelper
-import net.superricky.tpaplusplus.util.MsgFmt
+import net.superricky.tpaplusplus.util.template
 import java.time.Duration
 import java.time.Instant
 
@@ -39,9 +39,7 @@ object TimeoutManager {
 
         if (timeout.request.isHereRequest) {
             sender.sendSystemMessage(
-                Component.literal(
-                    MsgFmt.fmt(
-                        Messages.SENDER_TPAHERE_TIMEOUT.get(),
+                Component.literal(Messages.SENDER_TPAHERE_TIMEOUT.get().template(
                         mapOf("receivers_name" to receiver.displayName.string)
                     )
                 )
@@ -49,8 +47,7 @@ object TimeoutManager {
 
             receiver.sendSystemMessage(
                 Component.literal(
-                    MsgFmt.fmt(
-                        Messages.RECEIVER_TPAHERE_TIMEOUT.get(),
+                        Messages.RECEIVER_TPAHERE_TIMEOUT.get().template(
                         mapOf("senders_name" to sender.displayName.string)
                     )
                 )
@@ -61,18 +58,14 @@ object TimeoutManager {
         }
 
         sender.sendSystemMessage(
-            Component.literal(
-                MsgFmt.fmt(
-                    Messages.SENDER_TPA_TIMEOUT.get(),
+            Component.literal(Messages.SENDER_TPA_TIMEOUT.get().template(
                     mapOf("receivers_name" to receiver.displayName.string)
                 )
             )
         )
 
         receiver.sendSystemMessage(
-            Component.literal(
-                MsgFmt.fmt(
-                    Messages.RECEIVER_TPA_TIMEOUT.get(),
+            Component.literal(Messages.RECEIVER_TPA_TIMEOUT.get().template(
                     mapOf("senders_name" to sender.displayName.string)
                 )
             )

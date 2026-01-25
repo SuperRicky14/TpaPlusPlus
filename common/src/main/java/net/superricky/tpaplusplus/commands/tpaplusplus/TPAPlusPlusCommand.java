@@ -13,7 +13,7 @@ import net.superricky.tpaplusplus.config.Config;
 import net.superricky.tpaplusplus.config.Messages;
 import net.superricky.tpaplusplus.network.UpdateCheckKt;
 import net.superricky.tpaplusplus.requests.RequestHelper;
-import net.superricky.tpaplusplus.util.MsgFmt;
+import net.superricky.tpaplusplus.util.MsgFmtKt;
 
 import java.util.Map;
 import java.util.Objects;
@@ -78,8 +78,8 @@ public class TPAPlusPlusCommand {
 
         for (String color : colorList) {
             if (!ConfigReformatter.isValidColor(color)) {
-                source.sendFailure(Component.literal(MsgFmt.fmt(Messages.ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS.get(), Map.of("invalid_color_code", color))));
-                source.sendFailure(Component.literal(MsgFmt.fmt(Messages.ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS_EXAMPLES.get(), Map.of("random_color_code", (Supplier<String>) ConfigReformatter::getRandomColorCode))));
+                source.sendFailure(Component.literal(MsgFmtKt.template(Messages.ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS.get(), Map.of("invalid_color_code", color))));
+                source.sendFailure(Component.literal(MsgFmtKt.template(Messages.ERR_TPAPLUSPLUS_COLORS_INVALID_COLORS_EXAMPLES.get(), Map.of("random_color_code", (Supplier<String>) ConfigReformatter::getRandomColorCode))));
                 return 0;
             }
         }
@@ -110,7 +110,7 @@ public class TPAPlusPlusCommand {
     }
 
     private static int version(CommandSourceStack source) {
-        source.sendSystemMessage(Component.literal(MsgFmt.fmt(Messages.TPAPLUSPLUS_VERSION.get(), Map.of("mod_version", TPAPlusPlus.MOD_VERSION)))); // send the mod's version to the command executor
+        source.sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.TPAPLUSPLUS_VERSION.get(), Map.of("mod_version", TPAPlusPlus.MOD_VERSION)))); // send the mod's version to the command executor
         source.sendSystemMessage(Component.literal("§6Checking for updates..."));
 
         final Entity executor = source.getEntity();

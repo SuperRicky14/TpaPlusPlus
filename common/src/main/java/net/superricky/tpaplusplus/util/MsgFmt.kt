@@ -4,7 +4,7 @@ import com.mojang.logging.LogUtils
 import java.util.function.Supplier
 import java.util.regex.Matcher
 
-private val TEMPLATE_PATTERN = """(?<!\\)\$\{(\w+)}""".toRegex().toPattern()
+private val TEMPLATE_PATTERN = """(\\)?\$\{(\w+)}""".toRegex().toPattern()
 private val LOGGER = LogUtils.getLogger()
 
 /**
@@ -25,7 +25,13 @@ fun String.template(replacements: Map<String, Any>): String {
     val matcher = TEMPLATE_PATTERN.matcher(this)
 
     while (matcher.find()) {
-        val placeholder = matcher.group(1)
+        if (matcher.group(1) != null) {
+            val consumedBackslashGroup = matcher.group().substring(1)
+            matcher.appendReplacement(sb, Matcher.quoteReplacement(consumedBackslashGroup))
+            continue
+        }
+
+        val placeholder = matcher.group(2)
         val replacement = when (val dynamicReplacement = replacements[placeholder]) {
             is String -> dynamicReplacement
             is Supplier<*> -> {

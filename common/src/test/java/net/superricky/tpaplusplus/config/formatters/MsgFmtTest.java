@@ -19,6 +19,24 @@ public class MsgFmtTest {
     }
 
     @Test
+    public void testEscapingPlaceholders() {
+        Map<String, Object> values = new HashMap<>();
+        values.put("name", "John");
+        String result = template("Hello, \\${name}!", values);
+        assertEquals("Hello, ${name}!", result);
+    }
+
+    @Test
+    public void testEscapingPlaceholderBackslashRemoval() {
+        Map<String, Object> values = new HashMap<>();
+        values.put("name", "John");
+        String result = template("Hello, \\\\${name}!", values);
+        assertEquals("Hello, \\${name}!", result);
+    }
+
+    // TODO: Test Suppliers and Lambdas
+
+    @Test
     public void testMultiplePlaceholders() {
         Map<String, Object> values = new HashMap<>();
         values.put("name", "John");
@@ -28,13 +46,23 @@ public class MsgFmtTest {
     }
 
     @Test
+    public void testNoPlaceholders() {
+        Map<String, Object> values = new HashMap<>();
+        values.put("name", "John");
+
+        String result = template("Hello there!", values);
+
+        assertEquals("Hello there!", result);
+    }
+
+    @Test
     public void testEmptyString() {
         String result = template("", new HashMap<>());
         assertEquals("", result);
     }
 
     @Test
-    public void testMissingPlaceholderValue() {
+    public void testMissingPlaceholderReplacement() {
         Map<String, Object> values = new HashMap<>();
         values.put("name", "John");
 

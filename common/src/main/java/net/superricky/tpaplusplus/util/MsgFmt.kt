@@ -25,39 +25,46 @@ fun String.template(replacements: Map<String, Any>): String {
     val matcher = TEMPLATE_PATTERN.matcher(this)
 
     while (matcher.find()) {
+        val group = matcher.group()
+
         if (matcher.group(1) != null) {
-            val consumedBackslashGroup = matcher.group().substring(1)
+            val consumedBackslashGroup = group.substring(1)
             matcher.appendReplacement(sb, Matcher.quoteReplacement(consumedBackslashGroup))
             continue
         }
 
         val placeholder = matcher.group(2)
-        val replacement = when (val dynamicReplacement = replacements[placeholder]) {
-            is String -> dynamicReplacement
-            is Supplier<*> -> {
-                val unknownSupplierResult = dynamicReplacement.get()
-                if (unknownSupplierResult == null) {
-                    LOGGER.warn("Attempted to unwrap Supplier \"$dynamicReplacement\" but got null. Refusing to template placeholder $placeholder")
-                    matcher.group()
-                } else {
-                    unknownSupplierResult.toString()
-                }
-            }
-            is Function0<*> -> {
-                val unknownLambdaResult = dynamicReplacement.invoke()
-                if (unknownLambdaResult == null) {
-                    LOGGER.warn("Attempted to unwrap Lambda \"$dynamicReplacement\" but got null. Refusing to template placeholder $placeholder")
-                    matcher.group()
-                } else {
-                    unknownLambdaResult.toString()
-                }
-            }
-            is Nothing? -> matcher.group()
-            else -> dynamicReplacement.toString()
-        }
+        val unsafeReplacement = replacements[placeholder]
+        val replacement = getReplacementTypeSafe(group, placeholder, unsafeReplacement)
 
         matcher.appendReplacement(sb, Matcher.quoteReplacement(replacement))
     }
     matcher.appendTail(sb)
     return sb.toString()
+}
+
+private fun getReplacementTypeSafe(group: String, placeholder: String, unsafeReplacement: Any?): String {
+    when (unsafeReplacement) {
+        is String -> {
+            return unsafeReplacement
+        }
+        is Supplier<*> -> {
+            val unknownSupplierResult = unsafeReplacement.get()
+            if (unknownSupplierResult == null) {
+                LOGGER.warn("Attempted to unwrap Supplier \"$unsafeReplacement\" but got null. Refusing to template placeholder $placeholder")
+                return group
+            }
+            return unknownSupplierResult.toString()
+        }
+        is Function0<*> -> {
+            val unknownLambdaResult = unsafeReplacement.invoke()
+            if (unknownLambdaResult == null) {
+                LOGGER.warn("Attempted to unwrap Lambda \"$unsafeReplacement\" but got null. Refusing to template placeholder $placeholder")
+                return group
+            }
+            return unknownLambdaResult.toString()
+        }
+        is Nothing? -> return group
+        else -> return unsafeReplacement.toString()
+    }
 }

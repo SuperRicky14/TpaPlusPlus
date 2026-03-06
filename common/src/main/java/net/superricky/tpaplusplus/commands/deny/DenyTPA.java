@@ -40,17 +40,17 @@ public class DenyTPA {
         request.getReceiver().sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.RECEIVER_DENIES_TPA.get(), Map.of("denied_sender_name", request.getSender().getName().getString()))));
         request.getSender().sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.SENDER_GOT_DENIED_TPA.get(), Map.of("receiver_who_denied", request.getReceiver().getName().getString()))));
 
-        RequestHelper.getRequestSet().remove(request);
+        RequestHelper.INSTANCE.getRequestSet().remove(request);
     }
 
     public static void denyTeleportRequest(ServerPlayer receiver) {
-        Request request = RequestGrabUtil.getReceiverRequest(receiver);
+        Request request = RequestGrabUtil.INSTANCE.getReceiverRequest(receiver);
         denyFunctionality(request, receiver);
     }
 
     // Deny command is run by the receiver, hence why it's in the receiver's point of view.
     public static void denyTeleportRequest(ServerPlayer receiver, ServerPlayer sender) {
-        Request request = RequestGrabUtil.getReceiverRequest(receiver, sender);
+        Request request = RequestGrabUtil.INSTANCE.getReceiverRequest(receiver, sender);
         denyFunctionality(request, receiver);
     }
 

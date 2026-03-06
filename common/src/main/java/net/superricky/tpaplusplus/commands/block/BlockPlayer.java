@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class BlockPlayer {
     public static void blockPlayer(ServerPlayer executor, ServerPlayer blockedPlayer) {
-        if (RequestHelper.isPlayerIdentical(executor, blockedPlayer)) {
+        if (RequestHelper.INSTANCE.isPlayerIdentical(executor, blockedPlayer)) {
             // Player is trying to block themselves
             executor.sendSystemMessage(Component.literal(Messages.CANNOT_BLOCK_SELF.get()));
             return;

@@ -40,18 +40,18 @@ public class AcceptTPA {
         receiver.sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.RECEIVER_ACCEPTS_TPA.get(), Map.of("senders_name", request.getSender().getName().getString()))));
         request.getSender().sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.SENDER_GOT_ACCEPTED_TPA.get(), Map.of("receivers_name", request.getReceiver().getName().getString()))));
 
-        RequestHelper.teleport(request);
+        RequestHelper.INSTANCE.teleport(request);
 
-        RequestHelper.getRequestSet().remove(request);
+        RequestHelper.INSTANCE.getRequestSet().remove(request);
     }
 
     public static void acceptTeleportRequest(ServerPlayer receiver) {
-        Request request = RequestGrabUtil.getReceiverRequest(receiver);
+        Request request = RequestGrabUtil.INSTANCE.getReceiverRequest(receiver);
         acceptFunctionality(request, receiver);
     }
 
     public static void acceptTeleportRequest(ServerPlayer receiver, ServerPlayer sender) {
-        Request request = RequestGrabUtil.getReceiverRequest(receiver, sender);
+        Request request = RequestGrabUtil.INSTANCE.getReceiverRequest(receiver, sender);
         acceptFunctionality(request, receiver);
     }
 

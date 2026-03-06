@@ -61,13 +61,11 @@ object AcceptTPA {
         requestSet.remove(request)
     }
 
-    @JvmStatic
     fun acceptTeleportRequest(receiver: ServerPlayer) {
         val request = getReceiverRequest(receiver)
         acceptFunctionality(request, receiver)
     }
 
-    @JvmStatic
     fun acceptTeleportRequest(receiver: ServerPlayer, sender: ServerPlayer) {
         val request = getReceiverRequest(receiver, sender)
         acceptFunctionality(request, receiver)

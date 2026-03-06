@@ -24,9 +24,8 @@ object AcceptTPA {
             return
         }
 
-        val cooldown: CooldownData?
-        if ((getPlayerCooldown(receiver.getUUID(), CommandType.ACCEPT).also { cooldown = it }) != null) {
-            CooldownManager.notifyCooldown(receiver, cooldown!!)
+        getPlayerCooldown(receiver.getUUID(), CommandType.ACCEPT)?.let { cooldown ->
+            CooldownManager.notifyCooldown(receiver, cooldown)
             return
         }
 

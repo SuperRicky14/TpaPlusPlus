@@ -15,8 +15,6 @@ import net.superricky.tpaplusplus.requests.RequestHelper.requestSet
 import net.superricky.tpaplusplus.requests.RequestHelper.teleport
 import net.superricky.tpaplusplus.util.template
 import java.time.Duration
-import java.util.*
-import java.util.Map
 
 object AcceptTPA {
     // Accept command is run by the sender, hence why it's in the sender's point of view.

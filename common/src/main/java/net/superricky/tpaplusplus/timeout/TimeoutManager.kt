@@ -53,7 +53,7 @@ object TimeoutManager {
                 )
             )
 
-            RequestHelper.getRequestSet().remove(timeout.request)
+            RequestHelper.requestSet.remove(timeout.request)
             return EventResult.pass()
         }
 
@@ -71,7 +71,7 @@ object TimeoutManager {
             )
         )
 
-        RequestHelper.getRequestSet().remove(timeout.request)
+        RequestHelper.requestSet.remove(timeout.request)
         return EventResult.pass()
     }
 }

@@ -1,58 +1,63 @@
-package net.superricky.tpaplusplus.requests;
+package net.superricky.tpaplusplus.requests
 
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayer
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+object RequestHelper {
+    val requestSet: MutableSet<Request> = hashSetOf()
 
-public class RequestHelper {
-    private static final Set<Request> requestSet = ConcurrentHashMap.newKeySet();
-
-    public static Set<Request> getRequestSet() {
-        return requestSet;
+    fun ServerPlayer.isPlayerIdentical(otherPlayer: ServerPlayer): Boolean {
+        return this.getUUID() == otherPlayer.getUUID()
     }
 
-    public static boolean isPlayerIdentical(ServerPlayer player1, ServerPlayer player2) {
-        return player1.getUUID().equals(player2.getUUID());
+    fun clearRequestSet() {
+        requestSet.clear()
     }
 
-    public static void clearRequestSet() {
-        requestSet.clear();
-    }
-
-    public static boolean teleportRequestExists(Request requestToFind) {
-        for (Request request : requestSet) {
-            if (isPlayerIdentical(requestToFind.getSender(), request.getSender())
-                    && isPlayerIdentical(requestToFind.getReceiver(), request.getReceiver())) {
-                return true;
+    fun teleportRequestExists(requestToFind: Request): Boolean {
+        for (request in requestSet) {
+            if (requestToFind.sender.isPlayerIdentical(request.sender)
+                && requestToFind.receiver.isPlayerIdentical(request.receiver)
+            ) {
+                return true
             }
         }
 
-        return false;
+        return false
     }
 
-    public static boolean alreadySentTeleportRequest(ServerPlayer sender, ServerPlayer receiver) {
-        for (Request request : requestSet) {
-            if (isPlayerIdentical(sender, request.getSender())
-                    && isPlayerIdentical(receiver, request.getReceiver()))
-                return true;
+    fun alreadySentTeleportRequest(sender: ServerPlayer, receiver: ServerPlayer): Boolean {
+        for (request in requestSet) {
+            if (sender.isPlayerIdentical(request.sender)
+                && receiver.isPlayerIdentical(request.receiver)
+            ) return true
         }
-        return false;
+        return false
     }
 
-    public static void teleport(Request request) {
-        ServerPlayer sender = request.getSender();
-        ServerPlayer receiver = request.getReceiver();
+    fun teleport(request: Request) {
+        val sender = request.sender
+        val receiver = request.receiver
 
         // /tpahere
-        if (request.isHereRequest()) {
-            receiver.teleportTo(sender.serverLevel(), sender.getX(), sender.getY(), sender.getZ(), sender.getYRot(), sender.getXRot());
+        if (request.isHereRequest) {
+            receiver.teleportTo(
+                sender.serverLevel(),
+                sender.x,
+                sender.y,
+                sender.z,
+                sender.yRot,
+                sender.xRot,
+            )
         }
 
         // /tpa
-        sender.teleportTo(receiver.serverLevel(), receiver.getX(), receiver.getY(), receiver.getZ(), receiver.getYRot(), receiver.getXRot());
-    }
-
-    private RequestHelper() {
+        sender.teleportTo(
+            receiver.serverLevel(),
+            receiver.x,
+            receiver.y,
+            receiver.z,
+            receiver.yRot,
+            receiver.xRot,
+        )
     }
 }

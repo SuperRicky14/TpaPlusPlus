@@ -140,7 +140,7 @@ public class TPAPlusPlusCommand {
 
             Config.SPEC.afterReload();
 
-            RequestHelper.clearRequestSet();
+            RequestHelper.INSTANCE.clearRequestSet();
             DeathHelper.clearDeathCoordinates();
 
             source.sendSystemMessage(Component.literal(Messages.TPAPLUSPLUS_FORCE_RELOADED_CONFIG.get()));

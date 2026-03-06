@@ -40,16 +40,16 @@ public class CancelTPA {
         request.getSender().sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.SENDER_CANCELS_TPA.get(), Map.of("cancelled_tpa_recipient", request.getReceiver().getName().getString()))));
         request.getReceiver().sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.RECEIVER_GOT_CANCELLED_TPA.get(), Map.of("cancelling_sender_of_tpa", request.getSender().getName().getString()))));
 
-        RequestHelper.getRequestSet().remove(request);
+        RequestHelper.INSTANCE.getRequestSet().remove(request);
     }
 
     public static void cancelTeleportRequest(ServerPlayer sender) {
-        Request request = RequestGrabUtil.getSenderRequest(sender);
+        Request request = RequestGrabUtil.INSTANCE.getSenderRequest(sender);
         cancelFunctionality(request, sender);
     }
 
     public static void cancelTeleportRequest(ServerPlayer sender, ServerPlayer receiver) {
-        Request request = RequestGrabUtil.getSenderRequest(sender, receiver);
+        Request request = RequestGrabUtil.INSTANCE.getSenderRequest(sender, receiver);
         cancelFunctionality(request, sender);
     }
 

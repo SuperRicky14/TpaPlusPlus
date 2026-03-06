@@ -39,12 +39,12 @@ public class SendTPA {
     }
 
     public static void sendTeleportRequest(ServerPlayer sender, ServerPlayer receiver, boolean isHereRequest) {
-        if (RequestHelper.isPlayerIdentical(sender, receiver)) {
+        if (RequestHelper.INSTANCE.isPlayerIdentical(sender, receiver)) {
             sender.sendSystemMessage(Component.literal(Messages.ERR_NO_SELF_TELEPORT.get()));
             return;
         }
 
-        if (RequestHelper.alreadySentTeleportRequest(sender, receiver)) {
+        if (RequestHelper.INSTANCE.alreadySentTeleportRequest(sender, receiver)) {
             sender.sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.ERR_ALREADY_SENT_TELEPORT_REQUEST.get(), Map.of("receiver_name", receiver.getName().getString()))));
             return;
         }
@@ -103,7 +103,7 @@ public class SendTPA {
     public static void absoluteSendTeleportRequest(ServerPlayer sender, ServerPlayer receiver, boolean isHereRequest) {
         Request request = new Request(sender, receiver, isHereRequest);
 
-        RequestHelper.getRequestSet().add(request);
+        RequestHelper.INSTANCE.getRequestSet().add(request);
 
         if (!Objects.equals(Config.TPA_TIMEOUT_IN_SECONDS.get(), Config.TPA_TIMEOUT_DISABLED)) {
             TimeoutManager.INSTANCE.scheduleTeleportTimeout(request, Duration.ofSeconds(Config.TPA_TIMEOUT_IN_SECONDS.get()));

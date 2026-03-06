@@ -38,7 +38,7 @@ public class TPAPlusPlus {
         LOGGER.info("REGISTERING BACK COMMAND...");
         CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> BackCommand.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPAACCEPT COMMAND...");
-        CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPAAcceptCommand.onRegisterCommandEvent(dispatcher));
+        CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPAAcceptCommand.INSTANCE.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPACANCEL COMMAND...");
         CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPACancelCommand.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPA COMMAND...");

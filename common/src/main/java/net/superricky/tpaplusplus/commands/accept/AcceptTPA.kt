@@ -1,60 +1,75 @@
-package net.superricky.tpaplusplus.commands.accept;
+package net.superricky.tpaplusplus.commands.accept
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.superricky.tpaplusplus.config.Config;
-import net.superricky.tpaplusplus.config.Messages;
-import net.superricky.tpaplusplus.cooldown.CommandType;
-import net.superricky.tpaplusplus.cooldown.CooldownData;
-import net.superricky.tpaplusplus.cooldown.CooldownManager;
-import net.superricky.tpaplusplus.requests.Request;
-import net.superricky.tpaplusplus.requests.RequestGrabUtil;
-import net.superricky.tpaplusplus.requests.RequestHelper;
-import net.superricky.tpaplusplus.util.MsgFmtKt;
+import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
+import net.superricky.tpaplusplus.config.Config
+import net.superricky.tpaplusplus.config.Messages
+import net.superricky.tpaplusplus.cooldown.CommandType
+import net.superricky.tpaplusplus.cooldown.CooldownData
+import net.superricky.tpaplusplus.cooldown.CooldownManager
+import net.superricky.tpaplusplus.cooldown.CooldownManager.getPlayerCooldown
+import net.superricky.tpaplusplus.cooldown.CooldownManager.scheduleCooldown
+import net.superricky.tpaplusplus.requests.Request
+import net.superricky.tpaplusplus.requests.RequestGrabUtil.getReceiverRequest
+import net.superricky.tpaplusplus.requests.RequestHelper.requestSet
+import net.superricky.tpaplusplus.requests.RequestHelper.teleport
+import net.superricky.tpaplusplus.util.template
+import java.time.Duration
+import java.util.*
+import java.util.Map
 
-import java.time.Duration;
-import java.util.Map;
-import java.util.Objects;
-
-public class AcceptTPA {
+object AcceptTPA {
     // Accept command is run by the sender, hence why it's in the sender's point of view.
-    public static void acceptFunctionality(Request request, ServerPlayer receiver) {
-        if (Objects.isNull(request)) {
-            receiver.sendSystemMessage(Component.literal(Messages.ERR_REQUEST_NOT_FOUND.get()));
-            return;
+    fun acceptFunctionality(request: Request?, receiver: ServerPlayer) {
+        if (request == null) {
+            receiver.sendSystemMessage(Component.literal(Messages.ERR_REQUEST_NOT_FOUND.get()))
+            return
         }
 
-        CooldownData cooldown;
-        if ((cooldown = CooldownManager.INSTANCE.getPlayerCooldown(receiver.getUUID(), CommandType.ACCEPT)) != null) {
-            CooldownManager.INSTANCE.notifyCooldown(receiver, cooldown);
-            return;
+        val cooldown: CooldownData?
+        if ((getPlayerCooldown(receiver.getUUID(), CommandType.ACCEPT).also { cooldown = it }) != null) {
+            CooldownManager.notifyCooldown(receiver, cooldown!!)
+            return
         }
 
-        if (Config.ACCEPT_COOLDOWN.get() > 0) // Check if cooldown is enabled
-            CooldownManager.INSTANCE.scheduleCooldown(receiver.getUUID(), Duration.ofSeconds(Config.ACCEPT_COOLDOWN.get()), CommandType.ACCEPT);
+        if (Config.ACCEPT_COOLDOWN.get() > 0)  // Check if cooldown is enabled
+            scheduleCooldown(
+                receiver.getUUID(),
+                Duration.ofSeconds(Config.ACCEPT_COOLDOWN.get().toLong()),
+                CommandType.ACCEPT
+            )
 
-        absoluteAcceptFunctionality(request, receiver);
+        absoluteAcceptFunctionality(request, receiver)
     }
 
-    public static void absoluteAcceptFunctionality(Request request, ServerPlayer receiver) {
-        receiver.sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.RECEIVER_ACCEPTS_TPA.get(), Map.of("senders_name", request.getSender().getName().getString()))));
-        request.getSender().sendSystemMessage(Component.literal(MsgFmtKt.template(Messages.SENDER_GOT_ACCEPTED_TPA.get(), Map.of("receivers_name", request.getReceiver().getName().getString()))));
+    fun absoluteAcceptFunctionality(request: Request, receiver: ServerPlayer) {
+        receiver.sendSystemMessage(
+            Component.literal(
+                Messages.RECEIVER_ACCEPTS_TPA.get()
+                    .template(mapOf("senders_name" to request.sender.name.string))
+            )
+        )
+        request.sender.sendSystemMessage(
+            Component.literal(
+                Messages.SENDER_GOT_ACCEPTED_TPA.get()
+                    .template(mapOf("receivers_name" to request.receiver.name.string))
+            )
+        )
 
-        RequestHelper.INSTANCE.teleport(request);
+        teleport(request)
 
-        RequestHelper.INSTANCE.getRequestSet().remove(request);
+        requestSet.remove(request)
     }
 
-    public static void acceptTeleportRequest(ServerPlayer receiver) {
-        Request request = RequestGrabUtil.INSTANCE.getReceiverRequest(receiver);
-        acceptFunctionality(request, receiver);
+    @JvmStatic
+    fun acceptTeleportRequest(receiver: ServerPlayer) {
+        val request = getReceiverRequest(receiver)
+        acceptFunctionality(request, receiver)
     }
 
-    public static void acceptTeleportRequest(ServerPlayer receiver, ServerPlayer sender) {
-        Request request = RequestGrabUtil.INSTANCE.getReceiverRequest(receiver, sender);
-        acceptFunctionality(request, receiver);
-    }
-
-    private AcceptTPA() {
+    @JvmStatic
+    fun acceptTeleportRequest(receiver: ServerPlayer, sender: ServerPlayer) {
+        val request = getReceiverRequest(receiver, sender)
+        acceptFunctionality(request, receiver)
     }
 }

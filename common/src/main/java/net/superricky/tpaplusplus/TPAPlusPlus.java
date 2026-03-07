@@ -36,7 +36,7 @@ public class TPAPlusPlus {
         LOGGER.info("INITIALIZING...");
 
         LOGGER.info("REGISTERING BACK COMMAND...");
-        CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> BackCommand.onRegisterCommandEvent(dispatcher));
+        CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> BackCommand.INSTANCE.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPAACCEPT COMMAND...");
         CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPAAcceptCommand.onRegisterCommandEvent(dispatcher));
         LOGGER.info("REGISTERING TPACANCEL COMMAND...");
@@ -57,7 +57,7 @@ public class TPAPlusPlus {
         CommandRegistrationEvent.EVENT.register((dispatcher, registry, selection) -> TPUnBlockCommand.onRegisterCommandEvent(dispatcher));
 
         LOGGER.info("REGISTERING \"LifecycleEvent.LIVING_DEATH\"...");
-        EntityEvent.LIVING_DEATH.register((deadEntity, source) -> DeathHelper.onDeath(deadEntity));
+        EntityEvent.LIVING_DEATH.register((deadEntity, source) -> DeathHelper.INSTANCE.onDeath(deadEntity));
 
         LOGGER.info("REGISTERING \"RequestTimeoutEvent\"...");
         RequestTimeoutEvent.EVENT.register(TimeoutManager.INSTANCE::onTimeoutEvent);
